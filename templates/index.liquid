@@ -9,5 +9,84 @@
   </div>
 {% endfor %} -->
 
-{% assign variable = 42 %}
-{{variable}}
+{% assign x = 42 %}
+{{x}}
+
+<br>
+
+{% assign x = 42 | plus: 1 %}
+{{x}}
+
+<br>
+
+{% assign x = 42 %}
+{{ x | plus: 1 }}
+
+<br>
+
+<!-- String -->
+{% assign z = "1, 2, 3" %}
+{{z}}
+
+<br>
+
+<!-- Array -->
+{% assign z = "1, 2, 3" | split: ',' %}
+{{z}}
+
+<!-- Loops -->
+<ul>
+  {% for item in z %}
+    <li>{{item}}</li>
+  {% endfor %}
+</ul>
+
+<!-- Products -->
+{% assign product = all_products['cup'] %}
+{{product}}
+<!-- ProductDrop means it exists -->
+<p>Product Title: {{product.title}}</p>
+
+<div style="background: deepskyblue;">
+  {% assign collection = collections['dishes'] %}
+  <p>Collection: {{collection.title}}</p>
+  <p>Products in Collection: {{collection.products}}</p>
+  <p>Product[0] in Collection: {{collection.products[0]}}</p>
+  <p>Product[0].title in Collection: {{collection.products[0].title}}</p>
+  <p>Product[1].title in Collection: {{collection.products[1].title}}</p>
+  <p>Product[2].title in Collection: {{collection.products[2].title}}</p>
+</div>
+
+<div style="background: hotpink;">
+  <ul>
+    Products in Collection with Loop (with price):
+    {% for product in collection.products %}
+      <li>{{product.title}}  --  {{product.price | money}}</li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div style="background: darkorchid;">
+  <ul>
+    Products in Collection with Loop (with price):
+    {% for product in collection.products %}
+      <li>
+        <a href="{{product.url}}" style="color: white;">
+          {{product.title}}  --  {{product.price | money}}
+        </a>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div style="background: darkorange;">
+  <ul id="josh-ul">
+    Add product with JS:
+  </ul>
+</div>
+<script>
+  const ul = document.querySelector('#josh-ul');
+  const li = document.createElement('li');
+  li.innerText = `{{all_products['cup'].title}}`;
+  ul.appendChild(li);
+</script>
