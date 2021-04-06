@@ -90,3 +90,35 @@
   li.innerText = `{{all_products['cup'].title}}`;
   ul.appendChild(li);
 </script>
+
+<!-- AJAX-API -->
+
+<script>
+  console.log('josh');
+  console.log('$');
+
+  $(document).ready(() => {
+
+    console.log('ready');
+    jQuery(document);
+
+    // $.get('/cart.js', function(data) {
+    //   console.log('data from GET request:');
+    //   console.log(data);
+    // });
+
+    const cartContents = fetch('/cart.js')
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        return data;
+      });
+
+  });
+</script>
+
+<!-- StoreFront API -->
+<div id="a_content">
+</div>
+
+<script type="module" src="../assets/storeFront-API.js"></script>
