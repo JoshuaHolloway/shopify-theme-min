@@ -118,7 +118,32 @@
 </script>
 
 <!-- StoreFront API -->
-<div id="a_content">
-</div>
+<script>
+  const query = `{
+                    shop {
+                      name
+                    }
+                  }`;
 
-<script type="module" src="../assets/storeFront-API.js"></script>
+  function apiCall(query) {
+    // return fetch('https://thememinimal.myshopify.com/api/graphql.json', { // same as below
+    return fetch('/api/graphql.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/graphql',
+        'X-Shopify-Storefront-Access-Token': __config__.get('storefront_access_token')
+      },
+      body: query
+    }).then(response => response.json());
+  }
+
+  $(document).ready(function() {
+    const $app = $('#app');
+  });
+
+  apiCall(query).then(response => {
+
+    console.log('Store Front API GraphQL Response: ');
+    console.log(response);
+  });
+</script>
