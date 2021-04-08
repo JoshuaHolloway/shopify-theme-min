@@ -1,0 +1,18 @@
+<!-- We want collection object in snippet to use specific collection: -->
+{% assign collection = collections['featured-collection'] %}
+
+{% include 'josh' %}
+
+
+{% schema %}
+{
+  "name": "Featured Collection",
+  "settings": [],
+  "presets": [
+    {
+      "category": "Custom Content",
+      "name": "Featured Collection"
+    }
+  ]
+}
+{% endschema %}

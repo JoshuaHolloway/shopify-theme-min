@@ -1,0 +1,20 @@
+<h5 style="background: darkorange;">/snippets/josh.liquid</h5>
+
+  <!-- collection trickles down scope chain from /sections/featured-collection.liquid
+                                         OR /sections/collection-template.liquid 
+  -->
+
+
+
+{% for product in collection.products %}
+  <div>
+    <a href="{{ product.url | within: collection }}">{{ product.title }}</a>
+    {{ product.price | money }}
+    {% unless product.available %}<br><strong>sold out</strong>{% endunless %}
+    <a href="{{ product.url | within: collection }}">
+      <!-- <img src="{{ product.featured_image.src | img_url: 'large' }}" alt="{{ product.featured_image.alt | escape }}"> -->
+    </a>
+  </div>
+{% else %}
+  <p>no matches</p>
+{% endfor %}

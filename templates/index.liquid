@@ -92,7 +92,6 @@
 </script>
 
 <!-- AJAX-API -->
-
 <script>
   console.log('josh');
   console.log('$');
@@ -110,10 +109,12 @@
     const cartContents = fetch('/cart.js')
       .then(response => response.json())
       .then(data => {
+        console.log('Cart from AJAX-API: ');
         console.log(data);
         return data;
       });
 
+      
   });
 </script>
 
@@ -147,3 +148,6 @@
     console.log(response);
   });
 </script>
+
+<!-- Dynamic Sections -->
+{{content_for_index}}

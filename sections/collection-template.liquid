@@ -1,0 +1,42 @@
+<!-- {% layout '_theme_.josh' %} -->
+
+<h2 style="color: green;">a collection-template.liquid</h2>
+<h4>{{ section.settings.slider-val}}</h4>
+<h1 id="COLLECTIONS-template.LIQUID-ASS-JOSH">{{ collection.title }}</h1>
+
+
+{% paginate collection.products by section.settings.sliderVal %}
+
+
+
+
+  {% include 'josh' %}
+
+
+
+
+
+  {% if paginate.pages > 1 %}
+    {{ paginate | default_pagination }}
+  {% endif %}
+
+{% endpaginate %}
+
+
+
+{% schema %}
+  {
+    "name": "Collection Template",
+    "settings": [
+      {
+          "type": "range",
+          "id": "sliderVal",
+          "min": 1,
+          "max": 25,
+          "step": 1,
+          "label": "Products Per Page",
+          "default": 2
+      }
+    ]
+  }
+{% endschema %}
