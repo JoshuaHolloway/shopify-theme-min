@@ -1,7 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
 
-    console.log('product.js !!!!!!!!!!!!!!!!!!!!!!!!!!!');
-  
     // Declare necessary parent scope variables
     let cartTotal = 0;
     let items = [];
@@ -54,14 +52,18 @@ document.addEventListener("DOMContentLoaded", function() {
     // Run previous function on page load
     getCart();
 
+
+    
     // Add item to the cart
-    $('#AddToCartForm').submit(function(e) {
-      
+    const add_to_cart_form = document.querySelector('#AddToCartForm');
+    add_to_cart_form.addEventListener('submit', (e) => {
+      console.log('josh: submitted!');
       // Prevent standard form submit
         e.preventDefault();
       
         // Use the form to send a POST request to '/cart/add.js'
-        $.post('/cart/add.js', $AddToCartForm.serialize()).then(response => {
+        $.post('/cart/add.js', $AddToCartForm.serialize())
+          .then(response => {
             
             // Parse and store the added item
             const item = JSON.parse(response);
@@ -69,7 +71,7 @@ document.addEventListener("DOMContentLoaded", function() {
             // Update cart total
             cartTotal = cartTotal + item.price;
             $('.cart__pricing-total-cost').html(`<strong>$${cartTotal / 100}</strong>`);
-
+  
             // Check if item already exists in the cart
             const existingItem = variantAlreadyExists(items, item);
             if(existingItem.length > 0) {
@@ -88,15 +90,17 @@ document.addEventListener("DOMContentLoaded", function() {
               
                 // Divide prices by 100 to get the dollar value
                 item.price = item.price / 100;
-              item.line_price = item.line_price / 100;
+                item.line_price = item.line_price / 100;
               
                 // Render line item template with Mustache
                 const output = Mustache.render(lineItemtemplate, item, {}, customTags);
                 $('#cart-goes-here .items').append(output);
             }
-
+  
         });
     });
+
+
 
     // Function: adjusts qty of a line item
     const adjustQty = (e, adjustment) => {
@@ -104,7 +108,7 @@ document.addEventListener("DOMContentLoaded", function() {
         // Find the current quantity and variant ID of the item
         const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
         const qtyInput = $(e.currentTarget).siblings('.cart__qty-num');
-  const currentQty = Number(qtyInput.val());
+        const currentQty = Number(qtyInput.val());
       
         // Apply the adjustment to the current quantity to get the new quantity
         const newQty = currentQty + adjustment;

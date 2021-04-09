@@ -6,7 +6,10 @@
     <div class="product">
         <h1>{{ product.title }}</h1>
         <img src="{{ featured_image | img_url: 'large' }}" alt="{{ featured_image.alt | escape }}" id="ProductPhotoImg">
-        <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm">
+
+
+        <!-- <form action="/cart/add" method="post" enctype="multipart/form-data" id="AddToCartForm"> -->
+        <form id="AddToCartForm">
             <select name="id" id="productSelect">
                 {% for variant in product.variants %}
                     {% if variant.available %}
@@ -21,9 +24,12 @@
                 {% endfor %}
             </select>
             {{ current_variant.price | money }}
+
             <label for="Quantity">quantity</label>
             <input type="number" id="Quantity" name="quantity" value="1" min="1">
+
             <button type="submit" name="add" id="AddToCart">Add to cart</button>
+
         </form>
         <div>{{ product.description }}</div>
         {% for image in product.images %}
@@ -39,6 +45,15 @@
         <div id="cart-goes-here"></div>
     </div>
 </div>
+
+
+
+
+
+
+
+
+
 
 <script id="template" type="text/html">
     <div>
@@ -106,6 +121,15 @@
         </div>
     </div>
 </script>
+
+
+
+
+
+
+
+
+
 
 <script id="lineItemTemplate" type="text/html">
     <div class="item" data-variant-id="<%id%>">
