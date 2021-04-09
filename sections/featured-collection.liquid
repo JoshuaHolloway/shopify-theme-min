@@ -1,13 +1,39 @@
 <!-- We want collection object in snippet to use specific collection: -->
-{% assign collection = collections['featured-collection'] %}
+<!-- {% assign collection = collections['featured-collection'] %} -->
+<!-- {% assign collection = section.settings.collection %} -->
+{{'JOSH (1)'}}
+<br>
+{{section.settings.collection}}
+<br>
+{{'JOSH (2)'}}
+<br>
+{{collections[section.settings.collection]}}
+{{'JOSH (3)'}}
+<br>
 
+{% assign collection = collections[section.settings.collection] %}
+
+<!-- /snippets/josh.liquid -->
 {% include 'josh' %}
+
+<br>
+
+{{'JOSH (4)'}}
+
+<br>
+
 
 
 {% schema %}
 {
   "name": "Featured Collection",
-  "settings": [],
+  "settings": [
+    {
+      "type":   "collection",
+      "id":     "collection",
+      "label":  "Collection"
+    }
+  ],
   "presets": [
     {
       "category": "Custom Content",
