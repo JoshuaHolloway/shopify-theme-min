@@ -1,3 +1,70 @@
+// const template = `
+//     <div>
+//     <div class="items">
+//         <%#items%>
+//         <div class="item" data-variant-id="<%id%>">
+//             <div class="row cart__row">
+//                 <div class="col-md-4 col-sm-4 col-4">
+//                     <img alt="" src="<%featured_image.url%>">
+//                 </div>
+//                 <div class="col-md-8 col-sm-8 col-8">
+//                     <p>
+//                         <a href="<%url%>" class="cart__product-name">
+//                             <span><%title%></span>
+//                         </a>
+//                         <%#options_with_values%><span class="cart__product-meta"><%name%>: <%value%></span><%/options_with_values%>
+//                         <span class="cart__product-meta" >$<%price%></span>
+//                     </p>
+//                     <div class="row--full display-table">
+//                         <div class="row__item display-table-cell one-half">
+//                             <div class="cart__qty">
+//                                 <button type="button" class="x-button cart__qty-adjust cart__qty--minus">
+//                                     <span aria-hidden="true" class="icon icon-minus"></span>
+//                                     <span aria-hidden="true" class="fallback-text">−</span>
+//                                 </button>
+//                                 <input type="text" pattern="[0-9]*" class="cart__qty-num" value="<%quantity%>">
+//                                 <button type="button" class="x-button cart__qty-adjust cart__qty--plus">
+//                                     <span aria-hidden="true" class="icon icon-plus"></span>
+//                                     <span aria-hidden="true" class="fallback-text">+</span>
+//                                 </button>
+//                             </div>
+//                         </div>
+//                         <div class="row__item display-table-cell one-half text-right"><span class="variant-price au">$<%line_price%></span>
+//                         </div>
+//                     </div>
+//                 </div>
+//             </div>
+//         </div>
+//         <%/items%>
+//         </div>
+//         <div class="cart__footer">
+//             <div class="cart__footer--empty">
+//                 <!---->
+//             </div>
+//             <div class="row cart__footer-extra">
+//                 <div class="col-md-6 col-sm-6 col-xs-6">
+//                     <p class="x-p cart__pricing-title">Shipping</p>
+//                 </div>
+//                 <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+//                     <p class="x-p cart__pricing-cost"><strong>FREE</strong></p>
+//                 </div>
+//                 <!---->
+//             </div>
+//             <div class="row cart__footer-total">
+//                 <div class="col-md-6 col-sm-6 col-xs-6">
+//                     <p class="x-p cart__pricing-total-title">Subtotal</p>
+//                 </div>
+//                 <div class="col-md-6 col-sm-6 col-xs-6 text-right">
+//                     <p class="x-p cart__pricing-total-cost"><strong>$<%total_price%></strong></p>
+//                 </div>
+//             </div>
+//             <a href="/checkout" id="checkoutButton" class="btn btn--secondary btn--full cart__cta">
+//                 Check Out
+//             </a>
+//         </div>
+//     </div>
+// `;
+
 document.addEventListener("DOMContentLoaded", function() {
 
     // Declare necessary parent scope variables
@@ -53,21 +120,89 @@ document.addEventListener("DOMContentLoaded", function() {
     getCart();
 
 
-    
+
     // Add item to the cart
     const add_to_cart_form = document.querySelector('#AddToCartForm');
     add_to_cart_form.addEventListener('submit', (e) => {
-      console.log('josh: submitted!');
+
       // Prevent standard form submit
-        e.preventDefault();
-      
-        // Use the form to send a POST request to '/cart/add.js'
-        $.post('/cart/add.js', $AddToCartForm.serialize())
-          .then(response => {
-            
-            // Parse and store the added item
-            const item = JSON.parse(response);
-          
+      e.preventDefault();
+      console.log('josh: submitted!');
+
+
+      const x        = $AddToCartForm;
+      const x_serial = $AddToCartForm.serialize();
+      console.log('x: ', x);
+      console.log('x_serial: ', x_serial);
+      // id=39540031127731&quantity=1
+
+      const y        = add_to_cart_form;
+      const y_select = y.querySelector('#productSelect');
+      const y_select_options = y_select.options;
+      const y_select_selectedIndex = y_select.selectedIndex;
+      const y_select_value = y_select_options[y_select_selectedIndex].value;
+      // console.log('y: ', y);
+      // console.log('y_select: ', y_select);
+      // console.log('y_select_options: ', y_select_options);
+      // console.log('y_select_selectedIndex: ', y_select_selectedIndex);
+      // console.log('y_select_value: ', y_select_value);
+
+      const z = add_to_cart_form.querySelector('#Quantity');
+      const z_value = z.value;
+      // console.log('z: ', z);
+      // console.log('z.value: ', z_value);
+
+      const A_serial = `id=${y_select_value}&quantity=${z_value}`;
+      const A_obj = {
+        "id": y_select_value,
+        "quantity": z_value
+      };
+
+
+
+      // var myUrl = '/cart/add.js';
+      // var myData = {
+      //   firstName: 'Joe',
+      //   lastName: 'Smith'
+      // };
+      // //axios.post(myUrl, myData, {
+      // axios.post(myUrl, A_obj, {
+      //     headers: {
+      //       'Content-Type': 'application/json',
+      //       'key': '12345'
+      //     }
+      //     // other configuration there
+      //   })
+      //   .then(function (response) {
+      //     alert('yeah!');
+      //     console.log(response);
+      //   })
+      //   .catch(function (error) {
+      //     alert('oops');
+      //     console.log(error);
+      //   })
+      // ;
+
+        let formData = {
+        'items': [{
+          'id': 39540031127731,
+          'quantity': 2
+          }]
+        };
+        
+
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(data => {
+            const item = data.items[0];
+            console.log('item: ', item);
+
             // Update cart total
             cartTotal = cartTotal + item.price;
             $('.cart__pricing-total-cost').html(`<strong>$${cartTotal / 100}</strong>`);
@@ -96,8 +231,13 @@ document.addEventListener("DOMContentLoaded", function() {
                 const output = Mustache.render(lineItemtemplate, item, {}, customTags);
                 $('#cart-goes-here .items').append(output);
             }
-  
+
+        })
+        .catch((error) => {
+          console.log('josh 2');
+          console.error('Error:', error);
         });
+
     });
 
 
