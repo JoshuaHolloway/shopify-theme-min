@@ -127,69 +127,21 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Prevent standard form submit
       e.preventDefault();
-      console.log('josh: submitted!');
-
-
-      const x        = $AddToCartForm;
-      const x_serial = $AddToCartForm.serialize();
-      console.log('x: ', x);
-      console.log('x_serial: ', x_serial);
-      // id=39540031127731&quantity=1
-
+  
       const y        = add_to_cart_form;
       const y_select = y.querySelector('#productSelect');
       const y_select_options = y_select.options;
       const y_select_selectedIndex = y_select.selectedIndex;
-      const y_select_value = y_select_options[y_select_selectedIndex].value;
-      // console.log('y: ', y);
-      // console.log('y_select: ', y_select);
-      // console.log('y_select_options: ', y_select_options);
-      // console.log('y_select_selectedIndex: ', y_select_selectedIndex);
-      // console.log('y_select_value: ', y_select_value);
+      const y_select_value = Number(y_select_options[y_select_selectedIndex].value);
 
-      const z = add_to_cart_form.querySelector('#Quantity');
-      const z_value = z.value;
-      // console.log('z: ', z);
-      // console.log('z.value: ', z_value);
-
-      const A_serial = `id=${y_select_value}&quantity=${z_value}`;
-      const A_obj = {
-        "id": y_select_value,
-        "quantity": z_value
-      };
-
-
-
-      // var myUrl = '/cart/add.js';
-      // var myData = {
-      //   firstName: 'Joe',
-      //   lastName: 'Smith'
-      // };
-      // //axios.post(myUrl, myData, {
-      // axios.post(myUrl, A_obj, {
-      //     headers: {
-      //       'Content-Type': 'application/json',
-      //       'key': '12345'
-      //     }
-      //     // other configuration there
-      //   })
-      //   .then(function (response) {
-      //     alert('yeah!');
-      //     console.log(response);
-      //   })
-      //   .catch(function (error) {
-      //     alert('oops');
-      //     console.log(error);
-      //   })
-      // ;
+      const quantity = Number(add_to_cart_form.querySelector('#Quantity').value);
 
         let formData = {
-        'items': [{
-          'id': 39540031127731,
-          'quantity': 2
+          'items': [{
+            'id': y_select_value,
+            'quantity': quantity
           }]
         };
-        
 
         fetch('/cart/add.js', {
           method: 'POST',
@@ -201,7 +153,6 @@ document.addEventListener("DOMContentLoaded", function() {
         .then(response => response.json())
         .then(data => {
             const item = data.items[0];
-            console.log('item: ', item);
 
             // Update cart total
             cartTotal = cartTotal + item.price;
