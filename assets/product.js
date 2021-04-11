@@ -35,30 +35,21 @@ document.addEventListener("DOMContentLoaded", function() {
   
     // Render cart template with Mustache
     const output = Mustache.render(template, data, {}, customTags);
-    $('#cart-goes-here').html(output);
+
+    const cart_goes_here = document.querySelector('#cart-goes-here');
+    cart_goes_here.innerHTML = output;
   }
 
   // Asynchronous function for handling GET '/cart.js' request
   async function getCart() {
     console.log('getCart()');
-    const response = await $.get('/cart.js');
-    const data = JSON.parse(response);
-    // console.log('jQuery response: ', response);
-    console.log('jQuery JSON.parse -> data: ', data);
-
-    const response_ = await fetch('/cart.js');
-    const data_ = await response_.json();
-    // console.log('fetch response: ', response_);
-    console.log('fetch response.json(): ', data_);
-  
-    handleCartResponse(data_);
+    const response = await fetch('/cart.js');
+    const data = await response.json();
+    handleCartResponse(data);
   }
 
   // Run previous function on page load
-  console.log('josh');
   getCart();
-
-
 
   // Add item to the cart
   const add_to_cart_form = document.querySelector('#AddToCartForm');
