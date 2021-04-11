@@ -1,4 +1,12 @@
 document.addEventListener("DOMContentLoaded", function() {
+  const josh = new class {
+    qs(target, elem=null) {
+      if (elem === nul)
+        return document.querySelector(target);
+      else
+        return elem.querySelector(target);
+    }
+  };
 
   // Declare necessary parent scope variables
   let cartTotal = 0;
@@ -167,9 +175,11 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   }
 
-  // Increase Quantity Trigger 
-  $(document).on('click','.cart__qty--plus',  (e) => adjustQty(e, 1));
+  // Increase Quantity Trigger
+  // $(document).on('click','.cart__qty--plus',  (e) => adjustQty(e, 1));
+  josh.qs('.cart__qty--plus').addEventListener('click', e => adjustQty(e, 1));
 
   // Decrease Quantity Trigger 
-  $(document).on('click','.cart__qty--minus',  (e) => adjustQty(e, -1));
+  // $(document).on('click','.cart__qty--minus',  (e) => adjustQty(e, -1));
+  josh.qs('.cart__qty--minus').addEventListener('click', e => adjustQty(e, -1));
 });
