@@ -7,13 +7,10 @@
   <link rel="canonical" href="{{ canonical_url }}">
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
   {{ content_for_header }} <!-- Header hook for plugins -->
-  {{ 'application.scss.css' | asset_url | stylesheet_tag }}
-  {{ 'application.js' | asset_url | script_tag }}
-  {{ 'template.js' | asset_url | script_tag }}
-  {{ 'templateLineItem.js' | asset_url | script_tag }}
-
-  {{ 'https://code.jquery.com/jquery-3.6.0.js' | script_tag }}
   {{ 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' | stylesheet_tag }}
+  {{ 'application.scss.css' | asset_url | stylesheet_tag }}
+
+
   <script>
   	// console.log('JOSH');
     // console.log(jQuery);
@@ -49,5 +46,15 @@
   <main role="main">
     {{ content_for_layout }}
   </main>
+
+  {{ 'https://code.jquery.com/jquery-3.6.0.js' | script_tag }}
+  {{ "https://cdnjs.cloudflare.com/ajax/libs/mustache.js/3.0.1/mustache.min.js" | script_tag }}
+  {{ "https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js" | script_tag }}
+
+  {{ 'application.js' | asset_url | script_tag }}
+  {{ 'template.js' | asset_url | script_tag }}
+  {{ 'templateLineItem.js' | asset_url | script_tag }}
+  {{ 'product.js' | asset_url | script_tag }}
+
 </body>
 </html>

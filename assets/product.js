@@ -1,4 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
+  const qs = (target) => document.querySelector(target);
   const josh = new class {
     qs(target, elem=null) {
       if (elem === nul)
@@ -14,9 +15,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Assigning DOM elements to variables
   const $AddToCartForm = $('#AddToCartForm');
-
-  // Specifying custom delimiters (as curly brackets are already in use)
-  var customTags = [ '<%', '%>' ];
 
   // Function: takes a list of items and a single item as arguments 
   // and returns a filtered array based on whether a match has been found
@@ -42,10 +40,12 @@ document.addEventListener("DOMContentLoaded", function() {
     });
   
     // Render cart template with Mustache
-    const output = Mustache.render(template, data, {}, customTags);
+    const output = Mustache.render(template, data, {}, ['<%', '%>']);
 
     const cart_goes_here = document.querySelector('#cart-goes-here');
     cart_goes_here.innerHTML = output;
+
+    set_qty_btn_listeners();
   }
 
   // Asynchronous function for handling GET '/cart.js' request
@@ -117,8 +117,10 @@ document.addEventListener("DOMContentLoaded", function() {
         item.line_price = item.line_price / 100;
       
         // Render line item template with Mustache
-        const output = Mustache.render(templateLineItem, item, {}, customTags);
+        const output = Mustache.render(templateLineItem, item, {}, ['<%', '%>']);
         $('#cart-goes-here .items').append(output);
+
+        set_qty_btn_listeners();
       }
 
     })
@@ -133,7 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Function: adjusts qty of a line item
   const adjustQty = (e, adjustment) => {
-    
+
     // Find the current quantity and variant ID of the item
     const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
     const qtyInput = $(e.currentTarget).siblings('.cart__qty-num');
@@ -176,10 +178,20 @@ document.addEventListener("DOMContentLoaded", function() {
   }
 
   // Increase Quantity Trigger
-  // $(document).on('click','.cart__qty--plus',  (e) => adjustQty(e, 1));
-  josh.qs('.cart__qty--plus').addEventListener('click', e => adjustQty(e, 1));
+  const set_qty_btn_listeners = () => {
 
-  // Decrease Quantity Trigger 
-  // $(document).on('click','.cart__qty--minus',  (e) => adjustQty(e, -1));
-  josh.qs('.cart__qty--minus').addEventListener('click', e => adjustQty(e, -1));
+    // $(document).on('click','.cart__qty--plus',  (e) => {    
+    //   console.log('$().on()               :: e.target: ', e.target);
+    //   adjustQty(e, 1);
+    // });
+
+    const x = document.querySelector('.cart__qty--plus');
+    console.log('qs(.cart__qty--plus): ', x);
+    x.addEventListener('click', event => adjustQty(event, 1));
+
+    // Decrease Quantity Trigger 
+    $(document).on('click','.cart__qty--minus',  (e) => adjustQty(e, -1));
+    // josh.qs('.cart__qty--minus').addEventListener('click', e => adjustQty(e, -1));
+  };
+
 });
