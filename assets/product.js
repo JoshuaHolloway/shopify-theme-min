@@ -179,19 +179,8 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Increase Quantity Trigger
   const set_qty_btn_listeners = () => {
-
-    // $(document).on('click','.cart__qty--plus',  (e) => {    
-    //   console.log('$().on()               :: e.target: ', e.target);
-    //   adjustQty(e, 1);
-    // });
-
-    const x = document.querySelector('.cart__qty--plus');
-    console.log('qs(.cart__qty--plus): ', x);
-    x.addEventListener('click', event => adjustQty(event, 1));
-
-    // Decrease Quantity Trigger 
-    $(document).on('click','.cart__qty--minus',  (e) => adjustQty(e, -1));
-    // josh.qs('.cart__qty--minus').addEventListener('click', e => adjustQty(e, -1));
+    qs('.cart__qty--plus').addEventListener( 'click', event => adjustQty(event, +1));
+    qs('.cart__qty--minus').addEventListener('click', event => adjustQty(event, -1));
   };
 
 });
