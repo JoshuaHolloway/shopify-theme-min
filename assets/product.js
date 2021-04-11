@@ -40,13 +40,22 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Asynchronous function for handling GET '/cart.js' request
   async function getCart() {
+    console.log('getCart()');
     const response = await $.get('/cart.js');
     const data = JSON.parse(response);
+    // console.log('jQuery response: ', response);
+    console.log('jQuery JSON.parse -> data: ', data);
+
+    const response_ = await fetch('/cart.js');
+    const data_ = await response_.json();
+    // console.log('fetch response: ', response_);
+    console.log('fetch response.json(): ', data_);
   
-    handleCartResponse(data);
+    handleCartResponse(data_);
   }
 
   // Run previous function on page load
+  console.log('josh');
   getCart();
 
 
