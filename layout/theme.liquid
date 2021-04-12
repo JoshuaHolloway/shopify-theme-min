@@ -10,6 +10,7 @@
   {{ 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' | stylesheet_tag }}
   {{ 'application.scss.css' | asset_url | stylesheet_tag }}
 
+  {{ 'bundle.css' | asset_url | stylesheet_tag }}
 
   <script>
   	// console.log('JOSH');
@@ -55,6 +56,10 @@
   {{ 'template.js' | asset_url | script_tag }}
   {{ 'templateLineItem.js' | asset_url | script_tag }}
   {{ 'product.js' | asset_url | script_tag }}
+
+  <div id="app">
+  </div>
+  {{ 'bundle.js' | asset_url | script_tag }}
 
 </body>
 </html>
