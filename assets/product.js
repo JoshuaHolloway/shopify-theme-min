@@ -13,9 +13,6 @@ document.addEventListener("DOMContentLoaded", function() {
   let cartTotal = 0;
   let items = [];
 
-  // Assigning DOM elements to variables
-  const $AddToCartForm = $('#AddToCartForm');
-
   // Function: takes a list of items and a single item as arguments 
   // and returns a filtered array based on whether a match has been found
   const variantAlreadyExists = (items, newItem) => {
@@ -94,7 +91,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
       // Update cart total
       cartTotal = cartTotal + item.price;
-      $('.cart__pricing-total-cost').html(`<strong>$${cartTotal / 100}</strong>`);
+      qs('.cart__pricing-total-cost').innerHTML = `JOSH: <strong>$${cartTotal / 100}</strong>`;
 
       // Check if item already exists in the cart
       const existingItem = variantAlreadyExists(items, item);
@@ -144,38 +141,40 @@ document.addEventListener("DOMContentLoaded", function() {
     // Apply the adjustment to the current quantity to get the new quantity
     const newQty = currentQty + adjustment;
 
-    // Send a POST request to '/cart/change.js' with the new quantity and variant ID
-    $.post('/cart/change.js', { quantity: newQty, id: itemVariantId }).then((response) => {
-      if(response) {
-        
-        // Parse and store JSON response
-        const data = JSON.parse(response);
-      
-        // Update the quantity input with the new value
-        qtyInput.val(newQty);
+    fetch('/cart/change.js', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ "quantity": newQty, "id": String(itemVariantId) })
+    })
+    .then(response => response.json())
+    .then(data => {
+      console.log('fetch: ', data);
 
-        // If new quantity is less than one, simply remove the line item from the DOM
-        // Else re-render the cart
-        if(newQty < 1) {
-          
-          // Hide the DOM element
-          $item = $(e.currentTarget).closest('.item');
-          $item.hide();
+      // Update the quantity input with the new value
+      qtyInput.val(newQty);
+
+      // If new quantity is less than one, simply remove the line item from the DOM
+      // Else re-render the cart
+      if(newQty < 1) {
         
-          // Update parent scope variables
-          items = data.items;
-          cartTotal = data.total_price;
-        
-          // Update total price
-          const cart__pricingTotalCost = document.querySelector('.cart__pricing-total-cost');
-          const strong = cart__pricingTotalCost.querySelector('strong');
-          strong.innerHTML = `$${cartTotal / 100}`;
-        } else {
-          handleCartResponse(data);
-        }
+        // Hide the DOM element
+        $item = $(e.currentTarget).closest('.item');
+        $item.hide();
+      
+        // Update parent scope variables
+        items = data.items;
+        cartTotal = data.total_price;
+      
+        // Update total price
+        qs('.cart__pricing-total-cost').innerHTML = `<strong>$${cartTotal / 100}</strong>`;
+      } else {
+        handleCartResponse(data);
       }
-    });
-  }
+    })
+    .catch(error => console.error('Error:', error));
+  };
 
   // Increase Quantity Trigger
   const set_qty_btn_listeners = () => {
