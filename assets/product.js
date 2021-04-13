@@ -39,6 +39,7 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Asynchronous function for handling GET '/cart.js' request
   async function getCart() {
+    console.log('getCart()');
     const response = await fetch('/cart.js');
     const data = await response.json();
     handleCartResponse(data);
@@ -112,13 +113,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   });
 
+
+
   // Function: adjusts qty of a line item
   const adjustQty = (e, adjustment) => {
 
     // Find the current quantity and variant ID of the item
-    // const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
-    const itemVariantId = Number(e.target.closest('.item').dataset.variantId);
-
+    const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
     const qtyInput = $(e.currentTarget).siblings('.cart__qty-num');
     const currentQty = Number(qtyInput.val());
   
@@ -134,6 +135,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(response => response.json())
     .then(data => {
+      console.log('fetch: ', data);
 
       // Update the quantity input with the new value
       qtyInput.val(newQty);
@@ -141,17 +143,7 @@ document.addEventListener("DOMContentLoaded", function() {
       // If new quantity is less than one, simply remove the line item from the DOM
       // Else re-render the cart
       if(newQty < 1) {
-        
-        // Hide the DOM element
-        $item = $(e.currentTarget).closest('.item');
-        $item.hide();
-      
-        // Update parent scope variables
-        items = data.items;
-        cartTotal = data.total_price;
-      
-        // Update total price
-        qs('.cart__pricing-total-cost').innerHTML = `<strong>$${cartTotal / 100}</strong>`;
+        alert('TODO: Handle when newQty < 1');
       } else {
         handleCartResponse(data);
       }
