@@ -1,13 +1,5 @@
 document.addEventListener("DOMContentLoaded", function() {
   const qs = (target) => document.querySelector(target);
-  const josh = new class {
-    qs(target, elem=null) {
-      if (elem === nul)
-        return document.querySelector(target);
-      else
-        return elem.querySelector(target);
-    }
-  };
 
   // Declare necessary parent scope variables
   let cartTotal = 0;
@@ -96,16 +88,10 @@ document.addEventListener("DOMContentLoaded", function() {
       // Check if item already exists in the cart
       const existingItem = variantAlreadyExists(items, item);
       if(existingItem.length > 0) {
-        
-        // If so, find the item via its id and update UI using jQuery 
-        const $item = $(`.item[data-variant-id=${existingItem[0].id}]`);
-      
-        $item.find('.cart__qty-num').val(item.quantity);
-        $item.find('.variant-price.au').html(`$${item.line_price / 100}`);
+        alert('TODO: Handle item already exists in cart!');
       } else {
+        console.log('Render line item');
         
-        // If not...
-      
         // Add new item to items array
         items.push(item);
       
@@ -115,8 +101,7 @@ document.addEventListener("DOMContentLoaded", function() {
       
         // Render line item template with Mustache
         const output = Mustache.render(templateLineItem, item, {}, ['<%', '%>']);
-        $('#cart-goes-here .items').append(output);
-
+        qs('#cart-goes-here .items').innerHTML = output;
         set_qty_btn_listeners();
       }
 

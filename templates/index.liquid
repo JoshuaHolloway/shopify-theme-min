@@ -8,3 +8,61 @@
     </a>
   </div>
 {% endfor %}
+
+<!-- AJAX-API -->
+<script>
+  // console.log('josh');
+  // console.log('$');
+
+  // $(document).ready(() => {
+
+  //   console.log('ready');
+  //   jQuery(document);
+
+  //   // $.get('/cart.js', function(data) {
+  //   //   console.log('data from GET request:');
+  //   //   console.log(data);
+  //   // });
+
+  //   const cartContents = fetch('/cart.js')
+  //     .then(response => response.json())
+  //     .then(data => {
+  //       console.log('Cart from AJAX-API: ');
+  //       console.log(data);
+  //       return data;
+  //     });
+
+      
+  // });
+</script>
+
+<!-- StoreFront API -->
+<!-- <script>
+  const query = `{
+                    shop {
+                      name
+                    }
+                  }`;
+
+  function apiCall(query) {
+    // return fetch('https://thememinimal.myshopify.com/api/graphql.json', { // same as below
+    return fetch('/api/graphql.json', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/graphql',
+        'X-Shopify-Storefront-Access-Token': __config__.get('storefront_access_token')
+      },
+      body: query
+    }).then(response => response.json());
+  }
+
+  $(document).ready(function() {
+    const $app = $('#app');
+  });
+
+  apiCall(query).then(response => {
+
+    console.log('Store Front API GraphQL Response: ');
+    console.log(response);
+  });
+</script> -->
