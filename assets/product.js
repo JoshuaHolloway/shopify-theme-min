@@ -39,7 +39,6 @@ document.addEventListener("DOMContentLoaded", function() {
 
   // Asynchronous function for handling GET '/cart.js' request
   async function getCart() {
-    console.log('getCart()');
     const response = await fetch('/cart.js');
     const data = await response.json();
     handleCartResponse(data);
@@ -113,13 +112,13 @@ document.addEventListener("DOMContentLoaded", function() {
 
   });
 
-
-
   // Function: adjusts qty of a line item
   const adjustQty = (e, adjustment) => {
 
     // Find the current quantity and variant ID of the item
-    const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
+    // const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
+    const itemVariantId = Number(e.target.closest('.item').dataset.variantId);
+
     const qtyInput = $(e.currentTarget).siblings('.cart__qty-num');
     const currentQty = Number(qtyInput.val());
   
@@ -135,7 +134,6 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(response => response.json())
     .then(data => {
-      console.log('fetch: ', data);
 
       // Update the quantity input with the new value
       qtyInput.val(newQty);
