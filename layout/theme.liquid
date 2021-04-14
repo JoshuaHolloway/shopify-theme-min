@@ -55,11 +55,10 @@
   {{ 'application.js' | asset_url | script_tag }}
   {{ 'template.js' | asset_url | script_tag }}
   {{ 'templateLineItem.js' | asset_url | script_tag }}
-  {{ 'product.js' | asset_url | script_tag }}
+  <!-- {{ 'product.js' | asset_url | script_tag }} -->
 
-  <div id="app">
-  </div>
-  <!-- {{ 'bundle.js' | asset_url | script_tag }} -->
+  <div id="app"></div>
+  {{ 'bundle.js' | asset_url | script_tag }}
 
 </body>
 </html>
