@@ -1,9 +1,7 @@
 <script>
-  import getCart from './getCart.js';
-  import renderCart from './renderCart.js'
-  getCart(renderCart);
+  import Cart from './Cart.svelte';
 
-	export let price;
+	// export let price;
   export let qty_in_cart = 0;
 
 
@@ -20,6 +18,11 @@
 
 </script>
 
+
+<h1>josh 1</h1>
+<Cart />
+<h1>josh 2</h1>
+
 <div id="container">
 
   <div id="id-container">
@@ -28,7 +31,7 @@
     <button on:click={handlePlus}>+</button>
   </div>
 
-  <h1>Total Price: ${price}</h1>
+  <!-- <h1>Total Price: ${price}</h1> -->
   <h5>Quantity In Cart: {qty_in_cart}</h5>
 </div>
 

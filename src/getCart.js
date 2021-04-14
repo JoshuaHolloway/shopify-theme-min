@@ -24,21 +24,13 @@
 
 // Asynchronous function for handling GET '/cart.js' request
 // timer2.tic();
-async function getCart(f) {
+async function getCart() {
   console.log('getCart()');
+  
+  console.log('BEGIN AJAX request:');
   const response = await fetch('/cart.js');
   const data = await response.json();
-
   console.log('END AJAX response:');
-  // console.log(data);
-
-
-
-  // console.log(typeof data.total_price);
-  // price = (data.total_price / 100).toFixed(2);
-//   timer2.toc();
-
-//   handleCartResponse(data);
-  f(data);
+  return data;
 }
 export default getCart;

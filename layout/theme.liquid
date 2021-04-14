@@ -46,6 +46,13 @@
 
   <main role="main">
     {{ content_for_layout }}
+    <div id="app"></div>
+
+    <div id="cart-container">
+      <p id="cart-container__subtotal">Subtotal: </p>
+      <button>Proceed to checkout</button>
+    </div>
+
   </main>
 
   {{ 'https://code.jquery.com/jquery-3.6.0.js' | script_tag }}
@@ -57,7 +64,7 @@
   {{ 'templateLineItem.js' | asset_url | script_tag }}
   <!-- {{ 'product.js' | asset_url | script_tag }} -->
 
-  <div id="app"></div>
+  
   {{ 'bundle.js' | asset_url | script_tag }}
 
 </body>
