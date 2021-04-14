@@ -5,20 +5,7 @@
 
   // --------------------------------------------------------
   let total_price = 0;
-  let arr = [{
-      id: 0,
-      URL: '',
-      title: '',
-      imgURL: '',
-      price: 0
-    },{
-      id: 0,
-      URL: '',
-      title: '',
-      imgURL: '',
-      price: 0
-    } 
-  ];
+  let arr = [];
 
   // --------------------------------------------------------
 
@@ -29,14 +16,14 @@
 
     items.forEach((item, idx) => {
 
-
+      arr[idx] = {
+        id:  item.id,
+        URL: item.url,
+        title: item.title,
+        imgURL: item.featured_image.url,
+        price: toDollars(item.price)
+      };
       
-      arr[idx].id     = item.id;
-      arr[idx].URL    = item.url;
-      arr[idx].title  = item.title;
-      arr[idx].imgURL = item.featured_image.url;
-      arr[idx].price  = toDollars(item.price);
-
       const price = item.price;
       const qty = item.quantity;
 
@@ -50,5 +37,5 @@
 
 <h1>Total Price: ${total_price}</h1>
 {#each arr as item}
-  <Item __URL_={item.URL} __title_={item.title} __imgURL_={item.imgURL} __price_={item.price}/>
+  <Item id={item.id} URL={item.URL} title={item.title} imgURL={item.imgURL} price={item.price}/>
 {/each}

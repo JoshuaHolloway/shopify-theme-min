@@ -403,22 +403,22 @@ var app = (function () {
     		c: function create() {
     			div = element("div");
     			a = element("a");
-    			t0 = text(/*__title_*/ ctx[2]);
+    			t0 = text(/*title*/ ctx[2]);
     			t1 = space();
     			img = element("img");
     			t2 = space();
     			p = element("p");
-    			t3 = text(/*__price_*/ ctx[4]);
-    			attr_dev(a, "href", /*__URL_*/ ctx[1]);
-    			add_location(a, file$2, 10, 2, 177);
+    			t3 = text(/*price*/ ctx[4]);
+    			attr_dev(a, "href", /*URL*/ ctx[1]);
+    			add_location(a, file$2, 10, 2, 159);
     			attr_dev(img, "height", "150");
-    			if (img.src !== (img_src_value = /*__imgURL_*/ ctx[3])) attr_dev(img, "src", img_src_value);
+    			if (img.src !== (img_src_value = /*imgURL*/ ctx[3])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "");
-    			add_location(img, file$2, 11, 2, 213);
-    			add_location(p, file$2, 12, 2, 260);
+    			add_location(img, file$2, 11, 2, 189);
+    			add_location(p, file$2, 12, 2, 233);
     			attr_dev(div, "class", "item");
-    			attr_dev(div, "data-variant-id", /*__id_*/ ctx[0]);
-    			add_location(div, file$2, 8, 0, 131);
+    			attr_dev(div, "data-variant-id", /*id*/ ctx[0]);
+    			add_location(div, file$2, 8, 0, 116);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -434,20 +434,20 @@ var app = (function () {
     			append_dev(p, t3);
     		},
     		p: function update(ctx, [dirty]) {
-    			if (dirty & /*__title_*/ 4) set_data_dev(t0, /*__title_*/ ctx[2]);
+    			if (dirty & /*title*/ 4) set_data_dev(t0, /*title*/ ctx[2]);
 
-    			if (dirty & /*__URL_*/ 2) {
-    				attr_dev(a, "href", /*__URL_*/ ctx[1]);
+    			if (dirty & /*URL*/ 2) {
+    				attr_dev(a, "href", /*URL*/ ctx[1]);
     			}
 
-    			if (dirty & /*__imgURL_*/ 8 && img.src !== (img_src_value = /*__imgURL_*/ ctx[3])) {
+    			if (dirty & /*imgURL*/ 8 && img.src !== (img_src_value = /*imgURL*/ ctx[3])) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (dirty & /*__price_*/ 16) set_data_dev(t3, /*__price_*/ ctx[4]);
+    			if (dirty & /*price*/ 16) set_data_dev(t3, /*price*/ ctx[4]);
 
-    			if (dirty & /*__id_*/ 1) {
-    				attr_dev(div, "data-variant-id", /*__id_*/ ctx[0]);
+    			if (dirty & /*id*/ 1) {
+    				attr_dev(div, "data-variant-id", /*id*/ ctx[0]);
     			}
     		},
     		i: noop,
@@ -471,46 +471,40 @@ var app = (function () {
     function instance$2($$self, $$props, $$invalidate) {
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Item", slots, []);
-    	let { __id_ } = $$props;
-    	let { __URL_ } = $$props;
-    	let { __title_ } = $$props;
-    	let { __imgURL_ } = $$props;
-    	let { __price_ } = $$props;
-    	const writable_props = ["__id_", "__URL_", "__title_", "__imgURL_", "__price_"];
+    	let { id } = $$props;
+    	let { URL } = $$props;
+    	let { title } = $$props;
+    	let { imgURL } = $$props;
+    	let { price } = $$props;
+    	const writable_props = ["id", "URL", "title", "imgURL", "price"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console.warn(`<Item> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$$set = $$props => {
-    		if ("__id_" in $$props) $$invalidate(0, __id_ = $$props.__id_);
-    		if ("__URL_" in $$props) $$invalidate(1, __URL_ = $$props.__URL_);
-    		if ("__title_" in $$props) $$invalidate(2, __title_ = $$props.__title_);
-    		if ("__imgURL_" in $$props) $$invalidate(3, __imgURL_ = $$props.__imgURL_);
-    		if ("__price_" in $$props) $$invalidate(4, __price_ = $$props.__price_);
+    		if ("id" in $$props) $$invalidate(0, id = $$props.id);
+    		if ("URL" in $$props) $$invalidate(1, URL = $$props.URL);
+    		if ("title" in $$props) $$invalidate(2, title = $$props.title);
+    		if ("imgURL" in $$props) $$invalidate(3, imgURL = $$props.imgURL);
+    		if ("price" in $$props) $$invalidate(4, price = $$props.price);
     	};
 
-    	$$self.$capture_state = () => ({
-    		__id_,
-    		__URL_,
-    		__title_,
-    		__imgURL_,
-    		__price_
-    	});
+    	$$self.$capture_state = () => ({ id, URL, title, imgURL, price });
 
     	$$self.$inject_state = $$props => {
-    		if ("__id_" in $$props) $$invalidate(0, __id_ = $$props.__id_);
-    		if ("__URL_" in $$props) $$invalidate(1, __URL_ = $$props.__URL_);
-    		if ("__title_" in $$props) $$invalidate(2, __title_ = $$props.__title_);
-    		if ("__imgURL_" in $$props) $$invalidate(3, __imgURL_ = $$props.__imgURL_);
-    		if ("__price_" in $$props) $$invalidate(4, __price_ = $$props.__price_);
+    		if ("id" in $$props) $$invalidate(0, id = $$props.id);
+    		if ("URL" in $$props) $$invalidate(1, URL = $$props.URL);
+    		if ("title" in $$props) $$invalidate(2, title = $$props.title);
+    		if ("imgURL" in $$props) $$invalidate(3, imgURL = $$props.imgURL);
+    		if ("price" in $$props) $$invalidate(4, price = $$props.price);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [__id_, __URL_, __title_, __imgURL_, __price_];
+    	return [id, URL, title, imgURL, price];
     }
 
     class Item extends SvelteComponentDev {
@@ -518,11 +512,11 @@ var app = (function () {
     		super(options);
 
     		init(this, options, instance$2, create_fragment$2, safe_not_equal, {
-    			__id_: 0,
-    			__URL_: 1,
-    			__title_: 2,
-    			__imgURL_: 3,
-    			__price_: 4
+    			id: 0,
+    			URL: 1,
+    			title: 2,
+    			imgURL: 3,
+    			price: 4
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -535,64 +529,64 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*__id_*/ ctx[0] === undefined && !("__id_" in props)) {
-    			console.warn("<Item> was created without expected prop '__id_'");
+    		if (/*id*/ ctx[0] === undefined && !("id" in props)) {
+    			console.warn("<Item> was created without expected prop 'id'");
     		}
 
-    		if (/*__URL_*/ ctx[1] === undefined && !("__URL_" in props)) {
-    			console.warn("<Item> was created without expected prop '__URL_'");
+    		if (/*URL*/ ctx[1] === undefined && !("URL" in props)) {
+    			console.warn("<Item> was created without expected prop 'URL'");
     		}
 
-    		if (/*__title_*/ ctx[2] === undefined && !("__title_" in props)) {
-    			console.warn("<Item> was created without expected prop '__title_'");
+    		if (/*title*/ ctx[2] === undefined && !("title" in props)) {
+    			console.warn("<Item> was created without expected prop 'title'");
     		}
 
-    		if (/*__imgURL_*/ ctx[3] === undefined && !("__imgURL_" in props)) {
-    			console.warn("<Item> was created without expected prop '__imgURL_'");
+    		if (/*imgURL*/ ctx[3] === undefined && !("imgURL" in props)) {
+    			console.warn("<Item> was created without expected prop 'imgURL'");
     		}
 
-    		if (/*__price_*/ ctx[4] === undefined && !("__price_" in props)) {
-    			console.warn("<Item> was created without expected prop '__price_'");
+    		if (/*price*/ ctx[4] === undefined && !("price" in props)) {
+    			console.warn("<Item> was created without expected prop 'price'");
     		}
     	}
 
-    	get __id_() {
+    	get id() {
     		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set __id_(value) {
+    	set id(value) {
     		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get __URL_() {
+    	get URL() {
     		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set __URL_(value) {
+    	set URL(value) {
     		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get __title_() {
+    	get title() {
     		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set __title_(value) {
+    	set title(value) {
     		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get __imgURL_() {
+    	get imgURL() {
     		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set __imgURL_(value) {
+    	set imgURL(value) {
     		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	get __price_() {
+    	get price() {
     		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
-    	set __price_(value) {
+    	set price(value) {
     		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
@@ -642,17 +636,18 @@ var app = (function () {
     	return child_ctx;
     }
 
-    // (52:0) {#each arr as item}
+    // (39:0) {#each arr as item}
     function create_each_block(ctx) {
     	let item;
     	let current;
 
     	item = new Item({
     			props: {
-    				__URL_: /*item*/ ctx[4].URL,
-    				__title_: /*item*/ ctx[4].title,
-    				__imgURL_: /*item*/ ctx[4].imgURL,
-    				__price_: /*item*/ ctx[4].price
+    				id: /*item*/ ctx[4].id,
+    				URL: /*item*/ ctx[4].URL,
+    				title: /*item*/ ctx[4].title,
+    				imgURL: /*item*/ ctx[4].imgURL,
+    				price: /*item*/ ctx[4].price
     			},
     			$$inline: true
     		});
@@ -667,10 +662,11 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const item_changes = {};
-    			if (dirty & /*arr*/ 2) item_changes.__URL_ = /*item*/ ctx[4].URL;
-    			if (dirty & /*arr*/ 2) item_changes.__title_ = /*item*/ ctx[4].title;
-    			if (dirty & /*arr*/ 2) item_changes.__imgURL_ = /*item*/ ctx[4].imgURL;
-    			if (dirty & /*arr*/ 2) item_changes.__price_ = /*item*/ ctx[4].price;
+    			if (dirty & /*arr*/ 2) item_changes.id = /*item*/ ctx[4].id;
+    			if (dirty & /*arr*/ 2) item_changes.URL = /*item*/ ctx[4].URL;
+    			if (dirty & /*arr*/ 2) item_changes.title = /*item*/ ctx[4].title;
+    			if (dirty & /*arr*/ 2) item_changes.imgURL = /*item*/ ctx[4].imgURL;
+    			if (dirty & /*arr*/ 2) item_changes.price = /*item*/ ctx[4].price;
     			item.$set(item_changes);
     		},
     		i: function intro(local) {
@@ -691,7 +687,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(52:0) {#each arr as item}",
+    		source: "(39:0) {#each arr as item}",
     		ctx
     	});
 
@@ -729,7 +725,7 @@ var app = (function () {
     			}
 
     			each_1_anchor = empty();
-    			add_location(h1, file$1, 50, 0, 1015);
+    			add_location(h1, file$1, 37, 0, 817);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -823,22 +819,7 @@ var app = (function () {
     	// --------------------------------------------------------
     	let total_price = 0;
 
-    	let arr = [
-    		{
-    			id: 0,
-    			URL: "",
-    			title: "",
-    			imgURL: "",
-    			price: 0
-    		},
-    		{
-    			id: 0,
-    			URL: "",
-    			title: "",
-    			imgURL: "",
-    			price: 0
-    		}
-    	];
+    	let arr = [];
 
     	// --------------------------------------------------------
     	async function renderCart() {
@@ -846,11 +827,18 @@ var app = (function () {
     		const items = data.items;
 
     		items.forEach((item, idx) => {
-    			$$invalidate(1, arr[idx].id = item.id, arr);
-    			$$invalidate(1, arr[idx].URL = item.url, arr);
-    			$$invalidate(1, arr[idx].title = item.title, arr);
-    			$$invalidate(1, arr[idx].imgURL = item.featured_image.url, arr);
-    			$$invalidate(1, arr[idx].price = toDollars(item.price), arr);
+    			$$invalidate(
+    				1,
+    				arr[idx] = {
+    					id: item.id,
+    					URL: item.url,
+    					title: item.title,
+    					imgURL: item.featured_image.url,
+    					price: toDollars(item.price)
+    				},
+    				arr
+    			);
+
     			const price = item.price;
     			const qty = item.quantity;
     			$$invalidate(0, total_price += price * qty);

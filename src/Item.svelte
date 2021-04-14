@@ -1,14 +1,14 @@
 <script>
-  export let __id_;
-  export let __URL_;
-  export let __title_;
-  export let __imgURL_;
-  export let __price_;
+  export let id;
+  export let URL;
+  export let title;
+  export let imgURL;
+  export let price;
 </script>
 
-<div class="item" data-variant-id={__id_}>
+<div class="item" data-variant-id={id}>
 
-  <a href="{__URL_}">{__title_}</a>
-  <img height="150" src="{__imgURL_}" alt=""/>
-  <p>{__price_}</p>
+  <a href="{URL}">{title}</a>
+  <img height="150" src="{imgURL}" alt=""/>
+  <p>{price}</p>
 </div>
