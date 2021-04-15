@@ -1,9 +1,11 @@
-// import {Timer} from './timer.js';
+import {Timer} from './timer';
+const timer = new Timer();
+timer.state();
+
 // const timer1 = new Timer();
 // const timer2 = new Timer();
 
 // - - - - - - - - - - - - - - - - - - - 
-
 
 // console.log('BEGIN AJAX request to /cart.js');  
 // timer1.tic();
@@ -23,14 +25,17 @@
 // - - - - - - - - - - - - - - - - - - - 
 
 // Asynchronous function for handling GET '/cart.js' request
-// timer2.tic();
+timer.tic();
 async function getCart() {
   console.log('getCart()');
   
-  console.log('BEGIN AJAX request:');
+  let timeDiff = timer.toc();
+  console.log(`BEGIN AJAX request @ ${timeDiff.toFixed(0)}ms.`);
   const response = await fetch('/cart.js');
   const data = await response.json();
-  console.log('END AJAX response:');
+  console.log(data);
+  timeDiff = timer.toc();
+  console.log(`END AJAX response @ ${timeDiff.toFixed(0)}ms.`);
   return data;
 }
 export default getCart;

@@ -1,0 +1,21 @@
+// put your global styles here
+* { 
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+:root {
+  --text-color-1: black;
+}
+body {
+  // background: blue;
+  position: relative;
+  // background: {{settings.color_borders}};
+}
+
+#app {
+  position: absolute;
+  top: 0;
+  right: 0;
+  background: deeppink;
+}

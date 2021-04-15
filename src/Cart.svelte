@@ -1,12 +1,12 @@
 <script>
   import Item from './Item.svelte';
+  import CheckoutButton from './CheckoutButton.svelte';
   import getCart from './getCart.js';
-  const toDollars = (cents) => (Number(cents) / 100).toFixed(2);
+  import {toDollars} from './utils.js';
 
   // --------------------------------------------------------
   let total_price = 0;
   let arr = [];
-
   // --------------------------------------------------------
 
   async function renderCart() {
@@ -15,13 +15,16 @@
     const items = data.items;
 
     items.forEach((item, idx) => {
+      console.log('item:');
+      console.log(item);
 
       arr[idx] = {
         id:  item.id,
         URL: item.url,
         title: item.title,
         imgURL: item.featured_image.url,
-        price: toDollars(item.price)
+        price: toDollars(item.price),
+        quantity: item.quantity
       };
       
       const price = item.price;
@@ -35,7 +38,31 @@
   renderCart();
 </script>
 
-<h1>Total Price: ${total_price}</h1>
+<!-- ============================ -->
+
+<div class="checkout-button-container">
+  <h1>Subtotal: ${total_price}</h1>
+  <CheckoutButton />
+</div>
+
 {#each arr as item}
-  <Item id={item.id} URL={item.URL} title={item.title} imgURL={item.imgURL} price={item.price}/>
+  <hr>
+  <Item 
+    id={item.id} 
+    URL={item.URL} 
+    title={item.title} 
+    imgURL={item.imgURL} 
+    price={item.price}
+    quantity={item.quantity}
+  />
 {/each}
+<hr>
+
+<!-- ============================ -->
+
+
+<style>
+  .checkout-button-container {
+    padding: 0 20px;
+  }
+</style>

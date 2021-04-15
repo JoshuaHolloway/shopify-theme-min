@@ -1,10 +1,9 @@
 <script>
+  import Element from './Element.svelte';
   import Cart from './Cart.svelte';
 
 	// export let price;
   export let qty_in_cart = 0;
-
-
 
   // - - - - - - - - - - - - - - - - - - - 
 
@@ -19,9 +18,8 @@
 </script>
 
 
-<h1>josh 1</h1>
 <Cart />
-<h1>josh 2</h1>
+
 
 <div id="container">
 
@@ -35,8 +33,11 @@
   <h5>Quantity In Cart: {qty_in_cart}</h5>
 </div>
 
+
+<Element />
+
 <style>
-  * { box-sizing: border-box; }
+  
   #container {
     background: deepskyblue;
   }
@@ -50,6 +51,6 @@
   }
   #id-container button {
     height: 100%;
-    width: 40px;
+    width: 140px;
   }
 </style>

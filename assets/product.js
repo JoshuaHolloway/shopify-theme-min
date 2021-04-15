@@ -135,6 +135,8 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(response => response.json())
     .then(data => {
+      console.clear();
+      console.log({ "quantity": newQty, "id": String(itemVariantId) });
       console.log('fetch: ', data);
 
       // Update the quantity input with the new value
