@@ -1,5 +1,5 @@
 <script>
-  import { count } from './store.js';
+  import { count_1, count_2 } from './store.js';
   import Element from './Element.svelte';
   export let id;
   export let URL;
@@ -8,13 +8,11 @@
   export let price;
   export let quantity;
 
-  
   export let line_num;
 
-  let count_value;
-  const unsubscribe = count.subscribe(value => {
-    count_value = value;
-  });
+  // $: quantity = $count;
+
+  console.log('line_num: ', line_num);
   
 </script>
 
@@ -28,7 +26,15 @@
 
   <div class="info-container">
     <a href="{URL}">{title}</a>
-    <p>Quantity:{quantity} @ Price: {price}</p>
+
+    <!-- This should now re-render when $count is updated (we auto-subscribe with $-prefix) -->
+    <!-- $count is first set when <Element /> is created by passing it the quantity value from gettting the cart on page load -->
+    <!-- $count is updated in the POST request's count.update( callback ) -->
+    {#if line_num == 0}
+       <p>Quantity:{$count_1} @ Price: {price}</p>
+    {:else}
+       <p>Quantity:{$count_2} @ Price: {price}</p>
+    {/if}
   </div>
 
   <div class="qty-container">
