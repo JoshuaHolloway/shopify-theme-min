@@ -1,6 +1,7 @@
 <script>
   import { counts } from './store.js';
   import Element from './Element.svelte';
+  import Delete from './Delete.svelte';
   export let id;
   export let URL;
   export let title;
@@ -30,7 +31,9 @@
     <Element line_num={line_num} line_item_id={id} line_item_qty={quantity}/>
   </div>
 
-  <div class="remove-container"></div>
+  <div class="remove-container">
+    <Delete />
+  </div>
 </div>
 
 <style>
