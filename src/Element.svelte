@@ -8,15 +8,10 @@
 
   const count = counts[line_num];
   $count = line_item_qty;
-  
-  function increment() {
-    
-    console.clear();
 
-    // -This value is to be sent to the server 
-    //  (not verified it has been succefully updated yet, 
-    //   that happens in the response)
-    const new_quanity_we_desire = $count + 1;
+  // ============================================
+
+  function do_change_quantity_post_request(line_item_id, new_quanity_we_desire) {
 
     const data_obj = { "quantity": String(new_quanity_we_desire), "id": String(line_item_id) };
     // const data_obj = { "line": 1, "quantity": 7,  };
@@ -31,6 +26,7 @@
     .then(response => response.json())
     .then(data => {
 
+      console.clear();
       console.log('Svelte Fetch: ', data);
  
       // New quantity has been succesfully changed on server
@@ -40,6 +36,21 @@
        count.update(() => verified_new_quantity);
     })
     .catch(error => console.error('Error:', error));
+
+  }
+
+  // ============================================
+
+  function increment() {
+    const new_quanity_we_desire = $count + 1;
+    do_change_quantity_post_request(line_item_id, new_quanity_we_desire);
+  }
+
+  // ============================================
+
+  function decrement() {
+    const new_quanity_we_desire = $count - 1;
+    do_change_quantity_post_request(line_item_id, new_quanity_we_desire);
   }
 
 </script>
@@ -47,6 +58,7 @@
 <div class="qty-container">
   <button on:click={increment}>+</button>
   <span>{$count}</span>
+  <button on:click={decrement}>-</button>
 </div>
 
 <style>

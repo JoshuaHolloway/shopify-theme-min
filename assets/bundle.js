@@ -471,38 +471,50 @@ var app = (function () {
 
     function create_fragment$4(ctx) {
     	let div;
-    	let button;
+    	let button0;
     	let t1;
     	let span;
     	let t2;
+    	let t3;
+    	let button1;
     	let mounted;
     	let dispose;
 
     	const block = {
     		c: function create() {
     			div = element("div");
-    			button = element("button");
-    			button.textContent = "+";
+    			button0 = element("button");
+    			button0.textContent = "+";
     			t1 = space();
     			span = element("span");
     			t2 = text(/*$count*/ ctx[0]);
-    			add_location(button, file$3, 47, 2, 1225);
-    			add_location(span, file$3, 48, 2, 1267);
+    			t3 = space();
+    			button1 = element("button");
+    			button1.textContent = "-";
+    			add_location(button0, file$3, 58, 2, 1538);
+    			add_location(span, file$3, 59, 2, 1580);
+    			add_location(button1, file$3, 60, 2, 1604);
     			attr_dev(div, "class", "qty-container svelte-1yfr2bm");
-    			add_location(div, file$3, 46, 0, 1195);
+    			add_location(div, file$3, 57, 0, 1508);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
-    			append_dev(div, button);
+    			append_dev(div, button0);
     			append_dev(div, t1);
     			append_dev(div, span);
     			append_dev(span, t2);
+    			append_dev(div, t3);
+    			append_dev(div, button1);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*increment*/ ctx[2], false, false, false);
+    				dispose = [
+    					listen_dev(button0, "click", /*increment*/ ctx[2], false, false, false),
+    					listen_dev(button1, "click", /*decrement*/ ctx[3], false, false, false)
+    				];
+
     				mounted = true;
     			}
     		},
@@ -514,7 +526,7 @@ var app = (function () {
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -541,14 +553,8 @@ var app = (function () {
     	component_subscribe($$self, count, value => $$invalidate(0, $count = value));
     	set_store_value(count, $count = line_item_qty, $count);
 
-    	function increment() {
-    		console.clear();
-
-    		// -This value is to be sent to the server 
-    		//  (not verified it has been succefully updated yet, 
-    		//   that happens in the response)
-    		const new_quanity_we_desire = $count + 1;
-
+    	// ============================================
+    	function do_change_quantity_post_request(line_item_id, new_quanity_we_desire) {
     		const data_obj = {
     			"quantity": String(new_quanity_we_desire),
     			"id": String(line_item_id)
@@ -560,6 +566,7 @@ var app = (function () {
     			headers: { "Content-Type": "application/json" },
     			body: JSON.stringify(data_obj)
     		}).then(response => response.json()).then(data => {
+    			console.clear();
     			console.log("Svelte Fetch: ", data);
 
     			// New quantity has been succesfully changed on server
@@ -570,6 +577,18 @@ var app = (function () {
     		}).catch(error => console.error("Error:", error));
     	}
 
+    	// ============================================
+    	function increment() {
+    		const new_quanity_we_desire = $count + 1;
+    		do_change_quantity_post_request(line_item_id, new_quanity_we_desire);
+    	}
+
+    	// ============================================
+    	function decrement() {
+    		const new_quanity_we_desire = $count - 1;
+    		do_change_quantity_post_request(line_item_id, new_quanity_we_desire);
+    	}
+
     	const writable_props = ["line_item_id", "line_item_qty", "line_num"];
 
     	Object.keys($$props).forEach(key => {
@@ -577,9 +596,9 @@ var app = (function () {
     	});
 
     	$$self.$$set = $$props => {
-    		if ("line_item_id" in $$props) $$invalidate(3, line_item_id = $$props.line_item_id);
-    		if ("line_item_qty" in $$props) $$invalidate(4, line_item_qty = $$props.line_item_qty);
-    		if ("line_num" in $$props) $$invalidate(5, line_num = $$props.line_num);
+    		if ("line_item_id" in $$props) $$invalidate(4, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(5, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(6, line_num = $$props.line_num);
     	};
 
     	$$self.$capture_state = () => ({
@@ -588,21 +607,23 @@ var app = (function () {
     		line_item_qty,
     		line_num,
     		count,
+    		do_change_quantity_post_request,
     		increment,
+    		decrement,
     		$count
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("line_item_id" in $$props) $$invalidate(3, line_item_id = $$props.line_item_id);
-    		if ("line_item_qty" in $$props) $$invalidate(4, line_item_qty = $$props.line_item_qty);
-    		if ("line_num" in $$props) $$invalidate(5, line_num = $$props.line_num);
+    		if ("line_item_id" in $$props) $$invalidate(4, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(5, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(6, line_num = $$props.line_num);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [$count, count, increment, line_item_id, line_item_qty, line_num];
+    	return [$count, count, increment, decrement, line_item_id, line_item_qty, line_num];
     }
 
     class Element extends SvelteComponentDev {
@@ -610,9 +631,9 @@ var app = (function () {
     		super(options);
 
     		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
-    			line_item_id: 3,
-    			line_item_qty: 4,
-    			line_num: 5
+    			line_item_id: 4,
+    			line_item_qty: 5,
+    			line_num: 6
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -625,15 +646,15 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*line_item_id*/ ctx[3] === undefined && !("line_item_id" in props)) {
+    		if (/*line_item_id*/ ctx[4] === undefined && !("line_item_id" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_item_id'");
     		}
 
-    		if (/*line_item_qty*/ ctx[4] === undefined && !("line_item_qty" in props)) {
+    		if (/*line_item_qty*/ ctx[5] === undefined && !("line_item_qty" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_item_qty'");
     		}
 
-    		if (/*line_num*/ ctx[5] === undefined && !("line_num" in props)) {
+    		if (/*line_num*/ ctx[6] === undefined && !("line_num" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_num'");
     		}
     	}
