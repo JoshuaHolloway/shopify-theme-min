@@ -1,14 +1,27 @@
 <script>
-  import { count } from './store.js';
+  
   import Increment from './Elem-Increment.svelte';
   import Decrement from './Elem-Decrement.svelte';
 
-  let count_value;
-  const unsubscribe = count.subscribe(value => {
-    count_value = value;
-  });
+  export let line_item_id;
+  export let line_item_qty;
+
+  export let line_num;
+
 </script>
 
-<h1>The count is: {count_value}</h1>
-<Increment />
-<Decrement />
+<div class="qty-container">
+  <Increment 
+    line_num={line_num}
+    line_item_id={line_item_id} 
+    line_item_qty={line_item_qty}
+  />
+  <span>{line_item_qty}</span>
+  <Decrement />
+</div>
+
+<style>
+  .qty-container {
+    background: blue;
+  }
+</style>

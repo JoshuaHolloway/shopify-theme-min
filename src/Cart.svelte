@@ -45,7 +45,7 @@
   <CheckoutButton />
 </div>
 
-{#each arr as item}
+{#each arr as item, idx}
   <hr>
   <Item 
     id={item.id} 
@@ -54,12 +54,12 @@
     imgURL={item.imgURL} 
     price={item.price}
     quantity={item.quantity}
+    line_num={idx}
   />
 {/each}
 <hr>
 
 <!-- ============================ -->
-
 
 <style>
   .checkout-button-container {
