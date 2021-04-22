@@ -458,6 +458,9 @@ var app = (function () {
 
     const count_1 = writable(0);
     const count_2 = writable(0);
+
+    const counts = [];
+    counts.push(count_1, count_2);
     // export const count_1 = writable(0);
     // export const count_2 = writable(0);
 
@@ -469,6 +472,9 @@ var app = (function () {
     function create_fragment$4(ctx) {
     	let div;
     	let button;
+    	let t1;
+    	let span;
+    	let t2;
     	let mounted;
     	let dispose;
 
@@ -477,9 +483,13 @@ var app = (function () {
     			div = element("div");
     			button = element("button");
     			button.textContent = "+";
-    			add_location(button, file$3, 86, 2, 2439);
+    			t1 = space();
+    			span = element("span");
+    			t2 = text(/*$count*/ ctx[0]);
+    			add_location(button, file$3, 47, 2, 1225);
+    			add_location(span, file$3, 48, 2, 1267);
     			attr_dev(div, "class", "qty-container svelte-1yfr2bm");
-    			add_location(div, file$3, 84, 0, 2406);
+    			add_location(div, file$3, 46, 0, 1195);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -487,13 +497,18 @@ var app = (function () {
     		m: function mount(target, anchor) {
     			insert_dev(target, div, anchor);
     			append_dev(div, button);
+    			append_dev(div, t1);
+    			append_dev(div, span);
+    			append_dev(span, t2);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*increment*/ ctx[0], false, false, false);
+    				dispose = listen_dev(button, "click", /*increment*/ ctx[2], false, false, false);
     				mounted = true;
     			}
     		},
-    		p: noop,
+    		p: function update(ctx, [dirty]) {
+    			if (dirty & /*$count*/ 1) set_data_dev(t2, /*$count*/ ctx[0]);
+    		},
     		i: noop,
     		o: noop,
     		d: function destroy(detaching) {
@@ -515,38 +530,25 @@ var app = (function () {
     }
 
     function instance$4($$self, $$props, $$invalidate) {
-    	let $count_1;
-    	let $count_2;
-    	validate_store(count_1, "count_1");
-    	component_subscribe($$self, count_1, $$value => $$invalidate(4, $count_1 = $$value));
-    	validate_store(count_2, "count_2");
-    	component_subscribe($$self, count_2, $$value => $$invalidate(5, $count_2 = $$value));
+    	let $count;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Element", slots, []);
     	let { line_item_id } = $$props;
     	let { line_item_qty } = $$props;
     	let { line_num } = $$props;
-    	if (line_num === 0) set_store_value(count_1, $count_1 = line_item_qty, $count_1); else if (line_num === 1) set_store_value(count_2, $count_2 = line_item_qty, $count_2);
+    	const count = counts[line_num];
+    	validate_store(count, "count");
+    	component_subscribe($$self, count, value => $$invalidate(0, $count = value));
+    	set_store_value(count, $count = line_item_qty, $count);
 
     	function increment() {
     		console.clear();
-    		console.log(`line_num: ${line_num}, $count_1: ${$count_1}, $count_2: ${$count_2}`);
-    		console.log(`line_item_id: ${line_item_id}, typeof line_item_id: ${typeof line_item_id}`);
 
     		// -This value is to be sent to the server 
     		//  (not verified it has been succefully updated yet, 
     		//   that happens in the response)
-    		// const new_quanity_we_desire = local_component_qty + 1;
-    		let new_quanity_we_desire;
+    		const new_quanity_we_desire = $count + 1;
 
-    		if (line_num === 0) new_quanity_we_desire = $count_1 + 1; else if (line_num === 1) new_quanity_we_desire = $count_2 + 1;
-    		console.log("new_quantity_we_desire: ", new_quanity_we_desire);
-
-    		// const data_obj = { "quantity": new_quanity_we_desire, "id": String(line_item_id) };
-    		// const data_obj = { "quantity": String(9), "id": String(39540088832179) };
-    		// const data_obj = { "quantity": String(9), "id": String(39540031127731) };
-    		// const data_obj = { "quantity": String(18), "id": "39540088832179:6881ee5f9fc473f02da20f6049955538" };
-    		// const data_obj = { "quantity": String(18), "id": "39540031127731:109260b9cfda5bcd3e86cdb2f7ba8b67" };
     		const data_obj = {
     			"quantity": String(new_quanity_we_desire),
     			"id": String(line_item_id)
@@ -563,14 +565,8 @@ var app = (function () {
     			// New quantity has been succesfully changed on server
     			const verified_new_quantity = data.items[line_num].quantity;
 
-    			console.log("verified_new_quantity: ", verified_new_quantity);
-
     			// -Update quantity of line item (to display in component one level above)
-    			if (line_num === 0) {
-    				count_1.update(n => verified_new_quantity);
-    			} else if (line_num === 1) {
-    				count_2.update(n => verified_new_quantity);
-    			}
+    			count.update(() => verified_new_quantity);
     		}).catch(error => console.error("Error:", error));
     	}
 
@@ -581,33 +577,32 @@ var app = (function () {
     	});
 
     	$$self.$$set = $$props => {
-    		if ("line_item_id" in $$props) $$invalidate(1, line_item_id = $$props.line_item_id);
-    		if ("line_item_qty" in $$props) $$invalidate(2, line_item_qty = $$props.line_item_qty);
-    		if ("line_num" in $$props) $$invalidate(3, line_num = $$props.line_num);
+    		if ("line_item_id" in $$props) $$invalidate(3, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(4, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(5, line_num = $$props.line_num);
     	};
 
     	$$self.$capture_state = () => ({
-    		count_1,
-    		count_2,
+    		counts,
     		line_item_id,
     		line_item_qty,
     		line_num,
+    		count,
     		increment,
-    		$count_1,
-    		$count_2
+    		$count
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("line_item_id" in $$props) $$invalidate(1, line_item_id = $$props.line_item_id);
-    		if ("line_item_qty" in $$props) $$invalidate(2, line_item_qty = $$props.line_item_qty);
-    		if ("line_num" in $$props) $$invalidate(3, line_num = $$props.line_num);
+    		if ("line_item_id" in $$props) $$invalidate(3, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(4, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(5, line_num = $$props.line_num);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [increment, line_item_id, line_item_qty, line_num];
+    	return [$count, count, increment, line_item_id, line_item_qty, line_num];
     }
 
     class Element extends SvelteComponentDev {
@@ -615,9 +610,9 @@ var app = (function () {
     		super(options);
 
     		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
-    			line_item_id: 1,
-    			line_item_qty: 2,
-    			line_num: 3
+    			line_item_id: 3,
+    			line_item_qty: 4,
+    			line_num: 5
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -630,15 +625,15 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*line_item_id*/ ctx[1] === undefined && !("line_item_id" in props)) {
+    		if (/*line_item_id*/ ctx[3] === undefined && !("line_item_id" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_item_id'");
     		}
 
-    		if (/*line_item_qty*/ ctx[2] === undefined && !("line_item_qty" in props)) {
+    		if (/*line_item_qty*/ ctx[4] === undefined && !("line_item_qty" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_item_qty'");
     		}
 
-    		if (/*line_num*/ ctx[3] === undefined && !("line_num" in props)) {
+    		if (/*line_num*/ ctx[5] === undefined && !("line_num" in props)) {
     			console_1$2.warn("<Element> was created without expected prop 'line_num'");
     		}
     	}
@@ -673,96 +668,6 @@ var app = (function () {
     const { console: console_1$1 } = globals;
     const file$2 = "src\\Item.svelte";
 
-    // (35:4) {:else}
-    function create_else_block(ctx) {
-    	let p;
-    	let t0;
-    	let t1;
-    	let t2;
-    	let t3;
-
-    	const block = {
-    		c: function create() {
-    			p = element("p");
-    			t0 = text("Quantity:");
-    			t1 = text(/*$count_2*/ ctx[8]);
-    			t2 = text(" @ Price: ");
-    			t3 = text(/*price*/ ctx[4]);
-    			attr_dev(p, "class", "svelte-1gi6pjb");
-    			add_location(p, file$2, 35, 7, 954);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t0);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*$count_2*/ 256) set_data_dev(t1, /*$count_2*/ ctx[8]);
-    			if (dirty & /*price*/ 16) set_data_dev(t3, /*price*/ ctx[4]);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_else_block.name,
-    		type: "else",
-    		source: "(35:4) {:else}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
-    // (33:4) {#if line_num == 0}
-    function create_if_block(ctx) {
-    	let p;
-    	let t0;
-    	let t1;
-    	let t2;
-    	let t3;
-
-    	const block = {
-    		c: function create() {
-    			p = element("p");
-    			t0 = text("Quantity:");
-    			t1 = text(/*$count_1*/ ctx[7]);
-    			t2 = text(" @ Price: ");
-    			t3 = text(/*price*/ ctx[4]);
-    			attr_dev(p, "class", "svelte-1gi6pjb");
-    			add_location(p, file$2, 33, 7, 891);
-    		},
-    		m: function mount(target, anchor) {
-    			insert_dev(target, p, anchor);
-    			append_dev(p, t0);
-    			append_dev(p, t1);
-    			append_dev(p, t2);
-    			append_dev(p, t3);
-    		},
-    		p: function update(ctx, dirty) {
-    			if (dirty & /*$count_1*/ 128) set_data_dev(t1, /*$count_1*/ ctx[7]);
-    			if (dirty & /*price*/ 16) set_data_dev(t3, /*price*/ ctx[4]);
-    		},
-    		d: function destroy(detaching) {
-    			if (detaching) detach_dev(p);
-    		}
-    	};
-
-    	dispatch_dev("SvelteRegisterBlock", {
-    		block,
-    		id: create_if_block.name,
-    		type: "if",
-    		source: "(33:4) {#if line_num == 0}",
-    		ctx
-    	});
-
-    	return block;
-    }
-
     function create_fragment$3(ctx) {
     	let div4;
     	let div0;
@@ -773,20 +678,17 @@ var app = (function () {
     	let a;
     	let t1;
     	let t2;
+    	let p;
     	let t3;
+    	let t4;
+    	let t5;
+    	let t6;
+    	let t7;
     	let div2;
     	let element_1;
-    	let t4;
+    	let t8;
     	let div3;
     	let current;
-
-    	function select_block_type(ctx, dirty) {
-    		if (/*line_num*/ ctx[6] == 0) return create_if_block;
-    		return create_else_block;
-    	}
-
-    	let current_block_type = select_block_type(ctx);
-    	let if_block = current_block_type(ctx);
 
     	element_1 = new Element({
     			props: {
@@ -807,30 +709,36 @@ var app = (function () {
     			a = element("a");
     			t1 = text(/*title*/ ctx[2]);
     			t2 = space();
-    			if_block.c();
-    			t3 = space();
+    			p = element("p");
+    			t3 = text("JOSH Quantity:");
+    			t4 = text(/*$count*/ ctx[7]);
+    			t5 = text(" @ Price: ");
+    			t6 = text(/*price*/ ctx[4]);
+    			t7 = space();
     			div2 = element("div");
     			create_component(element_1.$$.fragment);
-    			t4 = space();
+    			t8 = space();
     			div3 = element("div");
     			attr_dev(img, "height", "100");
     			if (img.src !== (img_src_value = /*imgURL*/ ctx[3])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "");
-    			add_location(img, file$2, 22, 4, 403);
+    			add_location(img, file$2, 20, 4, 396);
     			attr_dev(div0, "class", "img-container svelte-1gi6pjb");
-    			add_location(div0, file$2, 21, 2, 371);
+    			add_location(div0, file$2, 19, 2, 364);
     			attr_dev(a, "href", /*URL*/ ctx[1]);
     			attr_dev(a, "class", "svelte-1gi6pjb");
-    			add_location(a, file$2, 27, 4, 527);
+    			add_location(a, file$2, 24, 4, 483);
+    			attr_dev(p, "class", "svelte-1gi6pjb");
+    			add_location(p, file$2, 25, 4, 515);
     			attr_dev(div1, "class", "info-container svelte-1gi6pjb");
-    			add_location(div1, file$2, 26, 2, 494);
+    			add_location(div1, file$2, 23, 2, 450);
     			attr_dev(div2, "class", "qty-container svelte-1gi6pjb");
-    			add_location(div2, file$2, 39, 2, 1020);
+    			add_location(div2, file$2, 28, 2, 574);
     			attr_dev(div3, "class", "remove-container svelte-1gi6pjb");
-    			add_location(div3, file$2, 53, 2, 1921);
+    			add_location(div3, file$2, 32, 2, 692);
     			attr_dev(div4, "class", "item svelte-1gi6pjb");
     			attr_dev(div4, "data-variant-id", /*id*/ ctx[0]);
-    			add_location(div4, file$2, 18, 0, 325);
+    			add_location(div4, file$2, 17, 0, 321);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -844,11 +752,15 @@ var app = (function () {
     			append_dev(div1, a);
     			append_dev(a, t1);
     			append_dev(div1, t2);
-    			if_block.m(div1, null);
-    			append_dev(div4, t3);
+    			append_dev(div1, p);
+    			append_dev(p, t3);
+    			append_dev(p, t4);
+    			append_dev(p, t5);
+    			append_dev(p, t6);
+    			append_dev(div4, t7);
     			append_dev(div4, div2);
     			mount_component(element_1, div2, null);
-    			append_dev(div4, t4);
+    			append_dev(div4, t8);
     			append_dev(div4, div3);
     			current = true;
     		},
@@ -863,18 +775,8 @@ var app = (function () {
     				attr_dev(a, "href", /*URL*/ ctx[1]);
     			}
 
-    			if (current_block_type === (current_block_type = select_block_type(ctx)) && if_block) {
-    				if_block.p(ctx, dirty);
-    			} else {
-    				if_block.d(1);
-    				if_block = current_block_type(ctx);
-
-    				if (if_block) {
-    					if_block.c();
-    					if_block.m(div1, null);
-    				}
-    			}
-
+    			if (!current || dirty & /*$count*/ 128) set_data_dev(t4, /*$count*/ ctx[7]);
+    			if (!current || dirty & /*price*/ 16) set_data_dev(t6, /*price*/ ctx[4]);
     			const element_1_changes = {};
     			if (dirty & /*line_num*/ 64) element_1_changes.line_num = /*line_num*/ ctx[6];
     			if (dirty & /*id*/ 1) element_1_changes.line_item_id = /*id*/ ctx[0];
@@ -896,7 +798,6 @@ var app = (function () {
     		},
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(div4);
-    			if_block.d();
     			destroy_component(element_1);
     		}
     	};
@@ -913,12 +814,7 @@ var app = (function () {
     }
 
     function instance$3($$self, $$props, $$invalidate) {
-    	let $count_1;
-    	let $count_2;
-    	validate_store(count_1, "count_1");
-    	component_subscribe($$self, count_1, $$value => $$invalidate(7, $count_1 = $$value));
-    	validate_store(count_2, "count_2");
-    	component_subscribe($$self, count_2, $$value => $$invalidate(8, $count_2 = $$value));
+    	let $count;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Item", slots, []);
     	let { id } = $$props;
@@ -928,10 +824,10 @@ var app = (function () {
     	let { price } = $$props;
     	let { quantity } = $$props;
     	let { line_num } = $$props;
-
-    	// $: quantity = $count;
+    	const count = counts[line_num];
+    	validate_store(count, "count");
+    	component_subscribe($$self, count, value => $$invalidate(7, $count = value));
     	console.log("line_num: ", line_num);
-
     	const writable_props = ["id", "URL", "title", "imgURL", "price", "quantity", "line_num"];
 
     	Object.keys($$props).forEach(key => {
@@ -949,8 +845,7 @@ var app = (function () {
     	};
 
     	$$self.$capture_state = () => ({
-    		count_1,
-    		count_2,
+    		counts,
     		Element,
     		id,
     		URL,
@@ -959,8 +854,8 @@ var app = (function () {
     		price,
     		quantity,
     		line_num,
-    		$count_1,
-    		$count_2
+    		count,
+    		$count
     	});
 
     	$$self.$inject_state = $$props => {
@@ -977,7 +872,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [id, URL, title, imgURL, price, quantity, line_num, $count_1, $count_2];
+    	return [id, URL, title, imgURL, price, quantity, line_num, $count, count];
     }
 
     class Item extends SvelteComponentDev {
@@ -1184,12 +1079,12 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[5] = list[i];
-    	child_ctx[7] = i;
+    	child_ctx[3] = list[i];
+    	child_ctx[5] = i;
     	return child_ctx;
     }
 
-    // (87:0) {#each arr as item, idx}
+    // (48:0) {#each arr as item, idx}
     function create_each_block(ctx) {
     	let hr;
     	let t;
@@ -1198,13 +1093,13 @@ var app = (function () {
 
     	item = new Item({
     			props: {
-    				id: /*item*/ ctx[5].id,
-    				URL: /*item*/ ctx[5].URL,
-    				title: /*item*/ ctx[5].title,
-    				imgURL: /*item*/ ctx[5].imgURL,
-    				price: /*item*/ ctx[5].price,
-    				quantity: /*item*/ ctx[5].quantity,
-    				line_num: /*idx*/ ctx[7]
+    				id: /*item*/ ctx[3].id,
+    				URL: /*item*/ ctx[3].URL,
+    				title: /*item*/ ctx[3].title,
+    				imgURL: /*item*/ ctx[3].imgURL,
+    				price: /*item*/ ctx[3].price,
+    				quantity: /*item*/ ctx[3].quantity,
+    				line_num: /*idx*/ ctx[5]
     			},
     			$$inline: true
     		});
@@ -1214,7 +1109,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(item.$$.fragment);
-    			add_location(hr, file, 87, 2, 2132);
+    			add_location(hr, file, 48, 2, 1104);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -1224,12 +1119,12 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const item_changes = {};
-    			if (dirty & /*arr*/ 2) item_changes.id = /*item*/ ctx[5].id;
-    			if (dirty & /*arr*/ 2) item_changes.URL = /*item*/ ctx[5].URL;
-    			if (dirty & /*arr*/ 2) item_changes.title = /*item*/ ctx[5].title;
-    			if (dirty & /*arr*/ 2) item_changes.imgURL = /*item*/ ctx[5].imgURL;
-    			if (dirty & /*arr*/ 2) item_changes.price = /*item*/ ctx[5].price;
-    			if (dirty & /*arr*/ 2) item_changes.quantity = /*item*/ ctx[5].quantity;
+    			if (dirty & /*arr*/ 2) item_changes.id = /*item*/ ctx[3].id;
+    			if (dirty & /*arr*/ 2) item_changes.URL = /*item*/ ctx[3].URL;
+    			if (dirty & /*arr*/ 2) item_changes.title = /*item*/ ctx[3].title;
+    			if (dirty & /*arr*/ 2) item_changes.imgURL = /*item*/ ctx[3].imgURL;
+    			if (dirty & /*arr*/ 2) item_changes.price = /*item*/ ctx[3].price;
+    			if (dirty & /*arr*/ 2) item_changes.quantity = /*item*/ ctx[3].quantity;
     			item.$set(item_changes);
     		},
     		i: function intro(local) {
@@ -1252,7 +1147,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(87:0) {#each arr as item, idx}",
+    		source: "(48:0) {#each arr as item, idx}",
     		ctx
     	});
 
@@ -1269,11 +1164,7 @@ var app = (function () {
     	let t3;
     	let t4;
     	let hr;
-    	let t5;
-    	let button;
     	let current;
-    	let mounted;
-    	let dispose;
     	checkoutbutton = new CheckoutButton({ $$inline: true });
     	let each_value = /*arr*/ ctx[1];
     	validate_each_argument(each_value);
@@ -1303,14 +1194,10 @@ var app = (function () {
 
     			t4 = space();
     			hr = element("hr");
-    			t5 = space();
-    			button = element("button");
-    			button.textContent = "Change Item 1";
-    			add_location(h1, file, 82, 2, 2042);
+    			add_location(h1, file, 43, 2, 1014);
     			attr_dev(div, "class", "checkout-button-container svelte-1doe5dg");
-    			add_location(div, file, 81, 0, 2000);
-    			add_location(hr, file, 98, 0, 2318);
-    			add_location(button, file, 100, 0, 2324);
+    			add_location(div, file, 42, 0, 972);
+    			add_location(hr, file, 59, 0, 1290);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1330,14 +1217,7 @@ var app = (function () {
 
     			insert_dev(target, t4, anchor);
     			insert_dev(target, hr, anchor);
-    			insert_dev(target, t5, anchor);
-    			insert_dev(target, button, anchor);
     			current = true;
-
-    			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*change_1*/ ctx[2], false, false, false);
-    				mounted = true;
-    			}
     		},
     		p: function update(ctx, [dirty]) {
     			if (!current || dirty & /*total_price*/ 1) set_data_dev(t1, /*total_price*/ ctx[0]);
@@ -1397,10 +1277,6 @@ var app = (function () {
     			destroy_each(each_blocks, detaching);
     			if (detaching) detach_dev(t4);
     			if (detaching) detach_dev(hr);
-    			if (detaching) detach_dev(t5);
-    			if (detaching) detach_dev(button);
-    			mounted = false;
-    			dispose();
     		}
     	};
 
@@ -1453,40 +1329,6 @@ var app = (function () {
 
     	
     	renderCart();
-
-    	const change_1 = () => {
-    		const data_obj = {
-    			"quantity": String(5),
-    			"id": "39540088832179"
-    		};
-
-    		// const data_obj = { "line": 1, "quantity": 7,  };
-    		fetch("/cart/change.js", {
-    			method: "POST",
-    			headers: { "Content-Type": "application/json" },
-    			body: JSON.stringify(data_obj)
-    		}).then(response => response.json()).then(data => {
-    			console.clear(); // body: data_obj
-    			console.log("Svelte Fetch: ", data);
-    		}).catch(error => console.error("Error:", error));
-    	};
-
-    	const change_2 = () => {
-    		const data_obj = {
-    			"quantity": String(5),
-    			"id": "39540088832179:6881ee5f9fc473f02da20f6049955538"
-    		};
-
-    		fetch("/cart/change.js", {
-    			method: "POST",
-    			headers: { "Content-Type": "application/json" },
-    			body: JSON.stringify(data_obj)
-    		}).then(response => response.json()).then(data => {
-    			console.clear();
-    			console.log("Svelte Fetch: ", data);
-    		}).catch(error => console.error("Error:", error));
-    	};
-
     	const writable_props = [];
 
     	Object.keys($$props).forEach(key => {
@@ -1500,9 +1342,7 @@ var app = (function () {
     		toDollars,
     		total_price,
     		arr,
-    		renderCart,
-    		change_1,
-    		change_2
+    		renderCart
     	});
 
     	$$self.$inject_state = $$props => {
@@ -1514,7 +1354,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [total_price, arr, change_1];
+    	return [total_price, arr];
     }
 
     class Cart extends SvelteComponentDev {

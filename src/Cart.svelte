@@ -36,45 +36,6 @@
   };
 
   renderCart();
-
-
-
-
-  const change_1 = () => {
-    const data_obj = { "quantity": String(5), "id": "39540088832179" };
-    // const data_obj = { "line": 1, "quantity": 7,  };
-    fetch('/cart/change.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data_obj)
-      // body: data_obj
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.clear();
-      console.log('Svelte Fetch: ', data);
-    })
-    .catch(error => console.error('Error:', error));
-  };
-
-  const change_2 = () => {
-    const data_obj = { "quantity": String(5), "id": "39540088832179:6881ee5f9fc473f02da20f6049955538" };
-    fetch('/cart/change.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify(data_obj)
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.clear();
-      console.log('Svelte Fetch: ', data);
-    })
-    .catch(error => console.error('Error:', error));
-  };
 </script>
 
 <!-- ============================ -->
@@ -97,8 +58,6 @@
   />
 {/each}
 <hr>
-
-<button on:click={change_1}>Change Item 1</button>
 
 <!-- ============================ -->
 
