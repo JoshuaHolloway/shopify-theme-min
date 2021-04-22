@@ -34,7 +34,7 @@ class Timer {
   toc() {
     this.endTime = performance.now();
     const timeDiff = this.endTime - this.startTime; //in ms 
-    return timeDiff;
+    return timeDiff.toFixed(2);
   }
   time() {
     const timeDiff = this.toc();
