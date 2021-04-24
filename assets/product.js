@@ -14,6 +14,10 @@ document.addEventListener("DOMContentLoaded", function() {
     // Prevent standard form submit
     e.preventDefault();
 
+    console.clear();
+    console.log('Form: ', add_to_cart_form);
+ 
+
     const y        = add_to_cart_form;
     const y_select = y.querySelector('#productSelect');
     const y_select_options = y_select.options;
@@ -21,6 +25,50 @@ document.addEventListener("DOMContentLoaded", function() {
     const y_select_value = Number(y_select_options[y_select_selectedIndex].value);
 
     const quantity = Number(add_to_cart_form.querySelector('#Quantity').value);
+
+
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+    // TODO: Get the Variant ID!
+
+
+
+
 
     let formData = {
       'items': [{
@@ -38,7 +86,7 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(response => response.json())
     .then(data => {
-      console.clear();
+      
 
       const item = data.items[0];
 

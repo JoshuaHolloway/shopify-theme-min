@@ -6,6 +6,10 @@
   <meta name="description" content="{{ page_description | escape }}">
   <link rel="canonical" href="{{ canonical_url }}">
   <meta name="viewport" content="width=device-width,initial-scale=1,shrink-to-fit=no">
+
+
+  <script src="https://unpkg.com/vue@next"></script>
+
   {{ content_for_header }} <!-- Header hook for plugins -->
   {{ 'https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css' | stylesheet_tag }}
   <!-- {{ 'application.scss.css' | asset_url | stylesheet_tag }} -->
@@ -68,7 +72,7 @@
   {{ 'gsap.min.js' | asset_url | script_tag }}
   {{ 'product.js' | asset_url | script_tag }}
 
-  {{ 'bundle.js' | asset_url | script_tag }}
+  <!-- {{ 'bundle.js' | asset_url | script_tag }} -->
 
 </body>
 </html>

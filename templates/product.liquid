@@ -47,6 +47,101 @@
     <div id="cart-goes-here"></div>
   </div>
 
-
-
 </div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+<!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
+
+<div id="product-page" class="product-page container">
+  <div class="product-photo">
+    <img src="{{ featured_image | img_url: '500x', scale: 2 }}">
+  </div>
+  <div class="product-meta">
+    <h1 class="product-title">{{ product.title }}</h1>
+    <div class="product-price">{{ product.price | money }}</div>
+    <div class="product-description">{{ product.description }}</div>
+    {% if product.variants.size > 1 %}
+      <div class="variant-select">
+        {% for product_option in product.options_with_values %}
+          <label for="{{ product_option.name }}">
+            {{ product_option.name }}
+          </label>
+          <select id="{{ product_option.name }}" v-model="variant_selection.option{{ product_option.position }}">
+            {% for value in product_option.values %}
+              <option {% if product_option.selected_value == value %}selected{% endif %}>
+                {{ value }}
+              </option>
+            {% endfor %}
+          </select>
+        {% endfor %}
+      </div>
+    {% endif %}
+    <form action="/cart/add" method="post">
+      <input type="hidden" name="id" :value="current_variant_id">
+      <input type="hidden" name="quantity" value="1">
+      <button type="submit" class="atc">
+        Add to cart
+      </button>
+    </form>
+  </div>
+</div>
+
+
+<script>
+  const ProductPage = {
+    data() {
+      return { 
+        // This is bound to the 1st-input option in the form above (:value="current_variant_id")
+        current_variant_id: '{{ product.selected_or_first_available_variant.id }}',
+       
+        // -variant_selection are the two drop down values currently selected
+        // We bind the value of select element (corresponding to dropdown of variant chosen) to this data model
+        variant_selection: {
+          option1: "{{ product.options_with_values[0].selected_value }}",
+          option2: "{{ product.options_with_values[1].selected_value }}",
+          //option3: "{{ product.options_with_values[2].selected_value }}",
+          //option4: "{{ product.options_with_values[3].selected_value }}"
+        }, // bind this to our form
+        variants: [
+
+          // Transfer data from Liquid into our Vue instance
+          {% for variant in product.variants %}
+            {
+              id: "{{ variant.id }}",
+              available: {{ variant.available }},
+              option1: "{{ variant.option1 }}",
+              option2: "{{ variant.option2 }}",
+              price: "{{ variant.price | money }}",
+              {% assign img_url = variant.image.src | img_url: '500px', scale: 2 %}
+              image: "{% unless img_url contains 'no-image' %}{{ img_url }}{% endunless %}" // img_url is from above statement, 'no-image' is tied to a product that does not have an image associated to it in the shopify backend
+            },
+          {% endfor %}
+        ], // create a fallback image if the variant does not have an image
+        fallback_product_image: "{{ featured_image | img_url: '500px', scale: 2 }}" // featured_image is a variable set at top of product.liquid
+
+      }
+    },
+  };
+
+  Vue.createApp(ProductPage).mount('#product-page');
+</script>
