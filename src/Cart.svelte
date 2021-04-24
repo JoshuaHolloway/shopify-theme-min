@@ -7,12 +7,34 @@
   // --------------------------------------------------------
   let total_price = 0;
   let arr = [];
+
+  const f_remove = (e) => {
+    arr = arr.filter((elem, idx) => {
+      return idx !== e.detail
+    });
+  };
+
   // --------------------------------------------------------
 
+  // -Force re-grab of entire cart and re-render
+  //  if quantity of any row drops below zero
+  //  after initialization
+  // -TODO: Remove this and just remove row without
+  //        re-grabing entire cart
+
+  // -Wait, re-render will not re-trigger the javascript
+  //  code in this script unless we explicity tell it to 
+  //  in a reactive block.
+  // -We DO want a re-render of th e
+
+  // --------------------------------------------------------
+
+  // --------------------------------------------------------
+  let items;
   async function renderCart() {
 
     const data = await getCart();
-    const items = data.items;
+    items = data.items;
 
     items.forEach((item, idx) => {
       console.log('item:');
@@ -48,6 +70,8 @@
 {#each arr as item, idx}
   <hr>
   <Item 
+    f={f_remove}
+    items={items}
     id={item.id} 
     URL={item.URL} 
     title={item.title} 

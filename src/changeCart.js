@@ -42,11 +42,19 @@ function do_change_quantity_post_request(
     
     console.log('Svelte Fetch: ', data);
 
-    // New quantity has been succesfully changed on server
-    const verified_new_quantity = data.items[line_num].quantity;
-    if (verified_new_quantity !== new_quanity_we_desire)
-      count.update(() => current_quantity);
+    console.log(`new_quanity_we_desire: ${new_quanity_we_desire}`);
 
+    // New quantity has been succesfully changed on server
+    console.log('data.items[line_num]: ', data.items[line_num]);
+
+    if (data.items[line_num]) { // There are some of these items in cart
+      const verified_new_quantity = data.items[line_num].quantity;
+      if (verified_new_quantity !== new_quanity_we_desire) // If quanity change was not successful
+        count.update(() => current_quantity);
+    }
+    else { // zero of these already in cart
+      count.update(() => 0);
+    }
 
     const timeDiff = timer.toc();
     console.log(`END AJAX response @ ${timeDiff}ms.`);

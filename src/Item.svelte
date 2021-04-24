@@ -2,6 +2,10 @@
   import { counts } from './store.js';
   import Element from './Element.svelte';
   import Delete from './Delete.svelte';
+  
+  export let f;
+
+  export let items;
   export let id;
   export let URL;
   export let title;
@@ -13,8 +17,14 @@
   const count = counts[line_num];
 
   console.log('line_num: ', line_num);
-  
+ 
+  $: {
+    console.log('re-render ITEM, and items = ', items);
+  }
+
 </script>
+
+
 
 <div class="item" data-variant-id={id}>
 
@@ -32,7 +42,7 @@
   </div>
 
   <div class="remove-container">
-    <Delete />
+    <Delete on:remove={f} items={items} line_num={line_num} line_item_id={id} line_item_qty={quantity}/>
   </div>
 </div>
 

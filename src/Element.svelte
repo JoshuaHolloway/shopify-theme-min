@@ -12,7 +12,7 @@
 
   // ============================================
 
-  function increment() {
+  function f_increment() {
     const current_quantity = $count;
     const new_quanity_we_desire = $count + 1;
     do_change_quantity_post_request(line_item_id, current_quantity, new_quanity_we_desire, line_num);
@@ -20,7 +20,7 @@
 
   // ============================================
 
-  function decrement() {
+  function f_decrement() {
     const current_quantity = $count;
     const new_quanity_we_desire = $count - 1;
     do_change_quantity_post_request(line_item_id, current_quantity, new_quanity_we_desire, line_num);
@@ -29,9 +29,9 @@
 </script>
 
 <div class="qty-container">
-  <button on:click={increment}>+</button>
+  <button on:click={f_increment}>+</button>
   <span>{$count}</span>
-  <button on:click={decrement}>-</button>
+  <button on:click={f_decrement}>-</button>
 </div>
 
 <style>

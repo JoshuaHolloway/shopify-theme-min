@@ -92,6 +92,25 @@ var app = (function () {
     function set_current_component(component) {
         current_component = component;
     }
+    function get_current_component() {
+        if (!current_component)
+            throw new Error('Function called outside component initialization');
+        return current_component;
+    }
+    function createEventDispatcher() {
+        const component = get_current_component();
+        return (type, detail) => {
+            const callbacks = component.$$.callbacks[type];
+            if (callbacks) {
+                // TODO are there situations where events could be dispatched
+                // in a server (non-DOM) environment?
+                const event = custom_event(type, detail);
+                callbacks.slice().forEach(fn => {
+                    fn.call(component, event);
+                });
+            }
+        };
+    }
 
     const dirty_components = [];
     const binding_callbacks = [];
@@ -550,11 +569,19 @@ var app = (function () {
         
         console.log('Svelte Fetch: ', data);
 
-        // New quantity has been succesfully changed on server
-        const verified_new_quantity = data.items[line_num].quantity;
-        if (verified_new_quantity !== new_quanity_we_desire)
-          count.update(() => current_quantity);
+        console.log(`new_quanity_we_desire: ${new_quanity_we_desire}`);
 
+        // New quantity has been succesfully changed on server
+        console.log('data.items[line_num]: ', data.items[line_num]);
+
+        if (data.items[line_num]) { // There are some of these items in cart
+          const verified_new_quantity = data.items[line_num].quantity;
+          if (verified_new_quantity !== new_quanity_we_desire) // If quanity change was not successful
+            count.update(() => current_quantity);
+        }
+        else { // zero of these already in cart
+          count.update(() => 0);
+        }
 
         const timeDiff = timer.toc();
         console.log(`END AJAX response @ ${timeDiff}ms.`);
@@ -590,11 +617,11 @@ var app = (function () {
     			t3 = space();
     			button1 = element("button");
     			button1.textContent = "-";
-    			add_location(button0, file$4, 31, 2, 826);
-    			add_location(span, file$4, 32, 2, 868);
-    			add_location(button1, file$4, 33, 2, 892);
+    			add_location(button0, file$4, 31, 2, 830);
+    			add_location(span, file$4, 32, 2, 874);
+    			add_location(button1, file$4, 33, 2, 898);
     			attr_dev(div, "class", "qty-container svelte-1yfr2bm");
-    			add_location(div, file$4, 30, 0, 796);
+    			add_location(div, file$4, 30, 0, 800);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -610,8 +637,8 @@ var app = (function () {
 
     			if (!mounted) {
     				dispose = [
-    					listen_dev(button0, "click", /*increment*/ ctx[2], false, false, false),
-    					listen_dev(button1, "click", /*decrement*/ ctx[3], false, false, false)
+    					listen_dev(button0, "click", /*f_increment*/ ctx[2], false, false, false),
+    					listen_dev(button1, "click", /*f_decrement*/ ctx[3], false, false, false)
     				];
 
     				mounted = true;
@@ -653,14 +680,14 @@ var app = (function () {
     	set_store_value(count, $count = line_item_qty, $count);
 
     	// ============================================
-    	function increment() {
+    	function f_increment() {
     		const current_quantity = $count;
     		const new_quanity_we_desire = $count + 1;
     		do_change_quantity_post_request(line_item_id, current_quantity, new_quanity_we_desire, line_num);
     	}
 
     	// ============================================
-    	function decrement() {
+    	function f_decrement() {
     		const current_quantity = $count;
     		const new_quanity_we_desire = $count - 1;
     		do_change_quantity_post_request(line_item_id, current_quantity, new_quanity_we_desire, line_num);
@@ -685,8 +712,8 @@ var app = (function () {
     		line_item_qty,
     		line_num,
     		count,
-    		increment,
-    		decrement,
+    		f_increment,
+    		f_decrement,
     		$count
     	});
 
@@ -700,7 +727,7 @@ var app = (function () {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [$count, count, increment, decrement, line_item_id, line_item_qty, line_num];
+    	return [$count, count, f_increment, f_decrement, line_item_id, line_item_qty, line_num];
     }
 
     class Element extends SvelteComponentDev {
@@ -775,7 +802,7 @@ var app = (function () {
     		c: function create() {
     			button = element("button");
     			button.textContent = "Delete";
-    			add_location(button, file$3, 6, 0, 85);
+    			add_location(button, file$3, 31, 0, 704);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -784,7 +811,11 @@ var app = (function () {
     			insert_dev(target, button, anchor);
 
     			if (!mounted) {
-    				dispose = listen_dev(button, "click", /*f_delete*/ ctx[0], false, false, false);
+    				dispose = [
+    					listen_dev(button, "click", /*click_handler*/ ctx[7], false, false, false),
+    					listen_dev(button, "click", /*f_delete*/ ctx[3], false, false, false)
+    				];
+
     				mounted = true;
     			}
     		},
@@ -794,7 +825,7 @@ var app = (function () {
     		d: function destroy(detaching) {
     			if (detaching) detach_dev(button);
     			mounted = false;
-    			dispose();
+    			run_all(dispose);
     		}
     	};
 
@@ -810,27 +841,96 @@ var app = (function () {
     }
 
     function instance$4($$self, $$props, $$invalidate) {
+    	let $count;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Delete", slots, []);
+    	const dispatch = createEventDispatcher();
+    	let { items } = $$props;
+    	let { line_item_id } = $$props;
+    	let { line_item_qty } = $$props;
+    	let { line_num } = $$props;
+    	const count = counts[line_num];
+    	validate_store(count, "count");
+    	component_subscribe($$self, count, value => $$invalidate(8, $count = value));
+    	set_store_value(count, $count = line_item_qty, $count);
 
-    	const f_delete = () => {
-    		console.log("TODO: delete");
-    	};
+    	// ============================================
+    	function f_delete() {
+    		const current_quantity = $count;
+    		const new_quanity_we_desire = 0;
+    		do_change_quantity_post_request(line_item_id, current_quantity, new_quanity_we_desire, line_num);
+    	}
 
-    	const writable_props = [];
+    	const writable_props = ["items", "line_item_id", "line_item_qty", "line_num"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$2.warn(`<Delete> was created with unknown prop '${key}'`);
     	});
 
-    	$$self.$capture_state = () => ({ f_delete });
-    	return [f_delete];
+    	const click_handler = () => dispatch("remove", line_num);
+
+    	$$self.$$set = $$props => {
+    		if ("items" in $$props) $$invalidate(4, items = $$props.items);
+    		if ("line_item_id" in $$props) $$invalidate(5, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(6, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(0, line_num = $$props.line_num);
+    	};
+
+    	$$self.$capture_state = () => ({
+    		createEventDispatcher,
+    		dispatch,
+    		do_change_quantity_post_request,
+    		counts,
+    		items,
+    		line_item_id,
+    		line_item_qty,
+    		line_num,
+    		count,
+    		f_delete,
+    		$count
+    	});
+
+    	$$self.$inject_state = $$props => {
+    		if ("items" in $$props) $$invalidate(4, items = $$props.items);
+    		if ("line_item_id" in $$props) $$invalidate(5, line_item_id = $$props.line_item_id);
+    		if ("line_item_qty" in $$props) $$invalidate(6, line_item_qty = $$props.line_item_qty);
+    		if ("line_num" in $$props) $$invalidate(0, line_num = $$props.line_num);
+    	};
+
+    	if ($$props && "$$inject" in $$props) {
+    		$$self.$inject_state($$props.$$inject);
+    	}
+
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*items*/ 16) {
+    			{
+    				console.log("re-render DELETE, and items = ", items);
+    			}
+    		}
+    	};
+
+    	return [
+    		line_num,
+    		dispatch,
+    		count,
+    		f_delete,
+    		items,
+    		line_item_id,
+    		line_item_qty,
+    		click_handler
+    	];
     }
 
     class Delete extends SvelteComponentDev {
     	constructor(options) {
     		super(options);
-    		init(this, options, instance$4, create_fragment$4, safe_not_equal, {});
+
+    		init(this, options, instance$4, create_fragment$4, safe_not_equal, {
+    			items: 4,
+    			line_item_id: 5,
+    			line_item_qty: 6,
+    			line_num: 0
+    		});
 
     		dispatch_dev("SvelteRegisterComponent", {
     			component: this,
@@ -838,6 +938,57 @@ var app = (function () {
     			options,
     			id: create_fragment$4.name
     		});
+
+    		const { ctx } = this.$$;
+    		const props = options.props || {};
+
+    		if (/*items*/ ctx[4] === undefined && !("items" in props)) {
+    			console_1$2.warn("<Delete> was created without expected prop 'items'");
+    		}
+
+    		if (/*line_item_id*/ ctx[5] === undefined && !("line_item_id" in props)) {
+    			console_1$2.warn("<Delete> was created without expected prop 'line_item_id'");
+    		}
+
+    		if (/*line_item_qty*/ ctx[6] === undefined && !("line_item_qty" in props)) {
+    			console_1$2.warn("<Delete> was created without expected prop 'line_item_qty'");
+    		}
+
+    		if (/*line_num*/ ctx[0] === undefined && !("line_num" in props)) {
+    			console_1$2.warn("<Delete> was created without expected prop 'line_num'");
+    		}
+    	}
+
+    	get items() {
+    		throw new Error("<Delete>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set items(value) {
+    		throw new Error("<Delete>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get line_item_id() {
+    		throw new Error("<Delete>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set line_item_id(value) {
+    		throw new Error("<Delete>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get line_item_qty() {
+    		throw new Error("<Delete>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set line_item_qty(value) {
+    		throw new Error("<Delete>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get line_num() {
+    		throw new Error("<Delete>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set line_num(value) {
+    		throw new Error("<Delete>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
     }
 
@@ -871,14 +1022,26 @@ var app = (function () {
 
     	element_1 = new Element({
     			props: {
-    				line_num: /*line_num*/ ctx[6],
-    				line_item_id: /*id*/ ctx[0],
-    				line_item_qty: /*quantity*/ ctx[5]
+    				line_num: /*line_num*/ ctx[8],
+    				line_item_id: /*id*/ ctx[2],
+    				line_item_qty: /*quantity*/ ctx[7]
     			},
     			$$inline: true
     		});
 
-    	delete_1 = new Delete({ $$inline: true });
+    	delete_1 = new Delete({
+    			props: {
+    				items: /*items*/ ctx[1],
+    				line_num: /*line_num*/ ctx[8],
+    				line_item_id: /*id*/ ctx[2],
+    				line_item_qty: /*quantity*/ ctx[7]
+    			},
+    			$$inline: true
+    		});
+
+    	delete_1.$on("remove", function () {
+    		if (is_function(/*f*/ ctx[0])) /*f*/ ctx[0].apply(this, arguments);
+    	});
 
     	const block = {
     		c: function create() {
@@ -888,13 +1051,13 @@ var app = (function () {
     			t0 = space();
     			div1 = element("div");
     			a = element("a");
-    			t1 = text(/*title*/ ctx[2]);
+    			t1 = text(/*title*/ ctx[4]);
     			t2 = space();
     			p = element("p");
     			t3 = text("JOSH Quantity:");
-    			t4 = text(/*$count*/ ctx[7]);
+    			t4 = text(/*$count*/ ctx[9]);
     			t5 = text(" @ Price: ");
-    			t6 = text(/*price*/ ctx[4]);
+    			t6 = text(/*price*/ ctx[6]);
     			t7 = space();
     			div2 = element("div");
     			create_component(element_1.$$.fragment);
@@ -902,25 +1065,25 @@ var app = (function () {
     			div3 = element("div");
     			create_component(delete_1.$$.fragment);
     			attr_dev(img, "height", "100");
-    			if (img.src !== (img_src_value = /*imgURL*/ ctx[3])) attr_dev(img, "src", img_src_value);
+    			if (img.src !== (img_src_value = /*imgURL*/ ctx[5])) attr_dev(img, "src", img_src_value);
     			attr_dev(img, "alt", "");
-    			add_location(img, file$2, 21, 4, 436);
+    			add_location(img, file$2, 31, 4, 545);
     			attr_dev(div0, "class", "img-container svelte-1gi6pjb");
-    			add_location(div0, file$2, 20, 2, 404);
-    			attr_dev(a, "href", /*URL*/ ctx[1]);
+    			add_location(div0, file$2, 30, 2, 513);
+    			attr_dev(a, "href", /*URL*/ ctx[3]);
     			attr_dev(a, "class", "svelte-1gi6pjb");
-    			add_location(a, file$2, 25, 4, 523);
+    			add_location(a, file$2, 35, 4, 632);
     			attr_dev(p, "class", "svelte-1gi6pjb");
-    			add_location(p, file$2, 26, 4, 555);
+    			add_location(p, file$2, 36, 4, 664);
     			attr_dev(div1, "class", "info-container svelte-1gi6pjb");
-    			add_location(div1, file$2, 24, 2, 490);
+    			add_location(div1, file$2, 34, 2, 599);
     			attr_dev(div2, "class", "qty-container svelte-1gi6pjb");
-    			add_location(div2, file$2, 29, 2, 614);
+    			add_location(div2, file$2, 39, 2, 723);
     			attr_dev(div3, "class", "remove-container svelte-1gi6pjb");
-    			add_location(div3, file$2, 33, 2, 732);
+    			add_location(div3, file$2, 43, 2, 841);
     			attr_dev(div4, "class", "item svelte-1gi6pjb");
-    			attr_dev(div4, "data-variant-id", /*id*/ ctx[0]);
-    			add_location(div4, file$2, 18, 0, 361);
+    			attr_dev(div4, "data-variant-id", /*id*/ ctx[2]);
+    			add_location(div4, file$2, 28, 0, 470);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -947,27 +1110,35 @@ var app = (function () {
     			mount_component(delete_1, div3, null);
     			current = true;
     		},
-    		p: function update(ctx, [dirty]) {
-    			if (!current || dirty & /*imgURL*/ 8 && img.src !== (img_src_value = /*imgURL*/ ctx[3])) {
+    		p: function update(new_ctx, [dirty]) {
+    			ctx = new_ctx;
+
+    			if (!current || dirty & /*imgURL*/ 32 && img.src !== (img_src_value = /*imgURL*/ ctx[5])) {
     				attr_dev(img, "src", img_src_value);
     			}
 
-    			if (!current || dirty & /*title*/ 4) set_data_dev(t1, /*title*/ ctx[2]);
+    			if (!current || dirty & /*title*/ 16) set_data_dev(t1, /*title*/ ctx[4]);
 
-    			if (!current || dirty & /*URL*/ 2) {
-    				attr_dev(a, "href", /*URL*/ ctx[1]);
+    			if (!current || dirty & /*URL*/ 8) {
+    				attr_dev(a, "href", /*URL*/ ctx[3]);
     			}
 
-    			if (!current || dirty & /*$count*/ 128) set_data_dev(t4, /*$count*/ ctx[7]);
-    			if (!current || dirty & /*price*/ 16) set_data_dev(t6, /*price*/ ctx[4]);
+    			if (!current || dirty & /*$count*/ 512) set_data_dev(t4, /*$count*/ ctx[9]);
+    			if (!current || dirty & /*price*/ 64) set_data_dev(t6, /*price*/ ctx[6]);
     			const element_1_changes = {};
-    			if (dirty & /*line_num*/ 64) element_1_changes.line_num = /*line_num*/ ctx[6];
-    			if (dirty & /*id*/ 1) element_1_changes.line_item_id = /*id*/ ctx[0];
-    			if (dirty & /*quantity*/ 32) element_1_changes.line_item_qty = /*quantity*/ ctx[5];
+    			if (dirty & /*line_num*/ 256) element_1_changes.line_num = /*line_num*/ ctx[8];
+    			if (dirty & /*id*/ 4) element_1_changes.line_item_id = /*id*/ ctx[2];
+    			if (dirty & /*quantity*/ 128) element_1_changes.line_item_qty = /*quantity*/ ctx[7];
     			element_1.$set(element_1_changes);
+    			const delete_1_changes = {};
+    			if (dirty & /*items*/ 2) delete_1_changes.items = /*items*/ ctx[1];
+    			if (dirty & /*line_num*/ 256) delete_1_changes.line_num = /*line_num*/ ctx[8];
+    			if (dirty & /*id*/ 4) delete_1_changes.line_item_id = /*id*/ ctx[2];
+    			if (dirty & /*quantity*/ 128) delete_1_changes.line_item_qty = /*quantity*/ ctx[7];
+    			delete_1.$set(delete_1_changes);
 
-    			if (!current || dirty & /*id*/ 1) {
-    				attr_dev(div4, "data-variant-id", /*id*/ ctx[0]);
+    			if (!current || dirty & /*id*/ 4) {
+    				attr_dev(div4, "data-variant-id", /*id*/ ctx[2]);
     			}
     		},
     		i: function intro(local) {
@@ -1003,6 +1174,8 @@ var app = (function () {
     	let $count;
     	let { $$slots: slots = {}, $$scope } = $$props;
     	validate_slots("Item", slots, []);
+    	let { f } = $$props;
+    	let { items } = $$props;
     	let { id } = $$props;
     	let { URL } = $$props;
     	let { title } = $$props;
@@ -1012,28 +1185,32 @@ var app = (function () {
     	let { line_num } = $$props;
     	const count = counts[line_num];
     	validate_store(count, "count");
-    	component_subscribe($$self, count, value => $$invalidate(7, $count = value));
+    	component_subscribe($$self, count, value => $$invalidate(9, $count = value));
     	console.log("line_num: ", line_num);
-    	const writable_props = ["id", "URL", "title", "imgURL", "price", "quantity", "line_num"];
+    	const writable_props = ["f", "items", "id", "URL", "title", "imgURL", "price", "quantity", "line_num"];
 
     	Object.keys($$props).forEach(key => {
     		if (!~writable_props.indexOf(key) && key.slice(0, 2) !== "$$") console_1$1.warn(`<Item> was created with unknown prop '${key}'`);
     	});
 
     	$$self.$$set = $$props => {
-    		if ("id" in $$props) $$invalidate(0, id = $$props.id);
-    		if ("URL" in $$props) $$invalidate(1, URL = $$props.URL);
-    		if ("title" in $$props) $$invalidate(2, title = $$props.title);
-    		if ("imgURL" in $$props) $$invalidate(3, imgURL = $$props.imgURL);
-    		if ("price" in $$props) $$invalidate(4, price = $$props.price);
-    		if ("quantity" in $$props) $$invalidate(5, quantity = $$props.quantity);
-    		if ("line_num" in $$props) $$invalidate(6, line_num = $$props.line_num);
+    		if ("f" in $$props) $$invalidate(0, f = $$props.f);
+    		if ("items" in $$props) $$invalidate(1, items = $$props.items);
+    		if ("id" in $$props) $$invalidate(2, id = $$props.id);
+    		if ("URL" in $$props) $$invalidate(3, URL = $$props.URL);
+    		if ("title" in $$props) $$invalidate(4, title = $$props.title);
+    		if ("imgURL" in $$props) $$invalidate(5, imgURL = $$props.imgURL);
+    		if ("price" in $$props) $$invalidate(6, price = $$props.price);
+    		if ("quantity" in $$props) $$invalidate(7, quantity = $$props.quantity);
+    		if ("line_num" in $$props) $$invalidate(8, line_num = $$props.line_num);
     	};
 
     	$$self.$capture_state = () => ({
     		counts,
     		Element,
     		Delete,
+    		f,
+    		items,
     		id,
     		URL,
     		title,
@@ -1046,20 +1223,30 @@ var app = (function () {
     	});
 
     	$$self.$inject_state = $$props => {
-    		if ("id" in $$props) $$invalidate(0, id = $$props.id);
-    		if ("URL" in $$props) $$invalidate(1, URL = $$props.URL);
-    		if ("title" in $$props) $$invalidate(2, title = $$props.title);
-    		if ("imgURL" in $$props) $$invalidate(3, imgURL = $$props.imgURL);
-    		if ("price" in $$props) $$invalidate(4, price = $$props.price);
-    		if ("quantity" in $$props) $$invalidate(5, quantity = $$props.quantity);
-    		if ("line_num" in $$props) $$invalidate(6, line_num = $$props.line_num);
+    		if ("f" in $$props) $$invalidate(0, f = $$props.f);
+    		if ("items" in $$props) $$invalidate(1, items = $$props.items);
+    		if ("id" in $$props) $$invalidate(2, id = $$props.id);
+    		if ("URL" in $$props) $$invalidate(3, URL = $$props.URL);
+    		if ("title" in $$props) $$invalidate(4, title = $$props.title);
+    		if ("imgURL" in $$props) $$invalidate(5, imgURL = $$props.imgURL);
+    		if ("price" in $$props) $$invalidate(6, price = $$props.price);
+    		if ("quantity" in $$props) $$invalidate(7, quantity = $$props.quantity);
+    		if ("line_num" in $$props) $$invalidate(8, line_num = $$props.line_num);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [id, URL, title, imgURL, price, quantity, line_num, $count, count];
+    	$$self.$$.update = () => {
+    		if ($$self.$$.dirty & /*items*/ 2) {
+    			{
+    				console.log("re-render ITEM, and items = ", items);
+    			}
+    		}
+    	};
+
+    	return [f, items, id, URL, title, imgURL, price, quantity, line_num, $count, count];
     }
 
     class Item extends SvelteComponentDev {
@@ -1067,13 +1254,15 @@ var app = (function () {
     		super(options);
 
     		init(this, options, instance$3, create_fragment$3, safe_not_equal, {
-    			id: 0,
-    			URL: 1,
-    			title: 2,
-    			imgURL: 3,
-    			price: 4,
-    			quantity: 5,
-    			line_num: 6
+    			f: 0,
+    			items: 1,
+    			id: 2,
+    			URL: 3,
+    			title: 4,
+    			imgURL: 5,
+    			price: 6,
+    			quantity: 7,
+    			line_num: 8
     		});
 
     		dispatch_dev("SvelteRegisterComponent", {
@@ -1086,33 +1275,57 @@ var app = (function () {
     		const { ctx } = this.$$;
     		const props = options.props || {};
 
-    		if (/*id*/ ctx[0] === undefined && !("id" in props)) {
+    		if (/*f*/ ctx[0] === undefined && !("f" in props)) {
+    			console_1$1.warn("<Item> was created without expected prop 'f'");
+    		}
+
+    		if (/*items*/ ctx[1] === undefined && !("items" in props)) {
+    			console_1$1.warn("<Item> was created without expected prop 'items'");
+    		}
+
+    		if (/*id*/ ctx[2] === undefined && !("id" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'id'");
     		}
 
-    		if (/*URL*/ ctx[1] === undefined && !("URL" in props)) {
+    		if (/*URL*/ ctx[3] === undefined && !("URL" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'URL'");
     		}
 
-    		if (/*title*/ ctx[2] === undefined && !("title" in props)) {
+    		if (/*title*/ ctx[4] === undefined && !("title" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'title'");
     		}
 
-    		if (/*imgURL*/ ctx[3] === undefined && !("imgURL" in props)) {
+    		if (/*imgURL*/ ctx[5] === undefined && !("imgURL" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'imgURL'");
     		}
 
-    		if (/*price*/ ctx[4] === undefined && !("price" in props)) {
+    		if (/*price*/ ctx[6] === undefined && !("price" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'price'");
     		}
 
-    		if (/*quantity*/ ctx[5] === undefined && !("quantity" in props)) {
+    		if (/*quantity*/ ctx[7] === undefined && !("quantity" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'quantity'");
     		}
 
-    		if (/*line_num*/ ctx[6] === undefined && !("line_num" in props)) {
+    		if (/*line_num*/ ctx[8] === undefined && !("line_num" in props)) {
     			console_1$1.warn("<Item> was created without expected prop 'line_num'");
     		}
+    	}
+
+    	get f() {
+    		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set f(value) {
+    		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	get items() {
+    		throw new Error("<Item>: Props cannot be read directly from the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
+    	}
+
+    	set items(value) {
+    		throw new Error("<Item>: Props cannot be set directly on the component instance unless compiling with 'accessors: true' or '<svelte:options accessors/>'");
     	}
 
     	get id() {
@@ -1266,12 +1479,12 @@ var app = (function () {
 
     function get_each_context(ctx, list, i) {
     	const child_ctx = ctx.slice();
-    	child_ctx[3] = list[i];
-    	child_ctx[5] = i;
+    	child_ctx[5] = list[i];
+    	child_ctx[7] = i;
     	return child_ctx;
     }
 
-    // (48:0) {#each arr as item, idx}
+    // (70:0) {#each arr as item, idx}
     function create_each_block(ctx) {
     	let hr;
     	let t;
@@ -1280,13 +1493,15 @@ var app = (function () {
 
     	item = new Item({
     			props: {
-    				id: /*item*/ ctx[3].id,
-    				URL: /*item*/ ctx[3].URL,
-    				title: /*item*/ ctx[3].title,
-    				imgURL: /*item*/ ctx[3].imgURL,
-    				price: /*item*/ ctx[3].price,
-    				quantity: /*item*/ ctx[3].quantity,
-    				line_num: /*idx*/ ctx[5]
+    				f: /*f_remove*/ ctx[3],
+    				items: /*items*/ ctx[2],
+    				id: /*item*/ ctx[5].id,
+    				URL: /*item*/ ctx[5].URL,
+    				title: /*item*/ ctx[5].title,
+    				imgURL: /*item*/ ctx[5].imgURL,
+    				price: /*item*/ ctx[5].price,
+    				quantity: /*item*/ ctx[5].quantity,
+    				line_num: /*idx*/ ctx[7]
     			},
     			$$inline: true
     		});
@@ -1296,7 +1511,7 @@ var app = (function () {
     			hr = element("hr");
     			t = space();
     			create_component(item.$$.fragment);
-    			add_location(hr, file, 48, 2, 1104);
+    			add_location(hr, file, 70, 2, 1737);
     		},
     		m: function mount(target, anchor) {
     			insert_dev(target, hr, anchor);
@@ -1306,12 +1521,13 @@ var app = (function () {
     		},
     		p: function update(ctx, dirty) {
     			const item_changes = {};
-    			if (dirty & /*arr*/ 2) item_changes.id = /*item*/ ctx[3].id;
-    			if (dirty & /*arr*/ 2) item_changes.URL = /*item*/ ctx[3].URL;
-    			if (dirty & /*arr*/ 2) item_changes.title = /*item*/ ctx[3].title;
-    			if (dirty & /*arr*/ 2) item_changes.imgURL = /*item*/ ctx[3].imgURL;
-    			if (dirty & /*arr*/ 2) item_changes.price = /*item*/ ctx[3].price;
-    			if (dirty & /*arr*/ 2) item_changes.quantity = /*item*/ ctx[3].quantity;
+    			if (dirty & /*items*/ 4) item_changes.items = /*items*/ ctx[2];
+    			if (dirty & /*arr*/ 2) item_changes.id = /*item*/ ctx[5].id;
+    			if (dirty & /*arr*/ 2) item_changes.URL = /*item*/ ctx[5].URL;
+    			if (dirty & /*arr*/ 2) item_changes.title = /*item*/ ctx[5].title;
+    			if (dirty & /*arr*/ 2) item_changes.imgURL = /*item*/ ctx[5].imgURL;
+    			if (dirty & /*arr*/ 2) item_changes.price = /*item*/ ctx[5].price;
+    			if (dirty & /*arr*/ 2) item_changes.quantity = /*item*/ ctx[5].quantity;
     			item.$set(item_changes);
     		},
     		i: function intro(local) {
@@ -1334,7 +1550,7 @@ var app = (function () {
     		block,
     		id: create_each_block.name,
     		type: "each",
-    		source: "(48:0) {#each arr as item, idx}",
+    		source: "(70:0) {#each arr as item, idx}",
     		ctx
     	});
 
@@ -1381,10 +1597,10 @@ var app = (function () {
 
     			t4 = space();
     			hr = element("hr");
-    			add_location(h1, file, 43, 2, 1014);
+    			add_location(h1, file, 65, 2, 1647);
     			attr_dev(div, "class", "checkout-button-container svelte-1doe5dg");
-    			add_location(div, file, 42, 0, 972);
-    			add_location(hr, file, 59, 0, 1290);
+    			add_location(div, file, 64, 0, 1605);
+    			add_location(hr, file, 83, 0, 1958);
     		},
     		l: function claim(nodes) {
     			throw new Error("options.hydrate only works if the component was compiled with the `hydratable: true` option");
@@ -1409,7 +1625,7 @@ var app = (function () {
     		p: function update(ctx, [dirty]) {
     			if (!current || dirty & /*total_price*/ 1) set_data_dev(t1, /*total_price*/ ctx[0]);
 
-    			if (dirty & /*arr*/ 2) {
+    			if (dirty & /*f_remove, items, arr*/ 14) {
     				each_value = /*arr*/ ctx[1];
     				validate_each_argument(each_value);
     				let i;
@@ -1484,10 +1700,29 @@ var app = (function () {
     	let total_price = 0;
     	let arr = [];
 
+    	const f_remove = e => {
+    		$$invalidate(1, arr = arr.filter((elem, idx) => {
+    			return idx !== e.detail;
+    		}));
+    	};
+
     	// --------------------------------------------------------
+    	// -Force re-grab of entire cart and re-render
+    	//  if quantity of any row drops below zero
+    	//  after initialization
+    	// -TODO: Remove this and just remove row without
+    	//        re-grabing entire cart
+    	// -Wait, re-render will not re-trigger the javascript
+    	//  code in this script unless we explicity tell it to 
+    	//  in a reactive block.
+    	// -We DO want a re-render of th e
+    	// --------------------------------------------------------
+    	// --------------------------------------------------------
+    	let items;
+
     	async function renderCart() {
     		const data = await getCart();
-    		const items = data.items;
+    		$$invalidate(2, items = data.items);
 
     		items.forEach((item, idx) => {
     			console.log("item:");
@@ -1529,19 +1764,22 @@ var app = (function () {
     		toDollars,
     		total_price,
     		arr,
+    		f_remove,
+    		items,
     		renderCart
     	});
 
     	$$self.$inject_state = $$props => {
     		if ("total_price" in $$props) $$invalidate(0, total_price = $$props.total_price);
     		if ("arr" in $$props) $$invalidate(1, arr = $$props.arr);
+    		if ("items" in $$props) $$invalidate(2, items = $$props.items);
     	};
 
     	if ($$props && "$$inject" in $$props) {
     		$$self.$inject_state($$props.$$inject);
     	}
 
-    	return [total_price, arr];
+    	return [total_price, arr, items, f_remove];
     }
 
     class Cart extends SvelteComponentDev {
