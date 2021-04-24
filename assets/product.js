@@ -5,48 +5,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let cartTotal = 0;
   let items = [];
 
-  // Function: takes a list of items and a single item as arguments 
-  // and returns a filtered array based on whether a match has been found
-  const variantAlreadyExists = (items, newItem) => {
-    return items.filter(obj => {
-      return obj.id === newItem.id
-    });
-  };
 
-  // Function: takes a cart object, updates parent scope variables,
-  // divides prices by 100 and renders the cart using Mustache
-  const handleCartResponse = (data) => {
-
-    // Update parent scope variables
-    cartTotal = data.total_price;
-    items = data.items;
-  
-    // Divide prices by 100 to get the dollar value
-    data.total_price = data.total_price / 100;
-    data.items.forEach(item => {
-      item.price = item.price / 100;
-      item.line_price = item.line_price / 100;
-    });
-  
-    // Render cart template with Mustache
-    const output = Mustache.render(template, data, {}, ['<%', '%>']);
-
-    const cart_goes_here = document.querySelector('#cart-goes-here');
-    cart_goes_here.innerHTML = output;
-
-    set_qty_btn_listeners();
-  }
-
-  // Asynchronous function for handling GET '/cart.js' request
-  async function getCart() {
-    console.log('getCart()');
-    const response = await fetch('/cart.js');
-    const data = await response.json();
-    handleCartResponse(data);
-  }
-
-  // Run previous function on page load
-  getCart();
 
   // Add item to the cart
   const add_to_cart_form = document.querySelector('#AddToCartForm');
@@ -79,7 +38,56 @@ document.addEventListener("DOMContentLoaded", function() {
     })
     .then(response => response.json())
     .then(data => {
+      console.clear();
+
       const item = data.items[0];
+
+
+      // NOTE: Can do this all before the request to the server!
+      // NOTE: Can do this all before the request to the server!
+      // NOTE: Can do this all before the request to the server!
+      // NOTE: Can do this all before the request to the server!
+      // NOTE: Can do this all before the request to the server!
+      const new_item_variant_id = item.variant_id;
+
+      console.log('ADD to cart response successful!');
+
+      // Step 1: Search through the line items already in cart
+      const current_cart_items = document.querySelectorAll('#app .item');
+      console.log('current_cart_items: ', current_cart_items);
+      current_cart_items.forEach((cart_item, idx) => {
+        console.log('cart_item', cart_item);
+
+        // -Compare newly attempted add of item with cart
+        //  by comparing data-variant-id
+        const line_item_variant_id = Number(cart_item.dataset.variantId);
+
+        console.log('==========================================');
+        console.log('line_item_variant_id: ', line_item_variant_id, ', type: ', typeof line_item_variant_id);
+        console.log('new_item_variant_id:  ', new_item_variant_id, ', type: ', typeof new_item_variant_id);
+
+        if (new_item_variant_id === line_item_variant_id) {
+          // alert('item is already in cart!');
+          console.log('gsap: ', gsap);
+          const timeline = gsap.timeline();
+          timeline.fromTo(cart_item, {fontSize: '1.0em', color: 'black'}, {fontSize: '1.1em', color: 'red', duration: 1,
+            onStart: () => {
+              // cart_item.style.border = 'dashed 10px darkorange';
+            }});
+          timeline.fromTo(cart_item, {fontSize: '1.1em', color: 'red'}, {fontSize: '1.0em', color: 'black', duration: 1, 
+            onComplete: () => {
+              // cart_item.style.border = '';
+          }});
+        }
+
+      });
+
+
+      // Step 2: If item is not already in cart, then add to cart 
+      //           by pushing onto 'cart' variable in Item.svelte
+      //           to re-render cart
+
+
 
       // Update cart total
       cartTotal = cartTotal + item.price;
@@ -115,48 +123,5 @@ document.addEventListener("DOMContentLoaded", function() {
 
 
 
-  // Function: adjusts qty of a line item
-  const adjustQty = (e, adjustment) => {
-
-    // Find the current quantity and variant ID of the item
-    const itemVariantId = $(e.currentTarget).closest('.item').data('variant-id');
-    const qtyInput = $(e.currentTarget).siblings('.cart__qty-num');
-    const currentQty = Number(qtyInput.val());
-  
-    // Apply the adjustment to the current quantity to get the new quantity
-    const newQty = currentQty + adjustment;
-
-    fetch('/cart/change.js', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json'
-      },
-      body: JSON.stringify({ "quantity": newQty, "id": String(itemVariantId) })
-    })
-    .then(response => response.json())
-    .then(data => {
-      console.clear();
-      console.log({ "quantity": newQty, "id": String(itemVariantId) });
-      console.log('fetch: ', data);
-
-      // Update the quantity input with the new value
-      qtyInput.val(newQty);
-
-      // If new quantity is less than one, simply remove the line item from the DOM
-      // Else re-render the cart
-      if(newQty < 1) {
-        alert('TODO: Handle when newQty < 1');
-      } else {
-        handleCartResponse(data);
-      }
-    })
-    .catch(error => console.error('Error:', error));
-  };
-
-  // Increase Quantity Trigger
-  const set_qty_btn_listeners = () => {
-    qs('.cart__qty--plus').addEventListener( 'click', event => adjustQty(event, +1));
-    qs('.cart__qty--minus').addEventListener('click', event => adjustQty(event, -1));
-  };
 
 });
