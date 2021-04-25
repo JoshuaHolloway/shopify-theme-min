@@ -3,31 +3,64 @@
     
     <div class="cart-table">
       
-          {% if cart.items.size > 0 %}
-            {% for item in cart.items %}
-              <div class="cart-row">
-                <div class="cart-item-title">{{ item.title }}</div>
-                <img src="{{ item.image | img_url: '400x', scale: 2 }} }}">
-                <div>
-                  <div class="cart-item-price">{{ item.final_line_price | money }}</div>
-                  <label>
-                    Qty
-                    <input type="number" class="cart-item-qty" value="{{ item.quantity }}">
-                  </label>
-                </div>
-                <div class="cart-item-remove"><img src="{{ 'icon-trash.svg' | asset_url }}"></div>
+      <template 
+        v-if="cart.items.length > 0"
+      >
+
+          <div class="cart-row"
+            v-for="item in cart.items">
+            <div class="cart-item-title" 
+              v-html="item.title">
+            </div>
+
+            <img 
+              :src="item.image">
+            
+            <div>
+              <div class="cart-item-price" 
+                v-html="item.line_price">
               </div>
-            {% endfor %}
-          {% else %}
-            Your cart is currently empty
-          {% endif %}
+              <label>
+                Qty
+
+                {% comment %} @ [17:50] {% endcomment %}
+                {% comment %} One way data binding (HTML -> Vue) {% endcomment %}
+                {% comment %} :value="item.quantity" {% endcomment %}
+
+                {% comment %} Two way data-binding {% endcomment %}
+                {% comment %} v-model="item.quantity" {% endcomment %}
+                {% comment %} v-model="item.quantity" {% endcomment %}
+
+                <input type="number" class="cart-item-qty" 
+                  v-model="item.quantity"
+                  @change="update_cart(item.variant_id, item.quantity)">
+
+                  {% comment %} <input id="input" type="text" v-model="message"> {% endcomment %}
+                  {% comment %} <span v-text="message"></span> {% endcomment %}
+
+              </label>
+            </div>
+            
+            <div class="cart-item-remove">
+              <img src="{{ 'icon-trash.svg' | asset_url }}">
+            </div>
+          
+          </div>
+
+      </template>
+      <template v-else>
+        Your cart is currently empty
+      </template>
       
     </div>
 
     <div class="cart-sidebar">
       <div class="cart-sidebar-top">
         <h2>Your total</h2>
-        <div class="cart-total">{{ cart.total_price | money }}</div>
+
+        <div class="cart-total"
+          v-html="cart.total_price"
+        ></div>
       </div>
       <a href="/checkout" class="checkout-btn">
         Checkout
@@ -59,7 +92,10 @@
     
     data() {
     
+      console.log('data()  cart: ', this.cart);
+
       return {
+        
         cart: {
           items: [], // items: []
         }, // cart: {}
@@ -68,21 +104,67 @@
     }, // data() {}
 
     // lifecycle hook:
+    updated() {
+      console.log('updated()   cart: ', this.cart);
+    },
+
+    // lifecycle hook:
     created() {
 
       fetch('/cart.js')
         .then(res => res.json())
         .then(cart => {
           this.cart = cart;
+
+          console.log('/cart.js (fetch.): ', cart);
         })
         .catch(e => console.log(e));
 
     }, // created() {}
   
+    methods: {
+
+      update_cart(id, qty) {
+
+        console.clear();
+        console.log('update_cart() id: ', id, ', qty: ', qty);
+
+        // Docs:  jQuery.post('/cart/change.js', { quantity: 1, line: 2 });
+        // Docs:           { 'id': 794864053,            'quantity': 3 }
+        //const data_obj = { "id": String(line_item_id), "quantity": String(new_quanity_we_desire) };
+        // const data_obj = { "line": 1, "quantity": 7,  };
+
+
+        // Docs:  jQuery.post('/cart/update.js', { updates: { 794864053: 2, 794864233: 3 } });
+        const data_obj = { "quantity": String(qty), "id": String(id) };
+        //const data_obj = { "updates": { String(id): String(qty) } };
+       // const data_obj = `{ updates: { ${String(id)}: ${String(qty)} } }`;
+        console.log('data_obj: ', data_obj);
+
+        fetch('/cart/change.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(data_obj)
+        })
+        .then(response => response.json())
+        .then(cart => {
+
+          console.log('/update.js (fetch): ', cart);
+
+          this.cart = cart;
+
+        }) // .then()
+        .catch(error => console.log('Error:', error));
+
+
+
+      }, // update_cart() 
+
+    }, // methods: {}
+
   }; // CartPage = {}
 
   Vue.createApp(CartPage).mount('#cart-page');
-
-
-
 </script>
