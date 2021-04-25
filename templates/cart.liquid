@@ -29,7 +29,8 @@
               </label>
             </div>
             
-            <div class="cart-item-remove">
+            <div class="cart-item-remove" 
+              @click="remove_from_cart(item.id)">
               <img src="{{ 'icon-trash.svg' | asset_url }}">
             </div>
           
@@ -56,7 +57,7 @@
     </div>
   </div>
 
-  {% if collections['shoes'].products.size > 0 %}
+  {% comment %} {% if collections['shoes'].products.size > 0 %} {% endcomment %}
     <div class="cart-upsells">
       <h2>You might also like...</h2>
       
@@ -70,7 +71,7 @@
           {% endfor %}
         </div>
     </div>
-  {% endif %}
+  {% comment %} {% endif %} {% endcomment %}
   
 </div>
 
@@ -112,6 +113,12 @@
         this.cart = cart;
         this.format_prices();
       }, // set_cart() {}
+
+      // - - - - - - - - - - - - - - - - - - - - 
+
+      remove_from_cart(id) {
+        this.update_cart(id, 0);
+      }, // remove_from_cart() {}
 
       // - - - - - - - - - - - - - - - - - - - - 
 

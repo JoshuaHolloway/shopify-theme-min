@@ -208,6 +208,13 @@ table tr td {
     padding: 16px;
     border: 1px solid #eee;
 }
+.JOSH{
+  /* DEBUG */
+  height: 500px;
+  width: 500px;
+  background-color: hotpink;
+
+}
 .cart-upsells-grid {
     display: grid;
     grid-template-columns: repeat(4, 1fr);
@@ -273,6 +280,7 @@ table tr td {
     }
     .cart-page .checkout-btn {
         width: auto;
+        height:
     }
     .cart-upsells-grid {
         grid-template-columns: repeat(2, 1fr);
