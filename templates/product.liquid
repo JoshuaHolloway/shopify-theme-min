@@ -74,11 +74,17 @@
 
 <div id="product-page" class="product-page container">
   <div class="product-photo">
-    <img src="{{ featured_image | img_url: '500x', scale: 2 }}">
+    {% comment %} <img src="{{ featured_image | img_url: '500x', scale: 2 }}"> {% endcomment %}
+    <img 
+      :src="current_variant.image || fallback_product_image"
+    >
   </div>
   <div class="product-meta">
     <h1 class="product-title">{{ product.title }}</h1>
-    <div class="product-price">{{ product.price | money }}</div>
+    <div 
+      class="product-price"
+      v-html="current_variant.price"
+    >{{ product.price | money }}</div>
     <div class="product-description">{{ product.description }}</div>
     {% if product.variants.size > 1 %}
       <div class="variant-select">
@@ -107,7 +113,11 @@
       </div>
     {% endif %}
     <form action="/cart/add" method="post">
-      <input type="hidden" name="id" :value="current_variant_id">
+      <input 
+        type="hidden" 
+        name="id" 
+        :value="current_variant_id"
+      >
       <input type="hidden" name="quantity" value="1">
       <button type="submit" class="atc">
         Add to cart
@@ -119,6 +129,7 @@
 
 <script>
   const ProductPage = {
+    
     data() {
       return { 
         // This is bound to the 1st-input option in the form above (:value="current_variant_id")
@@ -132,9 +143,11 @@
           //option3: "{{ product.options_with_values[2].selected_value }}",
           //option4: "{{ product.options_with_values[3].selected_value }}"
         }, // bind this to our form
+        
+        
+        // Transfer data from Liquid into our Vue instance
         variants: [
 
-          // Transfer data from Liquid into our Vue instance
           {% for variant in product.variants %}
             {
               id: "{{ variant.id }}",
@@ -151,6 +164,9 @@
 
       }
     },
+
+    // ------------------------------------------
+
     methods: {
       variant_from_options() {
         console.log('variant_from_options()');
@@ -158,19 +174,30 @@
         // loop up variant based on variant options
         const variant = this.variants.find((variant) => {
           let match = true;
-          if (match && variant.option1 != '') {
+          if (variant.option1 != '') {
             match = variant.option1 == this.variant_selection.option1;
           }
           if (match && variant.option2 != '') {
             match = variant.option2 == this.variant_selection.option2;
           }
+          //if (match && variant.option3 != '') {
+          //  match = variant.option3 == this.variant_selection.option3;
+          //}
           return match;
         });
 
         // update current variant id to be equal to variant selected in find statement
         this.current_variant_id = variant.id;
       }
-    }
+    },
+
+    // ------------------------------------------
+
+    computed: {
+      current_variant() {
+        return this.variants.find( variant => variant.id == this.current_variant_id );
+      }
+    },
   };
 
   Vue.createApp(ProductPage).mount('#product-page');
