@@ -62,10 +62,18 @@
 
 <div id="product-page" class="product-page container">
   <div class="product-photo">
-    {% comment %} <img src="{{ featured_image | img_url: '500x', scale: 2 }}"> {% endcomment %}
-    <img 
-      :src="current_variant.image || fallback_product_image"
-    >
+
+    <transition name="fade">
+      {% comment %} <img src="{{ featured_image | img_url: '500x', scale: 2 }}"> {% endcomment %}
+      <img 
+        :src="current_variant.image || fallback_product_image"
+        :key="current_variant.image || fallback_product_image"
+      >
+    </transition>
+    <style>
+
+    </style>
+
   </div>
   <div class="product-meta">
     <h1 class="product-title">{{ product.title }}</h1>
