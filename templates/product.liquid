@@ -49,18 +49,6 @@
 
 </div>
 
-
-
-
-
-
-
-
-
-
-
-
-
 <!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
 <!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
 <!-- Stuff from product.liquid from Shopify Vue course (lesson 5) below -->
@@ -188,7 +176,21 @@
 
         // update current variant id to be equal to variant selected in find statement
         this.current_variant_id = variant.id;
-      }
+
+        // update url
+        this.update_history_state(variant);
+      },
+
+      update_history_state(variant) {
+        console.log('update_history_state');
+        if ( !history.replaceState || !variant ) {
+          console.log('if');
+          return;
+        }
+
+        const newurl = `${window.location.protocol}//${window.location.host}${window.location.pathname}?variant=${variant.id}`;
+        window.history.replaceState({path: newurl}, '', newurl);
+      },
     },
 
     // ------------------------------------------
