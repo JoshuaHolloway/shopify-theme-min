@@ -86,7 +86,17 @@
           <label for="{{ product_option.name }}">
             {{ product_option.name }}
           </label>
-          <select id="{{ product_option.name }}" v-model="variant_selection.option{{ product_option.position }}">
+          
+          {% comment %} Bind to vue instance (v-model="...") {% endcomment %}
+          {% comment %} When change, change it variant selection 
+                        AND re-calculate current variant id from array variant_selection in Vue data()
+          {% endcomment %}
+          <select 
+            id="{{ product_option.name }}" 
+            v-model="variant_selection.option{{ product_option.position }}"
+            @change="variant_from_options"
+          >
+          {% comment %} @change="variant_from_options" {% endcomment %}
             {% for value in product_option.values %}
               <option {% if product_option.selected_value == value %}selected{% endif %}>
                 {{ value }}
@@ -141,6 +151,26 @@
 
       }
     },
+    methods: {
+      variant_from_options() {
+        console.log('variant_from_options()');
+
+        // loop up variant based on variant options
+        const variant = this.variants.find((variant) => {
+          let match = true;
+          if (match && variant.option1 != '') {
+            match = variant.option1 == this.variant_selection.option1;
+          }
+          if (match && variant.option2 != '') {
+            match = variant.option2 == this.variant_selection.option2;
+          }
+          return match;
+        });
+
+        // update current variant id to be equal to variant selected in find statement
+        this.current_variant_id = variant.id;
+      }
+    }
   };
 
   Vue.createApp(ProductPage).mount('#product-page');
