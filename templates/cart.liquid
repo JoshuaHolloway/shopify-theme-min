@@ -1,3 +1,5 @@
+{% include 'store.js' %}
+
 <div id="cart-page" class="cart-page container">
   <div class="cart-section">
     
@@ -57,39 +59,61 @@
     </div>
   </div>
 
-  {% comment %} {% if collections['shoes'].products.size > 0 %} {% endcomment %}
-    <div class="cart-upsells">
-      <h2>You might also like...</h2>
-      
-        <div class="cart-upsells-grid">
-          {% for product in collections['shoes'].products limit:4 %}
-            <div class="cart-upsell-item">
-              <div class="cart-upsell-title">{{ product.title }}</div>
-              <img class="cart-upsell-item-image" src="{{ product.featured_image | img_url: '400x', scale: 2 }}">
-              <a class="cart-upsell-atc-btn">Add to cart</a>
-            </div>
-          {% endfor %}
-        </div>
-    </div>
-  {% comment %} {% endif %} {% endcomment %}
+
+  <div class="cart-upsells"
+    v-if="upsells.length > 0"
+  >
+    <h2>You might also like...</h2>
+    
+      <div class="cart-upsells-grid">
+
+        <template 
+          v-for="(upsell, idx) in upsells" 
+        >
+          <div class="cart-upsell-item" 
+            v-if="idx < 4"
+          >
+            {% comment %} <div class="cart-upsell-title">{{ product.title }}</div> {% endcomment %}
+            <div class="cart-upsell-title" v-html="upsell.title"></div>
+
+            {% comment %} <img class="cart-upsell-item-image" src="{{ product.featured_image | img_url: '400x', scale: 2 }}"> {% endcomment %}
+            <img class="cart-upsell-item-image" 
+              :src="upsell.image">
+            
+            <a class="cart-upsell-atc-btn">Add to cart</a>
+          </div>
+        </template>
+
+      </div>
+  </div>
   
 </div>
 
 
 <script>
-  const CartPage = {
-    
-    data() {
-    
-      console.log('data()  cart: ', this.cart);
+  const CartPageOptions = {
 
+    // ==========================================
+
+    data() {
       return {
-        
         cart: {
           items: [], // items: []
         }, // cart: {}
-      }; // return
-    
+        upsells: [ // this array will have store data filled in it when it first is sent to client upon page load
+          {% for product in collections['shoes'].products %}
+          
+            {
+              title:      "{{ product.title }}",
+              handle:     "{{ product.handle }}",
+              image:      "{{ product.featured_image | img_url: '400px', scale: 2 }}",
+              product_id: "{{ product.id }}",
+              variant_id: "{{ variant.selected_or_first_available_variant.id }}",
+            },
+          
+          {% endfor %}
+        ], // upsells: {}
+      }; // return {}
     }, // data() {}
 
     // ==========================================
@@ -158,7 +182,9 @@
 
     }, // methods: {}
 
-  }; // CartPage = {}
+  }; // CartPageOptions = {}
 
-  Vue.createApp(CartPage).mount('#cart-page');
+  const CartPage = Vue.createApp(CartPageOptions);
+  CartPage.mount('#cart-page');
+
 </script>
