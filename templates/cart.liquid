@@ -85,12 +85,12 @@
 
 
             <a class="cart-upsell-atc-btn  cart-upsell-atc-btn--adding"
-              v-if="loading==true">
+              v-if="upsell.adding_upsell==true">
               Adding..
             </a>
 
             <a class="cart-upsell-atc-btn"
-              v-if="loading==false"
+              v-else
               @click="add_to_cart(upsell.variant_id)"
             >
               Add to cart
@@ -130,6 +130,7 @@
               image:      "{{ product.featured_image | img_url: '400px', scale: 2 }}",
               product_id: "{{ product.id }}",
               variant_id: "{{ product.selected_or_first_available_variant.id }}",
+              adding_upsell: false, // adding-upsell false 0
             },
           
           {% endfor %}
@@ -215,8 +216,16 @@
 
       add_to_cart(id) {
 
-        this.loading = true; // start-loading 1
+        // on cart page add-to-cart button only for upsells
+        const get_upsell = () => {
+          const upsell = this.upsells.find(upsell => upsell.variant_id == id);
+          return upsell;
+        };
 
+        const upsell = get_upsell();
+        upsell.adding_upsell = true; // adding-upsell true 1
+        this.loading = true; // start-loading 1
+        
         let formData = {
           'items': [{
             'id': id,
@@ -238,6 +247,8 @@
 
           // refresh cart data
           this.get_cart();
+
+          upsell.adding_upsell = false; // adding-upsell false 1
         })
         .catch(e => console.log(e));
 
