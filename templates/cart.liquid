@@ -74,13 +74,19 @@
             v-if="idx < 4"
           >
             {% comment %} <div class="cart-upsell-title">{{ product.title }}</div> {% endcomment %}
-            <div class="cart-upsell-title" v-html="upsell.title"></div>
+            <div class="cart-upsell-title" 
+              v-html="upsell.title">
+            </div>
 
             {% comment %} <img class="cart-upsell-item-image" src="{{ product.featured_image | img_url: '400x', scale: 2 }}"> {% endcomment %}
             <img class="cart-upsell-item-image" 
               :src="upsell.image">
             
-            <a class="cart-upsell-atc-btn">Add to cart</a>
+            <a class="cart-upsell-atc-btn"
+              @click="add_to_cart(upsell.variant_id)"
+            >
+              Add to cart
+            </a>
           </div>
         </template>
 
@@ -108,7 +114,7 @@
               handle:     "{{ product.handle }}",
               image:      "{{ product.featured_image | img_url: '400px', scale: 2 }}",
               product_id: "{{ product.id }}",
-              variant_id: "{{ variant.selected_or_first_available_variant.id }}",
+              variant_id: "{{ product.selected_or_first_available_variant.id }}",
             },
           
           {% endfor %}
@@ -120,17 +126,35 @@
 
     // lifecycle hook:
     created() {
-
-      fetch('/cart.js')
-        .then(res => res.json())
-        .then(cart => this.set_cart(cart))
-        .catch(e => console.log(e));
-
+      this.get_cart();
     }, // created() {}
   
     // ==========================================
 
+    // lifecycle hook
+    beforeUpdate() {
+      console.log('beforeUpdate() lifecycle method');
+    }, // beforeUpdate() {}
+
+    // ==========================================
+
+    // lifecycle hook
+    updated() {
+      console.log('updated() lifecycle method');
+    }, // updated() {}
+
+    // ==========================================
+
     methods: {
+
+      get_cart() {
+        fetch('/cart.js')
+          .then(res => res.json())
+          .then(cart => this.set_cart(cart))
+          .catch(e => console.log(e));
+      }, // get_cart() {}
+
+      // - - - - - - - - - - - - - - - - - - - - 
 
       set_cart(cart) {
         // update cart
@@ -143,6 +167,36 @@
       remove_from_cart(id) {
         this.update_cart(id, 0);
       }, // remove_from_cart() {}
+
+      // - - - - - - - - - - - - - - - - - - - - 
+
+      add_to_cart(id) {
+
+        let formData = {
+          'items': [{
+            'id': id,
+            'quantity': 1
+          }]
+        };
+    
+        fetch('/cart/add.js', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: JSON.stringify(formData)
+        })
+        .then(response => response.json())
+        .then(obj => {
+          const item = obj.items[0]; // only one item added
+          console.log('ADD item: ', item);
+
+          // refresh cart data
+          this.get_cart();
+        })
+        .catch(e => console.log(e));
+
+      }, // add_to_cart() {}
 
       // - - - - - - - - - - - - - - - - - - - - 
 
@@ -181,6 +235,8 @@
       }, // format_prices() {}
 
     }, // methods: {}
+
+    // ==========================================
 
   }; // CartPageOptions = {}
 
