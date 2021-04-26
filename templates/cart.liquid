@@ -61,14 +61,14 @@
 
 
   <div class="cart-upsells"
-    v-if="upsells.length > 0"
+    v-if="filtered_upsells.length > 0"
   >
     <h2>You might also like...</h2>
     
       <div class="cart-upsells-grid">
 
         <template 
-          v-for="(upsell, idx) in upsells" 
+          v-for="(upsell, idx) in filtered_upsells" 
         >
           <div class="cart-upsell-item" 
             v-if="idx < 4"
@@ -120,39 +120,72 @@
           {% endfor %}
         ], // upsells: {}
       }; // return {}
-    }, // data() {}
+    }, // data()
 
     // ==========================================
 
     // lifecycle hook:
     created() {
       this.get_cart();
-    }, // created() {}
+
+      // DEBUG:
+      setTimeout(() => {
+        const products_in_cart = this.get_product_ids_in_cart();
+        console.log('products_in_cart', products_in_cart);
+      }, 2000);
+
+    }, // created()
   
     // ==========================================
 
     // lifecycle hook
     beforeUpdate() {
       console.log('beforeUpdate() lifecycle method');
-    }, // beforeUpdate() {}
+    }, // beforeUpdate()
 
     // ==========================================
 
     // lifecycle hook
     updated() {
       console.log('updated() lifecycle method');
-    }, // updated() {}
+    }, // updated()
+
+    // ==========================================
+
+    computed: {
+      filtered_upsells() {
+        const upsells_not_in_cart = this.get_upsells_not_in_cart();
+        return upsells_not_in_cart;
+      }, // filtered_upsells()
+    }, // computed: {}
 
     // ==========================================
 
     methods: {
+
+      get_product_ids_in_cart() {
+        const products_in_cart = this.cart.items.map((item) => {
+          return item.product_id.toString();
+        }); // .map()
+        return products_in_cart;
+      }, // get_product_ids_in_cart()
+
+      // - - - - - - - - - - - - - - - - - - - - 
+
+      get_upsells_not_in_cart() {
+        const products_in_cart = this.get_product_ids_in_cart();
+        const upsells_not_in_cart = this.upsells.filter(upsell => !products_in_cart.includes(upsell.product_id));
+        return upsells_not_in_cart;
+      }, // get_upsells_not_in_cart()
+
+      // - - - - - - - - - - - - - - - - - - - - 
 
       get_cart() {
         fetch('/cart.js')
           .then(res => res.json())
           .then(cart => this.set_cart(cart))
           .catch(e => console.log(e));
-      }, // get_cart() {}
+      }, // get_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
@@ -160,13 +193,13 @@
         // update cart
         this.cart = cart;
         this.format_prices();
-      }, // set_cart() {}
+      }, // set_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
       remove_from_cart(id) {
         this.update_cart(id, 0);
-      }, // remove_from_cart() {}
+      }, // remove_from_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
@@ -196,13 +229,13 @@
         })
         .catch(e => console.log(e));
 
-      }, // add_to_cart() {}
+      }, // add_to_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
       remove_cart(id) {
         this.update_cart(id, 0);
-      }, // remove_cart() {}
+      }, // remove_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
@@ -232,7 +265,7 @@
         });
 
         this.cart.formatted_total_price = Shopify.formatMoney(this.cart.total_price);
-      }, // format_prices() {}
+      }, // format_prices()
 
     }, // methods: {}
 
