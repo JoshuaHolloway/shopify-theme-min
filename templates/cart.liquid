@@ -81,12 +81,23 @@
             {% comment %} <img class="cart-upsell-item-image" src="{{ product.featured_image | img_url: '400x', scale: 2 }}"> {% endcomment %}
             <img class="cart-upsell-item-image" 
               :src="upsell.image">
-            
+
+
+
+            <a class="cart-upsell-atc-btn  cart-upsell-atc-btn--adding"
+              v-if="loading==true">
+              Adding..
+            </a>
+
             <a class="cart-upsell-atc-btn"
+              v-if="loading==false"
               @click="add_to_cart(upsell.variant_id)"
             >
               Add to cart
             </a>
+
+
+
           </div>
         </template>
 
@@ -103,6 +114,10 @@
 
     data() {
       return {
+
+        // start-loading 0
+        loading: true, // loading: boolean
+        
         cart: {
           items: [], // items: []
         }, // cart: {}
@@ -127,13 +142,6 @@
     // lifecycle hook:
     created() {
       this.get_cart();
-
-      // DEBUG:
-      setTimeout(() => {
-        const products_in_cart = this.get_product_ids_in_cart();
-        console.log('products_in_cart', products_in_cart);
-      }, 2000);
-
     }, // created()
   
     // ==========================================
@@ -193,17 +201,21 @@
         // update cart
         this.cart = cart;
         this.format_prices();
+        this.loading = false; // end-loading 1
       }, // set_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
       remove_from_cart(id) {
+        this.loading = true; // start-loading 2
         this.update_cart(id, 0);
       }, // remove_from_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
       add_to_cart(id) {
+
+        this.loading = true; // start-loading 1
 
         let formData = {
           'items': [{
@@ -230,12 +242,6 @@
         .catch(e => console.log(e));
 
       }, // add_to_cart()
-
-      // - - - - - - - - - - - - - - - - - - - - 
-
-      remove_cart(id) {
-        this.update_cart(id, 0);
-      }, // remove_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
