@@ -5,43 +5,62 @@
     
     <div class="cart-table">
       
-      <template 
-        v-if="cart.items.length > 0"
-      >
 
-          <div class="cart-row"
-            v-for="item in cart.items">
-            <div class="cart-item-title" 
-              v-html="item.title">
-            </div>
 
-            <img 
-              :src="item.image">
-            
-            <div>
-              <div class="cart-item-price" 
-                v-html="item.formatted_line_price">
+      <transition name="fade">
+        
+        <div v-show="!loading">
+
+
+
+          <template 
+            v-if="cart.items.length > 0"
+          >
+
+              <div class="cart-row"
+                v-for="item in cart.items">
+                <div class="cart-item-title" 
+                  v-html="item.title">
+                </div>
+
+                <img 
+                  :src="item.image">
+                
+                <div>
+                  <div class="cart-item-price" 
+                    v-html="item.formatted_line_price">
+                  </div>
+                  <label>
+                    Qty
+                    <input type="number" class="cart-item-qty" 
+                      v-model="item.quantity"
+                      @change="update_cart(item.variant_id, item.quantity)"
+                    >
+                  </label>
+                </div>
+                
+                <div class="cart-item-remove" 
+                  @click="remove_from_cart(item.id)">
+                  <img src="{{ 'icon-trash.svg' | asset_url }}">
+                </div>
+              
               </div>
-              <label>
-                Qty
-                <input type="number" class="cart-item-qty" 
-                  v-model="item.quantity"
-                  @change="update_cart(item.variant_id, item.quantity)"
-                >
-              </label>
-            </div>
-            
-            <div class="cart-item-remove" 
-              @click="remove_from_cart(item.id)">
-              <img src="{{ 'icon-trash.svg' | asset_url }}">
-            </div>
-          
-          </div>
 
-      </template>
-      <template v-else>
-        Your cart is currently empty
-      </template>
+          </template>
+          <template v-else>
+            Your cart is currently empty
+          </template>
+
+
+
+
+
+        </div>
+      
+      </transition>
+
+
+
       
     </div>
 
