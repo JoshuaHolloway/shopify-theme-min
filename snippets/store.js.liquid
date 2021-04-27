@@ -1,6 +1,8 @@
 <script>
   const store = Vuex.createStore({
 
+    // ==========================================
+
     state() {
       return {
 
@@ -17,7 +19,18 @@
       // -best practice is to have actions call mutations which update state directly
 
       SET_CART(state, cart) {
+
+        const format_prices = () => {
+          cart.items.forEach(item => {
+            // First time creates new property on items[idx]
+            item.formatted_line_price = Shopify.formatMoney(item.line_price); 
+          });
+          cart.formatted_total_price = Shopify.formatMoney(cart.total_price);
+        }; // format_prices()
+
+        format_prices();
         state.cart = cart;
+
       } // SET_CART()
     }, // mutations: {}
 
@@ -37,28 +50,83 @@
     // ==========================================
 
     actions: { // actions update state (like methods in Vue instance which can update data)
+      
+      // - - - - - - - - - - - - - - - - - - - - 
+
       get_cart({ commit }) { // this replaces getting the cart in the Vue instances created() lifecycle hook (this.get_cart())
         // const commit = props.commit;
 
-        return fetch('/cart.js')
-                .then(res => res.json())
-                //.then(cart => this.set_cart(cart))
-                .then(cart => store.commit('SET_CART', cart)) // (<mutation>, <payload>)
-                // ^ sets the value of cart state to response of API call
-                .catch(e => console.log(e));
-
+        const promise = fetch('/cart.js')
+                        .then(res  => res.json())
+                        //.then(cart => this.set_cart(cart))
+                        .then(cart => store.commit('SET_CART', cart)) // (<mutation>, <payload>)
+                        // ^ sets the value of cart state to response of API call
+                        .catch(e   => console.log(e));
+        return promise;
       }, // get_cart({ commit })
+
+      // - - - - - - - - - - - - - - - - - - - - 
+      
+      update_cart({ commit }, { id, qty }) {
+        const data_obj = { "quantity": String(qty), "id": String(id) };
+
+        // returning promise allows us to chain .then() on dispatch
+        const promise = fetch('/cart/change.js', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(data_obj)
+                        })
+                        .then(response => response.json())
+                        //.then(cart     => this.set_cart(cart))
+                        .then(cart     => store.commit('SET_CART', cart))
+                        .catch(error   => console.log('Error:', error));
+        return promise;
+      }, // update_cart() 
+
+      // - - - - - - - - - - - - - - - - - - - - 
+
+      add_to_cart({ commit, dispatch }, id) {
+
+
+
+        let formData = {
+          'items': [{
+            'id': id,
+            'quantity': 1
+          }]
+        };
+    
+        const promise = fetch('/cart/add.js', {
+                          method: 'POST',
+                          headers: {
+                            'Content-Type': 'application/json'
+                          },
+                          body: JSON.stringify(formData)
+                        })
+                        .then(response => response.json())
+                        .then(obj => {
+                          //const item = obj.items[0]; // only one item added
+                          //console.log('ADD item: ', item);
+
+                          // refresh cart data
+                          //this.get_cart();
+                          dispatch('update_cart');
+
+                          //upsell.adding_upsell = false; // adding-upsell false 1
+                        })
+                        .catch(e => console.log(e));
+
+        return promise;
+        
+      }, // add_to_cart()
+
+      // - - - - - - - - - - - - - - - - - - - - 
+
     }, // actions: {}
 
-    // we replace created
-
-
     // ==========================================
-
-    // ==========================================
-
-    // ==========================================
-
 
   }); // store
 </script>

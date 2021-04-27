@@ -212,7 +212,8 @@
     methods: {
 
       get_product_ids_in_cart() {
-        const products_in_cart = this.cart.items.map((item) => {
+        //const products_in_cart = this.cart.items.map((item) => {
+        const products_in_cart = store.state.cart.items.map((item) => {
           return item.product_id.toString();
         }); // .map()
         return products_in_cart;
@@ -228,27 +229,35 @@
 
       // - - - - - - - - - - - - - - - - - - - - 
 
-      get_cart() {
-        fetch('/cart.js')
-          .then(res => res.json())
-          .then(cart => this.set_cart(cart))
-          .catch(e => console.log(e));
-      }, // get_cart()
+      //get_cart() moved into store.actions.get_cart({ commit })
+      //get_cart() {
+      //  fetch('/cart.js')
+      //    .then(res => res.json())
+      //    .then(cart => this.set_cart(cart))
+      //    .catch(e => console.log(e));
+      //}, // get_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
-      set_cart(cart) {
-        // update cart
-        this.cart = cart;
-        this.format_prices();
-        this.loading = false; // end-loading 1
-      }, // set_cart()
+      //set_cart() is now done in store.mutations.SET_CART(state, cart)
+      //set_cart(cart) {
+      //  // update cart
+      //  this.cart = cart;
+      //  this.format_prices();
+      //  this.loading = false; // end-loading 1
+      //}, // set_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
       remove_from_cart(id) {
         this.loading = true; // start-loading 2
-        this.update_cart(id, 0);
+
+        //this.update_cart(id, 0);
+        const qty = 0;
+        const promise = store.dispatch('update_cart', {id, qty});
+        promise.then(() => {
+          this.loading = false;
+        });
       }, // remove_from_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
@@ -265,63 +274,62 @@
         upsell.adding_upsell = true; // adding-upsell true 1
         this.loading = true; // start-loading 1
         
-        let formData = {
-          'items': [{
-            'id': id,
-            'quantity': 1
-          }]
-        };
-    
-        fetch('/cart/add.js', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(formData)
-        })
-        .then(response => response.json())
-        .then(obj => {
-          const item = obj.items[0]; // only one item added
-          console.log('ADD item: ', item);
+        //let formData = {
+        //  'items': [{
+        //    'id': id,
+        //    'quantity': 1
+        //  }]
+        //};
+        //
+        //fetch('/cart/add.js', {
+        //  method: 'POST',
+        //  headers: {
+        //    'Content-Type': 'application/json'
+        //  },
+        //  body: JSON.stringify(formData)
+        //})
+        //.then(response => response.json())
+        //.then(obj => {
+        //  const item = obj.items[0]; // only one item added
+        //  console.log('ADD item: ', item);
+        //
+        //  // refresh cart data
+        //  this.get_cart();
+        //
+        //  upsell.adding_upsell = false; // adding-upsell false 1
+        //})
+        //.catch(e => console.log(e));
 
-          // refresh cart data
-          this.get_cart();
-
+        const promise = store.dispatch('add_to_cart', id);
+        promise.then(() => {
+          this.loading = false;
           upsell.adding_upsell = false; // adding-upsell false 1
-        })
-        .catch(e => console.log(e));
+        });
 
       }, // add_to_cart()
 
       // - - - - - - - - - - - - - - - - - - - - 
 
+      // body of update_cart(id, qty) moved into store.actions.update_cart({ commit }, {id, qty})
       update_cart(id, qty) {
+        // -this function is only used to update quantity.       
+        // -since we decided to not change to loadin state upon update of quantity,
+        //  we do not need to change the loading state upon resolution of promise.
+        
+        const promise = store.dispatch('update_cart', {id, qty});
 
-
-        const data_obj = { "quantity": String(qty), "id": String(id) };
-
-        fetch('/cart/change.js', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          body: JSON.stringify(data_obj)
-        })
-        .then(response => response.json())
-        .then(cart     => this.set_cart(cart))
-        .catch(error   => console.log('Error:', error));
       }, // update_cart() 
 
       // - - - - - - - - - - - - - - - - - - - - 
 
-      format_prices() {
-        this.cart.items.forEach(item => {
-          // First time creates new property on items[idx]
-          item.formatted_line_price = Shopify.formatMoney(item.line_price); 
-        });
-
-        this.cart.formatted_total_price = Shopify.formatMoney(this.cart.total_price);
-      }, // format_prices()
+      //format_prices() body now done in store.mutations.SET_CART(state, cart)
+      //format_prices() {
+      //  this.cart.items.forEach(item => {
+      //    // First time creates new property on items[idx]
+      //    item.formatted_line_price = Shopify.formatMoney(item.line_price); 
+      //  });
+      //  this.cart.formatted_total_price = Shopify.formatMoney(this.cart.total_price);
+      //}, // format_prices()
 
     }, // methods: {}
 
