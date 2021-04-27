@@ -1,3 +1,64 @@
 <script>
+  const store = Vuex.createStore({
 
+    state() {
+      return {
+
+        cart: {
+          items: [], // items: []
+        }, // cart: {}
+
+      }; // return
+    }, // state()
+
+    // ==========================================
+
+    mutations: { // mutations are used to commit and track state changes
+      // -best practice is to have actions call mutations which update state directly
+
+      SET_CART(state, cart) {
+        state.cart = cart;
+      } // SET_CART()
+    }, // mutations: {}
+
+    // ==========================================
+
+    getters: { // getters access state (like computed (properties?) in  Vue instance which can access data)
+      cart: (state) => { // get the cart object
+        return state.cart;
+
+        // -In order to get the data from our VueX store (store: store),
+        //  we need to create a new computed property that pulls the data from the VueX store.
+
+
+      }, // cart: () => {}
+    }, // geters: {}
+
+    // ==========================================
+
+    actions: { // actions update state (like methods in Vue instance which can update data)
+      get_cart({ commit }) { // this replaces getting the cart in the Vue instances created() lifecycle hook (this.get_cart())
+        // const commit = props.commit;
+
+        return fetch('/cart.js')
+                .then(res => res.json())
+                //.then(cart => this.set_cart(cart))
+                .then(cart => store.commit('SET_CART', cart)) // (<mutation>, <payload>)
+                // ^ sets the value of cart state to response of API call
+                .catch(e => console.log(e));
+
+      }, // get_cart({ commit })
+    }, // actions: {}
+
+    // we replace created
+
+
+    // ==========================================
+
+    // ==========================================
+
+    // ==========================================
+
+
+  }); // store
 </script>

@@ -1,3 +1,4 @@
+{% comment %} store.js.liquid snippet that contains VueX  {% endcomment %}
 {% include 'store.js' %}
 
 <div id="cart-page" class="cart-page container">
@@ -130,6 +131,10 @@
   const CartPageOptions = {
 
     // ==========================================
+    
+    store: store, // VueX store (/snippets/store.js.liquid)
+
+    // ==========================================
 
     data() {
       return {
@@ -137,9 +142,9 @@
         // start-loading 0
         loading: true, // loading: boolean
         
-        cart: {
-          items: [], // items: []
-        }, // cart: {}
+        //cart: {
+        //  items: [], // items: []
+        //}, // cart: {}
         upsells: [ // this array will have store data filled in it when it first is sent to client upon page load
           {% for product in collections['shoes'].products %}
           
@@ -161,7 +166,18 @@
 
     // lifecycle hook:
     created() {
-      this.get_cart();
+      //this.get_cart();
+
+      // Instead of this.get_cart() we dispatch the action get_cart({commit}) from VueX store
+      const promise = store.dispatch('get_cart');
+      promise.then(() => {
+        this.loading = false;
+      });
+
+      // -To syncrhonize the loading state, we need to use promises.
+      // -Return a promise from the fetch request in actions.get_cart({commit).
+      // -When promise resolves, set loading back to false.
+
     }, // created()
   
     // ==========================================
@@ -181,6 +197,10 @@
     // ==========================================
 
     computed: {
+      cart() {
+        return store.state.cart; // This is where we bring in our VueX data
+      }, // cart()
+
       filtered_upsells() {
         const upsells_not_in_cart = this.get_upsells_not_in_cart();
         return upsells_not_in_cart;
@@ -311,5 +331,6 @@
 
   const CartPage = Vue.createApp(CartPageOptions);
   CartPage.mount('#cart-page');
+  CartPage.use(store); // store defined in /snippets/store.js.liquid
 
 </script>
