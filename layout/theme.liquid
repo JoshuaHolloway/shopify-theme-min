@@ -50,6 +50,56 @@
     {% endif %}
   {% endif %}
 
+
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% comment %} VUE-X DEMO {% endcomment %}
+  {% include 'store.js' %}
+  <div id="header" class="header">
+    <div class="header-inner container">
+      {% comment %} <img src="{{ 'site-logo.png' | asset_url }}"> {% endcomment %}
+
+      <a class="header-link" href="/products/t-shirt">Shop Tees</a>
+      <a class="header-link" href="/collections/shoes">Shop Shoes</a>
+      <a class="header-link cart" href="/cart">Cart (<span v-html="cart.item_count"></span>)</a>
+      
+    </div>
+  </div>
+
+  <script>
+    const HeaderOptions = {
+      // ==========================================
+      name: 'Header-App', // App Name
+      // ==========================================
+      store: store, // store defined in /snippets/store.js.liquid
+      // ==========================================
+      computed: {
+        cart() {
+          return store.state.cart; // This is where we bring in our VueX data
+        }, // cart()
+      }, // computed: {}
+      // ==========================================
+      created() { // lifecycle-hook
+        store.dispatch('get_cart');
+      }, // created()
+      // ==========================================
+    }; // HeaderOptions = {}
+
+    const Header = Vue.createApp(HeaderOptions);
+    Header.mount('#header');
+    Header.use(store);
+  </script>
+
+
+
   <main role="main">
     {{ content_for_layout }}
     <div id="app"></div>
