@@ -19,40 +19,13 @@ nav { position: fixed;
   width: 100%;
   color: $navbar-color;
 
-  .nav__top {
-    height: 50px;
-    background: $navbar-background-1;
-    color: inherit;
+  @import 'navbar-mobile';
+  @media screen and (max-width: 1024px) {
+    &#nav__non-mobile { display: none; }
   }
-  .nav__bottom {
-    height: 50px;
-    background: $navbar-background-2;
-    color: inherit;
-
-    .nav__content-container {
-      border: solid red 1px;
-      display: flex;
-      justify-content: space-evenly;
-      align-items: center;
-    }
-
-    ul.nav__content-container { 
-      border: dashed green 2px;
-      height: 100%;
-      width: 100%;
-      list-style-type: none;
-      font-size: 1.8em;
-      color: inherit;
-      a {
-        text-decoration: none;
-        color: inherit;
-      }
-    }
-
-
-
-    display: grid;
-    grid-template-columns: 0.2fr 1fr 0.2fr;
+  @import 'navbar-non-mobile';
+  @media screen and (min-width: 1025px) {
+    &#nav__mobile { display: none; }
   }
 }
 
@@ -85,9 +58,9 @@ nav { position: fixed;
 // 1105 and below hide 'Customize'
 // 1162 and below hide Sale
 
-.hide-below-1024 {
+.hide-below-1105 {
   display: inline;
-  @media screen and (max-width: 1024px) {
+  @media screen and (max-width: 1105px) {
     display: none;
   }
 }
