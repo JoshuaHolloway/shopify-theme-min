@@ -1,0 +1,99 @@
+$navbar-background-1: #F5F5F5;
+$navbar-background-2: #FFFFFF;
+$navbar-color: #111111; // all text/logos in navbar
+
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body { position: relative; 
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 400;
+}
+
+nav { position: fixed;
+  height: 100px;
+  width: 100%;
+  color: $navbar-color;
+
+  .nav__top {
+    height: 50px;
+    background: $navbar-background-1;
+    color: inherit;
+  }
+  .nav__bottom {
+    height: 50px;
+    background: $navbar-background-2;
+    color: inherit;
+
+    .nav__content-container {
+      border: solid red 1px;
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+    }
+
+    ul.nav__content-container { 
+      border: dashed green 2px;
+      height: 100%;
+      width: 100%;
+      list-style-type: none;
+      font-size: 1.8em;
+      color: inherit;
+      a {
+        text-decoration: none;
+        color: inherit;
+      }
+    }
+
+
+
+    display: grid;
+    grid-template-columns: 0.2fr 1fr 0.2fr;
+  }
+}
+
+#section-1 {
+  background: deepskyblue;
+  height: 100vh;
+  // width: 100vw;
+}
+
+#section-2 {
+  background: darkorchid;
+  height: 100vh;
+  // width: 100vw;
+}
+
+#section-3 {
+  background: darkturquoise;
+  height: 100vh;
+  // width: 100vw;
+}
+
+.box {
+  height: 100px;
+  width: 100px;
+  background: deeppink;
+}
+
+// Breakpoints:
+// 1024 and below collapse to hamburger with sidebar
+// 1105 and below hide 'Customize'
+// 1162 and below hide Sale
+
+.hide-below-1024 {
+  display: inline;
+  @media screen and (max-width: 1024px) {
+    display: none;
+  }
+}
+.hide-below-1162 {
+  display: inline;
+  @media screen and (max-width: 1162px) {
+    display: none;
+  }
+}
