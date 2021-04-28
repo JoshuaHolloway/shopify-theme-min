@@ -1,1 +1,26 @@
-/* No CSS */
+.nav__mobile-container {
+  height: 50px;
+  background: #FFFFFF;
+  color: inherit;
+  display: grid;
+  grid-template-columns: 0.2fr 0.6fr 0.2fr;
+}
+
+.nav__mobile-container .nav__content-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+.nav__mobile-container ul.nav__content-container {
+  height: 100%;
+  width: 100%;
+  list-style-type: none;
+  font-size: 1.8em;
+  color: inherit;
+}
+
+.nav__mobile-container ul.nav__content-container a {
+  text-decoration: none;
+  color: inherit;
+}

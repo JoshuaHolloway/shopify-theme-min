@@ -1,17 +1,22 @@
+@import 'colors';
+
 .nav__mobile-container {
   height: 50px;
   background: $navbar-background-2;
   color: inherit;
 
+  display: grid;
+  grid-template-columns: 0.2fr 0.6fr 0.2fr;
+
   .nav__content-container {
-    border: solid red 1px;
+    // border: solid red 1px;
     display: flex;
     justify-content: space-evenly;
     align-items: center;
   }
 
   ul.nav__content-container { 
-    border: dashed green 2px;
+    // border: dashed green 2px;
     height: 100%;
     width: 100%;
     list-style-type: none;
@@ -22,9 +27,4 @@
       color: inherit;
     }
   }
-
-
-
-  display: grid;
-  grid-template-columns: 0.2fr 1fr 0.2fr;
 }
