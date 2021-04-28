@@ -1,0 +1,38 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body { position: relative; }
+
+nav { // absolute
+  position: fixed;
+  height: 100px;
+  width: 100%;
+  background: black;
+}
+
+#section-1 {
+  background: deepskyblue;
+  height: 100vh;
+  // width: 100vw;
+}
+
+#section-2 {
+  background: darkorchid;
+  height: 100vh;
+  // width: 100vw;
+}
+
+#section-3 {
+  background: darkturquoise;
+  height: 100vh;
+  // width: 100vw;
+}
+
+.box {
+  height: 100px;
+  width: 100px;
+  background: deeppink;
+}
