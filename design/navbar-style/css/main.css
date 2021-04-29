@@ -43,7 +43,7 @@ nav .nav__top {
   background: #F5F5F5;
   color: inherit;
   display: grid;
-  grid-template-columns: 0.2fr 0.8fr 0.4fr;
+  grid-template-columns: 2fr 8fr 2fr;
 }
 
 nav .nav__top .nav__content-container {
@@ -63,7 +63,17 @@ nav .nav__top .nav__content-container ul {
   color: inherit;
 }
 
-nav .nav__top .nav__content-container ul a {
+nav .nav__top .nav__content-container ul li {
+  width: 100%;
+  display: flex;
+  justify-content: center;
+}
+
+nav .nav__top .nav__content-container ul li:not(:last-child) {
+  border-right: solid black 1px;
+}
+
+nav .nav__top .nav__content-container ul li a {
   text-decoration: none;
   color: inherit;
 }

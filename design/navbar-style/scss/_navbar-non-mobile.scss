@@ -6,8 +6,8 @@
   color: inherit;
 
   display: grid;
-  grid-template-columns: 0.2fr 0.8fr 0.4fr;
-
+  grid-template-columns: 2fr 8fr 2fr;  // 2/12, 8/12, 2/12
+  
   .nav__content-container {
     // border: solid red 1px;
     display: flex;
@@ -18,15 +18,26 @@
       display: flex;
       justify-content: space-evenly;
       align-items: center;
-      // border: dashed green 2px;
+      // border: dashed blue 2px;
       height: 100%;
       width: 100%;
       list-style-type: none;
       font-size: 1.0em;
       color: inherit;
-      a {
-        text-decoration: none;
-        color: inherit;
+      li {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        // border: solid red 1px;
+        &:not(:last-child) {
+          // background: yellow;
+          border-right: solid black 1px;
+        }
+        a {
+          text-decoration: none;
+          color: inherit;
+          // border: dashed green 2px;
+        }
       }
     }
   }
