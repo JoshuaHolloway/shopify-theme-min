@@ -1,0 +1,17 @@
+$side-drawer-width: 200px;
+
+#side-drawer { position: absolute;
+  display: none;
+  right: 0;
+  width: $side-drawer-width;
+  height: 100vh;
+  background: red;
+  opacity: 0.4;
+  z-index: 1;
+
+  @media screen and (max-width: 1024px) {
+    & { 
+      display: flex; 
+    }
+  }
+}

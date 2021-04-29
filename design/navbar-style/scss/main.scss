@@ -23,8 +23,12 @@ nav { position: fixed;
   @import 'navbar-non-mobile';
   @media screen and (min-width: 1025px) {
     &#nav__mobile { display: none; }
+
   }
 }
+
+@import 'side-drawer';
+
 
 #section-1 {
   background: deepskyblue;

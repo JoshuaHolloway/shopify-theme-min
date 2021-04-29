@@ -19,6 +19,7 @@ nav {
 
 nav .nav__mobile-container {
   height: 50px;
+  width: 100vw;
   background: #FFFFFF;
   color: inherit;
   display: grid;
@@ -29,19 +30,6 @@ nav .nav__mobile-container .nav__content-container {
   display: flex;
   justify-content: space-evenly;
   align-items: center;
-}
-
-nav .nav__mobile-container ul.nav__content-container {
-  height: 100%;
-  width: 100%;
-  list-style-type: none;
-  font-size: 1.8em;
-  color: inherit;
-}
-
-nav .nav__mobile-container ul.nav__content-container a {
-  text-decoration: none;
-  color: inherit;
 }
 
 @media screen and (max-width: 1024px) {
@@ -110,6 +98,23 @@ nav .nav__bottom ul.nav__content-container a {
 @media screen and (min-width: 1025px) {
   nav#nav__mobile {
     display: none;
+  }
+}
+
+#side-drawer {
+  position: absolute;
+  display: none;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background: red;
+  opacity: 0.4;
+  z-index: 1;
+}
+
+@media screen and (max-width: 1024px) {
+  #side-drawer {
+    display: flex;
   }
 }
 

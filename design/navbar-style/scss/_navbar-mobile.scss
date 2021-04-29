@@ -2,6 +2,7 @@
 
 .nav__mobile-container {
   height: 50px;
+  width: 100vw;
   background: $navbar-background-2;
   color: inherit;
 
@@ -15,16 +16,4 @@
     align-items: center;
   }
 
-  ul.nav__content-container { 
-    // border: dashed green 2px;
-    height: 100%;
-    width: 100%;
-    list-style-type: none;
-    font-size: 1.8em;
-    color: inherit;
-    a {
-      text-decoration: none;
-      color: inherit;
-    }
-  }
 }
