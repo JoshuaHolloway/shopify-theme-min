@@ -104,7 +104,7 @@ nav .nav__bottom ul.nav__content-container a {
 #side-drawer {
   position: absolute;
   display: none;
-  right: 0;
+  right: -200px;
   width: 200px;
   height: 100vh;
   background: red;

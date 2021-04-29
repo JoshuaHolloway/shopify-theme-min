@@ -2,7 +2,7 @@ $side-drawer-width: 200px;
 
 #side-drawer { position: absolute;
   display: none;
-  right: 0;
+  right: -$side-drawer-width;
   width: $side-drawer-width;
   height: 100vh;
   background: red;
