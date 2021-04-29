@@ -17,9 +17,11 @@ const {viewport_width} = viewport_geometry();
 
 // ==============================================
 
+let timeline = gsap.timeline();
 const open_side_drawer = () => {
 
-  tween = gsap.to(side_drawer, {
+  timeline = gsap.timeline();
+  timeline.to(side_drawer, {
     x: -sidedrawer_width,
     onComplete: () => {
       console.log('animation complete');
@@ -39,19 +41,27 @@ const open_side_drawer = () => {
     }, // onReverse()
   });
 
+  const nav_mobile = document.querySelector('#nav-mobile');
+  timeline.to(nav_mobile, {
+    filter: 'blur(3px)',
+  }, '<'); // .to()
+  
+  const overlay = document.querySelector('.overlay');
+  timeline.to(overlay, {
+    backgroundColor: 'rgba(0, 0, 0, 0.2)',
+    onStart:           () => overlay.style.zIndex = 1,
+    onReverseComplete: () => overlay.style.zIndex = -1,
+  }, '<'); // .to()
+
 }; // open_side_drawer()
 
 const close_side_drawer = () => {
-  tween.reverse();
+  timeline.reverse();
 }; // close_side_drawer()
 
 // ==============================================
 
-let count = 0;
-// let tween =  gsap.from(side_drawer, {x: 200, paused: true});
-let tween = gsap.timeline();
 hamburger.addEventListener('click', () => {
-
   console.log('open nav-drawer');
   open_side_drawer();
 });

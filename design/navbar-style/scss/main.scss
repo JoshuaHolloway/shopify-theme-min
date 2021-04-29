@@ -9,65 +9,72 @@
 body { position: relative; 
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 400;
-}
 
-nav { position: fixed;
-  height: 100px;
-  width: 100%;
-  color: $navbar-color;
-
-  @import 'navbar-mobile';
-  @media screen and (max-width: 1024px) {
-    &#nav-non-mobile { display: none; }
+  .overlay { position: fixed;
+    background: rgba(0, 0, 0, 0.0);
+    z-index: -1;
+    height: 100vh;
+    width: 100vh;
   }
-  @import 'navbar-non-mobile';
-  @media screen and (min-width: 1025px) {
-    &#nav-mobile { display: none; }
 
+  nav { position: fixed;
+    height: 100px;
+    width: 100%;
+    color: $navbar-color;
+
+    @import 'navbar-mobile';
+    @media screen and (max-width: 1024px) {
+      &#nav-non-mobile { display: none; }
+    }
+    @import 'navbar-non-mobile';
+    @media screen and (min-width: 1025px) {
+      &#nav-mobile { display: none; }
+
+    }
   }
-}
 
-@import 'side-drawer';
+  @import 'side-drawer';
 
 
-#section-1 {
-  background: deepskyblue;
-  height: 100vh;
-  // width: 100vw;
-}
-
-#section-2 {
-  background: darkorchid;
-  height: 100vh;
-  // width: 100vw;
-}
-
-#section-3 {
-  background: darkturquoise;
-  height: 100vh;
-  // width: 100vw;
-}
-
-.box {
-  height: 100px;
-  width: 100px;
-  background: deeppink;
-}
-
-// Breakpoints:
-// 1024 and below collapse to hamburger with sidebar
-// 1105 and below hide 'Customize'
-// 1162 and below hide Sale
-
-.hide-below-1105 {
-  display: inline;
-  @media screen and (max-width: 1105px) {
-    display: none;
+  #section-1 {
+    background: deepskyblue;
+    height: 100vh;
+    // width: 100vw;
   }
-}
-.hide-below-1162 {
-  display: inline;
-  @media screen and (max-width: 1162px) {
-    display: none;
+
+  #section-2 {
+    background: darkorchid;
+    height: 100vh;
+    // width: 100vw;
+  }
+
+  #section-3 {
+    background: darkturquoise;
+    height: 100vh;
+    // width: 100vw;
+  }
+
+  .box {
+    height: 100px;
+    width: 100px;
+    background: deeppink;
+  }
+
+  // Breakpoints:
+  // 1024 and below collapse to hamburger with sidebar
+  // 1105 and below hide 'Customize'
+  // 1162 and below hide Sale
+
+  .hide-below-1105 {
+    display: inline;
+    @media screen and (max-width: 1105px) {
+      display: none;
+    }
+  }
+  .hide-below-1162 {
+    display: inline;
+    @media screen and (max-width: 1162px) {
+      display: none;
+    }
   }
 }
