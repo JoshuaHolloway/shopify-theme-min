@@ -6,13 +6,23 @@ $side-drawer-shift: -200px;
   right: $side-drawer-shift;
   width: $side-drawer-width;
   height: 100vh;
-  background: red;
-  opacity: 0.4;
+  background: #FFFFFF;
   z-index: 1;
 
   @media screen and (max-width: 1024px) {
     & { 
       display: flex; 
     }
+  }
+
+  .side-drawer__close-button {
+    height: 50px;
+    width: 50px;
+    border: dashed green 2px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #111111;
+    font-size: 2em;
   }
 }

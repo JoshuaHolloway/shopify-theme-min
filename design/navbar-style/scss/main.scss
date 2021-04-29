@@ -18,11 +18,11 @@ nav { position: fixed;
 
   @import 'navbar-mobile';
   @media screen and (max-width: 1024px) {
-    &#nav__non-mobile { display: none; }
+    &#nav-non-mobile { display: none; }
   }
   @import 'navbar-non-mobile';
   @media screen and (min-width: 1025px) {
-    &#nav__mobile { display: none; }
+    &#nav-mobile { display: none; }
 
   }
 }
