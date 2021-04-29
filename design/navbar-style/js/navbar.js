@@ -1,39 +1,58 @@
 let tween;
 let prev_scrollY = 0;
-// let was_previously_scrolling_up = true; 
-// let change_scroll_direction = true;
 
-let scroll_direction = false; // false = down,  true = up
+let is_navbar_hidden  = false;
+let is_navbar_showing = true;  // TODO: remove redundant variable
+
+// ==============================================
 
 const hide_navbar = () => {
+
+  is_navbar_hidden  = true;
+  is_navbar_showing = false;
+
   tween = gsap.to('nav', {
     yPercent: -100,
-    duration: 0.3
+    duration: 0.3, 
+    onStart: () => { // only want these to change once first start scrolling
+      // is_navbar_hidden  = true;
+      // is_navbar_showing = false;
+    }, // onStart()
   }); // tween = gsap.to('', {})
 }; // hide_navbar()
-const show_navbar = () => tween.reverse();
+
+// ==============================================
+
+const show_navbar = () => {
+  is_navbar_hidden  = false;
+  is_navbar_showing = true;
+  tween.reverse();
+}; // show_navbar()
+
+// ==============================================
 
 window.addEventListener('scroll', () => {
 
   if (scrollY < prev_scrollY) // scrolling up
   {
-    if (scroll_direction === true) {
-      console.log('changed to scrolling up');
+    if (is_navbar_hidden === true) {
+      // console.log('changed to scrolling up');
       show_navbar();
-      scroll_direction = false;
-    } else {
-      console.log('scrolling up');
-    }
+    } 
+    // else {
+    //   console.log('scrolling up, scrollY: ', scrollY);
+    // }
   }
   else // scrolling down
   {
-    if (scroll_direction === false){
-      console.log('changed to scrolling down');
+
+    if (is_navbar_showing === true){
+      // console.log('changed to scrolling down');
       hide_navbar();
-      scroll_direction = true;
-    } else {
-      console.log('scrolling down');
-    }
+    } 
+    // else {
+    //   console.log('scrolling down, scrollY: ', scrollY);
+    // }
   } 
 
   // update previous scroll postions
