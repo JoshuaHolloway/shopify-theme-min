@@ -132,7 +132,7 @@ nav .nav__bottom ul.nav__content-container a {
 }
 
 #side-drawer {
-  position: absolute;
+  position: fixed;
   display: none;
   right: -200px;
   width: 200px;
