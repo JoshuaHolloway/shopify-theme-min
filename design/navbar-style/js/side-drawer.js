@@ -13,14 +13,10 @@ let count = 0;
 let tween;
 window.addEventListener('click', () => {
   
-
-  if (count === 0) {
-    console.log('JOSH clicked!, sidedrawer_width: ', sidedrawer_width);
+  if (count === 0)
     tween = gsap.to(side_drawer, {x: -sidedrawer_width});
-  }
-  else {
+  else
     tween.reverse();
-  }
 
   count = (count + 1) % 2;
 });
