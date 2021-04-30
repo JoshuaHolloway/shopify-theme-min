@@ -12,60 +12,30 @@
   box-sizing: border-box;
   margin: 0;
   padding: 0;
-  background: deepskyblue;
 }
 
 body {
-  background: deepskyblue;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 400;
 
   main {  position: relative;
 
-    .side-drawer {  position: fixed;
-      z-index: 1;
-      // top: 0;
-      $side-drawer-width: 200px;
-      right: -$side-drawer-width;
-      width:  $side-drawer-width;
-      height: 100vh;
-      background: darkorchid;
-      color: white;
-    }
+    // .side-drawer { position: fixed; }
+    @import 'side-drawer';
 
-    .overlay { position: fixed;
-      z-index: -1;
-      height: 100vh;
-      width: 100vw;
-      background: rgba(0, 0, 0, 0.0);
-    }
+    // .overlay { position: fixed; }
+    @import 'overlay';
 
-    .blur-container {  position: absolute;
-      top: 0;
-
-      nav {  position: sticky; // position: fixed jumpst to top upon blur!
-        top: 0;
-        height: 50px;
-        width: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        background: darkorange;
-
-        .nav__content-container {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          height: fit-content;
-          width: fit-content;
-          padding: 5px;
-          background: white;
-
-          svg { 
-            background: inherit;
-          }
-        }
-      }
-    }
+    // .blur-container { position: absolute; }
+    @import 'blur-container';
   }
+}
+
+.container {
+  width: 100%;
+  padding-right: 1.75rem;
+  padding-left: 1.75rem;
+  // margin-right: auto;
+  // margin-left: auto;
+  border: solid yellowgreen 5px;
 }
