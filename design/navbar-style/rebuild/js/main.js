@@ -1,7 +1,7 @@
-console.log('hi');
+import { element_geometry, viewport_geometry } from './geometry.js';
 
+// ==============================================
 
-let count = 0;
 let master_timeline;
 const duration = 0.5;
 
@@ -18,7 +18,7 @@ const blur_background = () => {
   }); // .to()
   
   return timeline;
-};
+}; // blur_background()
 
 // ==============================================
 
@@ -35,28 +35,63 @@ const translucent_overlay = () => {
   }); // .to()
 
   return timeline;
-};
+}; // translucent_overlay()
 
+// ==============================================
+
+const side_drawer = document.querySelector('.side-drawer'); // $side-drawer-width  defined in  _side-drawer.scss 
+const side_drawer_width = element_geometry(side_drawer).w;
+const {viewport_width} = viewport_geometry();
+const slide_side_drawer = () => {
+
+  const timeline = gsap.timeline();
+
+  timeline.to(side_drawer, {
+    duration,
+    x: -side_drawer_width,
+    onComplete: () => {
+      listen_for_click_outside_of_side_drawer('add');
+    }, // onComplete()
+    onReverseComplete: () => {
+      listen_for_click_outside_of_side_drawer('remove')
+    }, // onReverseComplete()
+  });
+
+  const click_outside_of_side_drawer_listener = (event) => {
+    const click_x_pos = event.clientX;
+    const side_drawer_left_x_pos = viewport_width - side_drawer_width;
+    if (click_x_pos < side_drawer_left_x_pos) {
+      console.log('clicked outside the side-drawer!');
+      close_side_drawer();
+    }
+  };
+
+  const listen_for_click_outside_of_side_drawer = (option) => {
+    if (option === 'add')
+      window.addEventListener('click', click_outside_of_side_drawer_listener);
+    else if (option === 'remove')
+      window.removeEventListener('click', click_outside_of_side_drawer_listener);
+  };
+
+  return timeline;
+}; // slide_side_drawer()
 
 // ==============================================
 
 const nav__hamburger  = document.querySelector('.nav__hamburger');
-window.addEventListener('click', () => {
+nav__hamburger.addEventListener('click', () => {
   
   console.log('clicked button');
-  
-  if (count === 0) {
     
-    master_timeline = gsap.timeline();
-    master_timeline.add( blur_background() );
-    master_timeline.add( translucent_overlay(), '<' );
+  master_timeline = gsap.timeline();
+  master_timeline.add( blur_background() );
+  master_timeline.add( translucent_overlay(), '<' );
+  master_timeline.add( slide_side_drawer(),   '<' );
 
-  }
-  else {
-    master_timeline.reverse();
-  }
-
-  count = (count + 1) % 2;
-});
+}); // nav__hamburger.addEventListener('click', ()=>{})
 
 // ==============================================
+
+const close_side_drawer = () => {
+  master_timeline.reverse();
+}; // close_side_drawer()

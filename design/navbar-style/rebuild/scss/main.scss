@@ -1,3 +1,13 @@
+// -Systematic methodology of organizing style rulesets
+//  --Least common at top
+//  --How to systematically handle @media-queries?
+// 0: position and top/right/left/bottom
+// 0.1: z-index
+// 1: display
+// 2: height/width/padding/margin
+// 3: background/color
+// 4: font-size
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -13,55 +23,43 @@ body {
   main {  position: relative;
 
     .side-drawer {  position: fixed;
-
-      // -Systematic methodology of organizing style rulesets
-      //  --Least common at top
-      //  --How to systematically handle @media-queries?
-      // 0: position and top/right/left/bottom
-      // 0.1: z-index
-      // 1: display
-      // 2: height/width
-      // 3: background/color
-      // 4: font-size
-
+      z-index: 1;
       // top: 0;
-      right: 0;
-      width: 200px;
+      $side-drawer-width: 200px;
+      right: -$side-drawer-width;
+      width:  $side-drawer-width;
       height: 100vh;
       background: darkorchid;
       color: white;
-      z-index: 1;
     }
 
     .overlay { position: fixed;
-      background: rgba(0, 0, 0, 0.0);
       z-index: -1;
       height: 100vh;
       width: 100vw;
+      background: rgba(0, 0, 0, 0.0);
     }
 
     .blur-container {  position: absolute;
       top: 0;
 
-      nav {  position: sticky; // position: fixed disapears!
+      nav {  position: sticky; // position: fixed jumpst to top upon blur!
         top: 0;
         height: 50px;
         width: 100%;
-        background: darkorange;
-
         display: flex;
         justify-content: center;
         align-items: center;
+        background: darkorange;
 
         .nav__content-container {
-          padding: 5px;
-          height: fit-content;
-          width: fit-content;
-          // border: dashed 5px hotpink;
-          background: white;
           display: flex;
           justify-content: center;
           align-items: center;
+          height: fit-content;
+          width: fit-content;
+          padding: 5px;
+          background: white;
 
           svg { 
             background: inherit;
@@ -70,5 +68,4 @@ body {
       }
     }
   }
-
 }
