@@ -1,0 +1,60 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: deepskyblue;
+}
+
+main {  position: relative;
+
+  .side-drawer {  position: fixed;
+
+    // -Systematic methodology of organizing style rulesets
+    //  --Least common at top
+    //  --How to systematically handle @media-queries?
+    // 0: position and top/right/left/bottom
+    // 0.1: z-index
+    // 1: display
+    // 2: height/width
+    // 3: background/color
+    // 4: font-size
+
+    // top: 0;
+    right: 0;
+    width: 200px;
+    height: 100vh;
+    background: darkorchid;
+    color: white;
+    z-index: 1;
+  }
+
+  .blur-container {  position: absolute;
+    top: 0;
+
+    nav {  position: sticky; // position: fixed disapears!
+      top: 0;
+      height: 50px;
+      width: 100%;
+      background: darkorange;
+
+      display: flex;
+      justify-content: center;
+      align-items: center;
+
+      .nav__content-container {
+        padding: 5px;
+        height: fit-content;
+        width: fit-content;
+        // border: dashed 5px hotpink;
+        background: white;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
+        svg { 
+          background: inherit;
+        }
+      }
+    }
+  }
+}

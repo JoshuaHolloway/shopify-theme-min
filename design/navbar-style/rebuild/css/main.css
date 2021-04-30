@@ -1,0 +1,50 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  background: deepskyblue;
+}
+
+main {
+  position: relative;
+}
+
+main .side-drawer {
+  position: fixed;
+  right: 0;
+  width: 200px;
+  height: 100vh;
+  background: darkorchid;
+  color: white;
+  z-index: 1;
+}
+
+main .blur-container {
+  position: absolute;
+  top: 0;
+}
+
+main .blur-container nav {
+  position: sticky;
+  top: 0;
+  height: 50px;
+  width: 100%;
+  background: darkorange;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main .blur-container nav .nav__content-container {
+  padding: 5px;
+  height: fit-content;
+  width: fit-content;
+  background: white;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+main .blur-container nav .nav__content-container svg {
+  background: inherit;
+}
