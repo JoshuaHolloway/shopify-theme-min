@@ -1,0 +1,51 @@
+@import 'colors';
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body { position: relative;
+  // background: $primary-background;
+  background: deepskyblue;
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 400;
+
+  .overlay { position: fixed;
+    background: rgba(0, 0, 0, 0.0);
+    z-index: -1;
+    height: 100vh;
+    width: 100vh;
+  }
+
+  @import 'side-drawer';
+
+  #blur-container {
+    position: relative;
+    nav { position: fixed;
+      height: 100px;
+      width: 100%;
+      color: $navbar-color;
+  
+      @import 'navbar-mobile';
+      @media screen and (max-width: 1024px) {
+        &#nav-non-mobile { display: none; }
+      }
+
+    }
+  } // #blur-container
+
+  #section-1 {
+    // background: deepskyblue;
+    height: 100vh;
+    // width: 100vw;
+  }
+
+  #section-2 {
+    background: darkorchid;
+    height: 100vh;
+    // width: 100vw;
+  }
+
+}
