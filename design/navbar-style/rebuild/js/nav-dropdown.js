@@ -62,7 +62,7 @@ const slide = (className) => {
     }, // onComplete()
     onReverseComplete: () => {
       listen_for_click_outside_of_element('remove');
-      disable_scroll_listener();
+      enable_scroll_listener();
     }, // onReverseComplete()
   });
 
@@ -101,7 +101,7 @@ const open = () => {
   console.log('clicked hamburger');
   
   master_timeline = gsap.timeline();
-  // master_timeline.add( blur_background() );
+  master_timeline.add( blur_background() );
   master_timeline.add( translucent_overlay(), '<' );
   master_timeline.add( slide('.nav-dropdown'),   '<' );
 
