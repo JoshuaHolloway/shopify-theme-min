@@ -1,6 +1,8 @@
 // ==============================================
 
 import { element_geometry, viewport_geometry } from './geometry.js';
+import { enable_scroll_listener, 
+        disable_scroll_listener } from './hide-navbar.js';
 
 // ==============================================
 
@@ -56,9 +58,11 @@ const slide = (className) => {
     yPercent: 100,
     onComplete: () => {
       listen_for_click_outside_of_element('add');
+      disable_scroll_listener();
     }, // onComplete()
     onReverseComplete: () => {
-      listen_for_click_outside_of_element('remove')
+      listen_for_click_outside_of_element('remove');
+      disable_scroll_listener();
     }, // onReverseComplete()
   });
 

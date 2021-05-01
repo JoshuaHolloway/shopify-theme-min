@@ -24,8 +24,7 @@ const show_navbar = () => {
 
 // ==============================================
 
-window.addEventListener('scroll', () => {
-
+const scroll_listener = () => {
   if (scrollY < prev_scrollY) // scrolling up
   {
     if (is_navbar_hidden === true) 
@@ -34,6 +33,20 @@ window.addEventListener('scroll', () => {
   else if (is_navbar_hidden === false)
       hide_navbar();
   prev_scrollY = scrollY;
-}); // window.addEventListener('scroll', () => {})
+};
 
 // ==============================================
+
+const enable_scroll_listener = () => {
+  window.addEventListener('scroll', scroll_listener);
+};
+
+// ==============================================
+
+const disable_scroll_listener = () => {
+  window.removeEventListener('scroll', scroll_listener);
+};
+
+// ==============================================
+
+export {enable_scroll_listener, disable_scroll_listener};
