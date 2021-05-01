@@ -1,0 +1,35 @@
+.nav-mobile {
+  display: grid;
+  grid-template-columns: 2fr 4fr 6fr; // 2/12, 4/12, 6/12
+  width: 100%;
+  // border: dashed darkorange 6px;
+
+  .content-container {
+    display: flex;
+    justify-content: space-evenly;
+    align-items: center;
+    // border: solid hotpink 1px;
+
+    .icon {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: fit-content;
+      width: fit-content;
+      padding: 5px;
+      background: white;
+      // border: dashed green 1px;
+  
+      svg { 
+        height: 24px;
+        width:  24px;
+        background: inherit;
+  
+        &.hamburger {
+          height: 28px;
+          width: 28px;
+        }
+      }
+    }
+  }
+}

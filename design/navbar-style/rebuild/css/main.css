@@ -13,6 +13,15 @@
   height: 100%;
 }
 
+.content-container {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: #111;
+}
+
 li {
   width: 100%;
   display: flex;
@@ -36,6 +45,7 @@ html {
 }
 
 body {
+  overflow-x: hidden;
   color: #111;
   background-color: #fff;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
@@ -86,7 +96,19 @@ body main .blur-container nav {
   background: #fff;
 }
 
-body main .blur-container nav .nav__content-container {
+body main .blur-container nav .nav-mobile {
+  display: grid;
+  grid-template-columns: 2fr 4fr 6fr;
+  width: 100%;
+}
+
+body main .blur-container nav .nav-mobile .content-container {
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+}
+
+body main .blur-container nav .nav-mobile .content-container .icon {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -96,8 +118,15 @@ body main .blur-container nav .nav__content-container {
   background: white;
 }
 
-body main .blur-container nav .nav__content-container svg {
+body main .blur-container nav .nav-mobile .content-container .icon svg {
+  height: 24px;
+  width: 24px;
   background: inherit;
+}
+
+body main .blur-container nav .nav-mobile .content-container .icon svg.hamburger {
+  height: 28px;
+  width: 28px;
 }
 
 body main .blur-container #section-1 {
@@ -148,19 +177,19 @@ body main .blur-container footer .footer__bottom {
   height: 100%;
 }
 
-body main .blur-container footer .footer__bottom .footer__bottom__left {
+body main .blur-container footer .footer__bottom__left {
   background: pink;
 }
 
-body main .blur-container footer .footer__bottom .footer__bottom__center {
+body main .blur-container footer .footer__bottom__center {
   background: purple;
 }
 
-body main .blur-container footer .footer__bottom .footer__bottom__right .privacy-policy {
+body main .blur-container footer .footer__bottom__right .privacy-policy {
   color: #7E7E7E;
 }
 
-body main .blur-container footer .footer__bottom .footer__bottom__right .privacy-policy:hover {
+body main .blur-container footer .footer__bottom__right .privacy-policy:hover {
   color: #fff;
 }
 

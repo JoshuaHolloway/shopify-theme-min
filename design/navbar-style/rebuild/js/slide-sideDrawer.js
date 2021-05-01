@@ -101,7 +101,7 @@ const close_side_drawer = () => {
 
 // ==============================================
 
-const nav__hamburger  = document.querySelector('.nav__hamburger');
+const nav__hamburger  = document.querySelector('.nav__hamburger.icon');
 nav__hamburger.addEventListener('click', open_side_drawer); // nav__hamburger.addEventListener('click', ()=>{})
 
 // ==============================================

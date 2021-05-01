@@ -4,29 +4,7 @@
 
   // ============================================
 
-  nav {  position: sticky; // position: fixed jumpst to top upon blur!
-    top: 0;
-    height: $navbar-height;
-    width: 100%;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background:$background-1;
-
-    .nav__content-container {
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      height: fit-content;
-      width: fit-content;
-      padding: 5px;
-      background: white;
-
-      svg { 
-        background: inherit;
-      }
-    }
-  }
+  @import './nav/nav';
 
   // ============================================
 

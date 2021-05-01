@@ -11,16 +11,17 @@ footer {
     height: 100%;
 
     // left
-    .footer__bottom__left {
+    &__left {
       background: pink;
     }
 
     // middle
-    .footer__bottom__center {
+    &__center {
       background: purple;
     }
 
-    .footer__bottom__right {
+    // right
+    &__right {
       .privacy-policy {
         color: $color-footer-2;
         &:hover { color: $color-footer-1; }

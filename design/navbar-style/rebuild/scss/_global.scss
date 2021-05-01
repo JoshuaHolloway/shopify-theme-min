@@ -23,6 +23,15 @@ $color-footer-2:  #7E7E7E;
   height: 100%;
 }
 
+.content-container {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: $color-1;
+}
+
 li {
   width: 100%;
   display: flex;
