@@ -62,26 +62,27 @@ const slide = (className) => {
     }, // onReverseComplete()
   });
 
-  const click_outside_of_element_listener = (event, target_coordinate, vh) => {
+  const click_outside_of_element_listener = (event) => {
+
+    const element = document.querySelector(className);
+    const element_bottom = element_geometry(element).y2;
+    const {viewport_height: vh} = viewport_geometry();
 
     const y = event.clientY;
-    console.log('y: ', y, 'vh: ', vh,  'target_coordinate: ', target_coordinate);
-    if (y > target_coordinate) {
+
+    console.log('y: ', y, 'vh: ', vh,  'element_bottom: ', element_bottom);
+    
+    if (y > element_bottom) {
       console.log('clicked outside the side-drawer!');
       close();
     }
   };
 
   const listen_for_click_outside_of_element = (option) => {
-
-    const element = document.querySelector(className);
-    const target_coordinate = element_geometry(element).y2;
-    const {viewport_height: vh} = viewport_geometry();
-
     if (option === 'add')
-      window.addEventListener('click',    (e) => click_outside_of_element_listener(e, target_coordinate, vh));
+      window.addEventListener('click',    click_outside_of_element_listener);
     else if (option === 'remove')
-      window.removeEventListener('click', (e) => click_outside_of_element_listener(e, target_coordinate, vh));
+      window.removeEventListener('click', click_outside_of_element_listener);
   };
 
   return timeline;
@@ -89,9 +90,12 @@ const slide = (className) => {
 
 // ==============================================
 
-const open_side_drawer = () => {
+const open = () => {
   // -currently only used in click listener for
   //  clicking hamburger button in navbar
+
+  console.log('clicked hamburger');
+  
   master_timeline = gsap.timeline();
   // master_timeline.add( blur_background() );
   master_timeline.add( translucent_overlay(), '<' );
@@ -105,7 +109,8 @@ const close = () => {
   // -currently only used in click listener for
   //  clicking outside of the side-drawer
   master_timeline.reverse();
-}; // close_side_drawer()
+}; // close()
+
 
 // ==============================================
 
@@ -115,7 +120,7 @@ nav_items.forEach((nav_item, idx) => {
     console.log('clicked dropdown #', idx);
     
     // yPercent: 100
-    open_side_drawer();
+    open();
   });
 });
 
