@@ -1,0 +1,31 @@
+footer {
+  height: 60px;
+  background: $background-footer;
+  color: $color-footer-1;
+
+  .footer__bottom {
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+
+    // left
+    .footer__bottom__left {
+      background: pink;
+    }
+
+    // middle
+    .footer__bottom__center {
+      background: purple;
+    }
+
+    .footer__bottom__right {
+      .privacy-policy {
+        color: $color-footer-2;
+        &:hover { color: $color-footer-1; }
+      }
+    }
+  }
+
+}

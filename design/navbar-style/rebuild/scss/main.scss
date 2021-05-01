@@ -1,3 +1,4 @@
+@import 'global';
 // -Systematic methodology of organizing style rulesets
 //  --Least common at top
 //  --How to systematically handle @media-queries?
@@ -13,10 +14,6 @@
   margin: 0;
   padding: 0;
 }
-
-$background-1: #fff;
-$background-2: #F5F5F5;
-$color-1:        #111;
 
 html {
   font-size: 16px;
@@ -43,13 +40,7 @@ body {
     // .blur-container { position: absolute; }
     @import 'blur-container';
   }
-}
 
-.container {
-  width: 100%;
-  padding-right: 1.75rem;
-  padding-left: 1.75rem;
-  // margin-right: auto;
-  // margin-left: auto;
-  border: solid yellowgreen 5px;
+  // .modal
+  @import 'modal';
 }
