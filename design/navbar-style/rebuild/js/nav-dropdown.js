@@ -56,6 +56,9 @@ const slide = (className) => {
   timeline.to(className, {
     duration,
     yPercent: 100,
+    onStart: () => {
+      disable_nav_item_click_listeners();
+    }, // onStart()
     onComplete: () => {
       listen_for_click_outside_of_element('add');
       disable_scroll_listener();
@@ -63,24 +66,37 @@ const slide = (className) => {
     onReverseComplete: () => {
       listen_for_click_outside_of_element('remove');
       enable_scroll_listener();
+      enable_nav_item_click_listeners();
     }, // onReverseComplete()
   });
+
+  // - - - - - - - - - - - - - - - - - - - - - - 
 
   const click_outside_of_element_listener = (event) => {
 
     const element = document.querySelector(className);
-    const element_bottom = element_geometry(element).y2;
+    const {y1: element_top, y2: element_bottom} = element_geometry(element);
     const {viewport_height: vh} = viewport_geometry();
 
     const y = event.clientY;
 
     console.log('y: ', y, 'vh: ', vh,  'element_bottom: ', element_bottom);
     
-    if (y > element_bottom) {
+    if (y < element_top) {
+      // avoid being able to open the navbar dropdown twice
+      event.preventDefault(); // this does not fix it
+
+      // NEED TO REMOVE EVENT LISTENER ON THE ELEMENTS
+
+      console.log('WANT TO DO NOTHING WITH CLICK EVENT');
+    }
+    else if (y > element_bottom) {
       console.log('clicked outside the side-drawer!');
       close();
     }
   };
+
+  // - - - - - - - - - - - - - - - - - - - - - - 
 
   const listen_for_click_outside_of_element = (option) => {
     if (option === 'add')
@@ -118,14 +134,31 @@ const close = () => {
 
 // ==============================================
 
-nav_items.forEach((nav_item, idx) => {
-  nav_item.addEventListener('click', (event) => {
-    event.preventDefault();
-    console.log('clicked dropdown #', idx);
-    
-    // yPercent: 100
-    open();
+const enable_nav_item_click_listeners = () => {
+  nav_items.forEach((nav_item) => {
+    nav_item.addEventListener('click', click_listener);
   });
-});
+};
+
+// ==============================================
+
+const disable_nav_item_click_listeners = () => {
+  nav_items.forEach((nav_item) => {
+    nav_item.removeEventListener('click', click_listener);
+  });
+};
+
+// ==============================================
+
+const click_listener = (event) => {
+  event.preventDefault();
+
+  // yPercent: 100
+  open();
+};
+
+// ==============================================
+
+enable_nav_item_click_listeners();
 
 // ==============================================
