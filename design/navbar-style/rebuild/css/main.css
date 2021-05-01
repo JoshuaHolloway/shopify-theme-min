@@ -125,25 +125,10 @@ body main .blur-container nav .nav-mobile .content-container {
   align-items: center;
 }
 
-body main .blur-container nav .nav-mobile .content-container .icon {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: fit-content;
-  width: fit-content;
-  padding: 5px;
-  background: white;
-}
-
-body main .blur-container nav .nav-mobile .content-container .icon svg {
-  height: 24px;
-  width: 24px;
-  background: inherit;
-}
-
-body main .blur-container nav .nav-mobile .content-container .icon svg.hamburger {
-  height: 28px;
-  width: 28px;
+body main .blur-container nav .nav-mobile .content-container .hamburger {
+  height: 35px;
+  width: 35px;
+  padding: 2px;
 }
 
 @media screen and (max-width: 1024px) {
@@ -167,7 +152,7 @@ body main .blur-container nav .nav-desktop .nav__top {
   display: grid;
   grid-template-columns: 2fr 7fr 3fr;
   width: 100%;
-  height: 60px;
+  height: 48px;
   background: #F5F5F5;
 }
 

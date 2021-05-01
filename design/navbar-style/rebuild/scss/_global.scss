@@ -52,6 +52,12 @@ li {
 //   }
 // }
 
+
+// Breakpoints:
+// 1024 and below collapse to hamburger with sidebar
+// 1105 and below hide 'Customize'
+// 1162 and below hide Sale
+
 .hide-below-1105 {
   display: inline;
   @media screen and (max-width: 1105px) {
