@@ -33,14 +33,21 @@ a {
 }
 
 li {
-  width: 100%;
-  display: flex;
-  justify-content: center;
-  // border: solid red 1px;
-
+          list-style-type: none;
   a {
     text-decoration: none;
-    color: inherit;
-    // border: dashed green 2px;
   }
 }
+
+// li {
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+//   // border: solid red 1px;
+
+//   a {
+//     text-decoration: none;
+//     color: inherit;
+//     // border: dashed green 2px;
+//   }
+// }

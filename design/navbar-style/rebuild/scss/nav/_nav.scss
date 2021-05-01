@@ -1,12 +1,27 @@
+$mobile-bar-height: 60px;
+$desktop-bar-1-height: 60px;
+$desktop-bar-2-height: 60px;
+
 nav {  position: sticky; // position: fixed jumpst to top upon blur!
   top: 0;
-  height: $navbar-height;
   width: 100%;
   display: flex;
   justify-content: center;
   align-items: center;
   background:$background-1;
 
+  
   @import 'nav-mobile';
+  @media screen and (max-width: 1024px) { // x <= 1024
+    & { height: $mobile-bar-height; }
+    .nav-mobile  { display: grid; }
+    .nav-desktop { display: none; }
+  }
 
+  @import 'nav-desktop';
+  @media screen and (min-width: 1025px) { // 1025 <= x
+    & { height: calc($desktop-bar-1-height + $desktop-bar-2-height); }
+    .nav-desktop { display: grid; }
+    .nav-mobile  { display: none; }
+  }
 }
