@@ -1,11 +1,14 @@
 // ==============================================
 
+import { element_geometry, viewport_geometry } from './geometry.js';
+
+// ==============================================
+
 let master_timeline;
 const duration = 0.5;
 
 // ==============================================
 
-const nav_dropdown = document.querySelector('.nav-dropdown');
 const nav_items = gsap.utils.toArray('.nav-desktop .nav-item');
 console.log('nav_items: ', nav_items);
 
@@ -44,23 +47,65 @@ const translucent_overlay = () => {
 // ==============================================
 
 
-// ==============================================
+const slide = (className) => {
 
+  const timeline = gsap.timeline();
+
+  timeline.to(className, {
+    duration,
+    yPercent: 100,
+    onComplete: () => {
+      listen_for_click_outside_of_element('add');
+    }, // onComplete()
+    onReverseComplete: () => {
+      listen_for_click_outside_of_element('remove')
+    }, // onReverseComplete()
+  });
+
+  const click_outside_of_element_listener = (event, target_coordinate, vh) => {
+
+    const y = event.clientY;
+    console.log('y: ', y, 'vh: ', vh,  'target_coordinate: ', target_coordinate);
+    if (y > target_coordinate) {
+      console.log('clicked outside the side-drawer!');
+      close();
+    }
+  };
+
+  const listen_for_click_outside_of_element = (option) => {
+
+    const element = document.querySelector(className);
+    const target_coordinate = element_geometry(element).y2;
+    const {viewport_height: vh} = viewport_geometry();
+
+    if (option === 'add')
+      window.addEventListener('click',    (e) => click_outside_of_element_listener(e, target_coordinate, vh));
+    else if (option === 'remove')
+      window.removeEventListener('click', (e) => click_outside_of_element_listener(e, target_coordinate, vh));
+  };
+
+  return timeline;
+}; // slide_side_drawer()
 
 // ==============================================
 
 const open_side_drawer = () => {
   // -currently only used in click listener for
   //  clicking hamburger button in navbar
-
-  console.log('clicked hamburger');
-  
   master_timeline = gsap.timeline();
   // master_timeline.add( blur_background() );
   master_timeline.add( translucent_overlay(), '<' );
-  // master_timeline.add( slide_side_drawer(),   '<' );
+  master_timeline.add( slide('.nav-dropdown'),   '<' );
 
 };
+
+// ==============================================
+
+const close = () => {
+  // -currently only used in click listener for
+  //  clicking outside of the side-drawer
+  master_timeline.reverse();
+}; // close_side_drawer()
 
 // ==============================================
 

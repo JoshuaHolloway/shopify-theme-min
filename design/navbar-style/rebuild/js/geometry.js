@@ -11,10 +11,6 @@ const viewport_geometry = () => {
   const document_height2 = document.documentElement.getBoundingClientRect().height;
   const scroll_offset = window.scrollY;
 
-  // console.log(`scroll_offset: ${scroll_offset}`);
-  // console.log(`document_height1 = ${document_height1},   document_height2 = ${document_height2}`);
-  // console.log(`viewport_height: ${viewport_height}`);
-
   return {viewport_center_x, viewport_center_y, viewport_width, viewport_height};
 };
 
@@ -22,21 +18,28 @@ const viewport_geometry = () => {
 
 const element_geometry = (elem) => {
 
-  const square_geometry = elem.getBoundingClientRect(); 
+  const geometry = elem.getBoundingClientRect(); 
   // console.log('square_geometry: ', square_geometry);
   
-  const w = square_geometry.width;
-  const h = square_geometry.height;
-  const x1 = square_geometry.left;
-  const y1 = square_geometry.top;
+  // (x1, y1) -----------------------|
+  //    |                            |
+  //    |                            |
+  //    |----------(x0, y0)----------|
+  //    |                            |
+  //    |                            |
+  //    |-------------------------(x2, y2)
+
+
+  const w = geometry.width;
+  const h = geometry.height;
+  const x1 = geometry.left;
+  const y1 = geometry.top;
+  const x2 = geometry.right;
+  const y2 = geometry.bottom;
   const x0 = x1 + w/2;
   const y0 = y1 + h/2;
 
-  // console.log('scrollTop: ', elem.scrollTop);
-  // console.log('offsetTop: ', elem.offsetTop, ',    offsetParent: ', elem.offsetParent);
-  // console.log('offsetParent: ', elem.offsetParent);
-
-  return {x0, y0, x1, y1, w, h};
+  return {x0, y0, x1, y1, x2, y2, w, h};
 };
 
 // ========================================================

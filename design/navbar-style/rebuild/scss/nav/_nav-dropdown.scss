@@ -6,7 +6,7 @@
   }
 
   @media screen and (min-width: 1025px) { // 1025 <= x
-    // top: var(--nav-dropdown-shift-desktop);
+    top: var(--nav-dropdown-shift-desktop);
     & { display: block; }
   }
 

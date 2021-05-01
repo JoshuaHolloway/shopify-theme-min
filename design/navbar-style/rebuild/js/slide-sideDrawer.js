@@ -1,3 +1,5 @@
+// ==============================================
+
 import { element_geometry, viewport_geometry } from './geometry.js';
 
 // ==============================================
@@ -48,7 +50,7 @@ const slide_side_drawer = () => {
 
   timeline.to(side_drawer, {
     duration,
-    x: -side_drawer_width,
+    xPercent: -100,
     onComplete: () => {
       listen_for_click_outside_of_side_drawer('add');
     }, // onComplete()

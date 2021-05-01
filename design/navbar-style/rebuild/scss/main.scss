@@ -38,22 +38,31 @@
 //                      z-index       position    
 //  -main                           (relative)  
 //    --nav-dropdown    (-1)
-//    --side-drawer     (-1)
+//    --side-drawer     ( 2)  [off-screen => doesn't matter]
 //    --overlay         (-1)
-//    --blur-container  (1)
-//      ---nav          ()
-//      ---section-1    ()
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
 
 // Stacking Contexts [side-drawer-animation]:
 //                      z-index       position    
 //  -main                           (relative)  
 //    --nav-dropdown    (-1)
-//    --side-drawer     (-1)
-//    --overlay         (-1)
-//    --blur-container  (1)
-//      ---nav          ()
-//      ---section-1    ()
+//    --side-drawer     ( 2)
+//    --overlay         ( 1)  {ONLY THIS CHANGES FROM -1 to 1}
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
 
+// Stacking Contexts [side-drawer-animation]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     ( 2)
+//    --overlay         ( 1)  {ONLY THIS CHANGES FROM -1 to 1}
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
 
 * {
   box-sizing: border-box;
