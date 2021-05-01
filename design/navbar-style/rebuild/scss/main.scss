@@ -14,9 +14,23 @@
   padding: 0;
 }
 
+$background-1: #fff;
+$background-2: #F5F5F5;
+$color-1:        #111;
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 body {
+  color: $color-1;
+  background-color: $background-1;
+
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 400;
+  line-height: inherit;
+
 
   main {  position: relative;
 

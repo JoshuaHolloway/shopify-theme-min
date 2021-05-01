@@ -30,10 +30,11 @@ const widths = carousel_items.map(carousel_item => {
 
 const do_carousel = () => {
 
+  const pause_duration = 6.75; // 6.5s.
   carousel_items.forEach((carousel_item, idx) => {
 
     timeline.to(carousel_item, { x: viewport_width + viewport_width/2 - widths[idx]/2,} )
-            .to(carousel_item, { x: 2*viewport_width }, '<+7' );
+            .to(carousel_item, { x: 2*viewport_width }, `<+${pause_duration}` );
     });
 
 };

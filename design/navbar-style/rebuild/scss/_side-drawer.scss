@@ -1,12 +1,11 @@
 .side-drawer {  position: fixed;
-  z-index: 1;
+  z-index: 2;
   // top: 0;
   $side-drawer-width: 200px;
   right: -$side-drawer-width;
   width:  $side-drawer-width;
   height: 100vh;
-  background: darkorchid;
-  color: white;
+  background: $background-1;
 
   .side-drawer__section-1 {
     height: 100px;

@@ -3,15 +3,18 @@
   height: 60px;
 
   .carousel-inner { position: relative;
-    // display: flex;
-    // justify-content: center;
-    // align-items: center;
     height: 100%;
-    border: solid darkorchid 3px;
-
+    // border: solid darkorchid 3px;
+    
     .carousel-item { position: absolute; 
       left: -100vw;
-      // left: -100vw;
+      
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      
+      height: 100%;
     }
 
     .carousel-item:nth-child(1) {

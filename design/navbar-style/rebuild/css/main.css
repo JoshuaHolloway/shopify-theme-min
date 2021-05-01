@@ -4,9 +4,17 @@
   padding: 0;
 }
 
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
 body {
+  color: #111;
+  background-color: #fff;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 400;
+  line-height: inherit;
 }
 
 body main {
@@ -15,12 +23,11 @@ body main {
 
 body main .side-drawer {
   position: fixed;
-  z-index: 1;
+  z-index: 2;
   right: -200px;
   width: 200px;
   height: 100vh;
-  background: darkorchid;
-  color: white;
+  background: #fff;
 }
 
 body main .side-drawer .side-drawer__section-1 {
@@ -50,7 +57,7 @@ body main .blur-container nav {
   display: flex;
   justify-content: center;
   align-items: center;
-  background: darkorange;
+  background: #fff;
 }
 
 body main .blur-container nav .nav__content-container {
@@ -81,12 +88,16 @@ body main .blur-container #section-1 .carousel {
 body main .blur-container #section-1 .carousel .carousel-inner {
   position: relative;
   height: 100%;
-  border: solid darkorchid 3px;
 }
 
 body main .blur-container #section-1 .carousel .carousel-inner .carousel-item {
   position: absolute;
   left: -100vw;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
 }
 
 body main .blur-container #section-1 .carousel .carousel-inner .carousel-item:nth-child(1) {
