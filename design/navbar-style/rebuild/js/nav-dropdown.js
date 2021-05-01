@@ -16,7 +16,7 @@ console.log('nav_items: ', nav_items);
 
 // ==============================================
 
-const blur_container = document.querySelector('.blur-container');
+const blur_container = document.querySelector('.blur-container-2');
 const blur_background = () => {
 
   const timeline = gsap.timeline();
