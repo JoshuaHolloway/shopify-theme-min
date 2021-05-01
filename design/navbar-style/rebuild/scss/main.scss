@@ -9,6 +9,52 @@
 // 3: background/color
 // 4: font-size
 
+// z-index (normal):
+//    -nav:             1
+//    -blur-container:  0
+//    -overlay:        -1
+//    -side-drawer:    -1
+//    -nav-dropdown:   -1
+//    -modal:          -1
+
+// z-index (dropdown animation):
+//    -nav:             1
+//    -nav-dropdown:   -1
+//    -overlay:        -1
+//    -blur-container:  0
+//    -side-drawer:    -1
+//    -modal:          -1
+
+// z-index (sidebar animation):
+//    -side-drawer:     2
+//    -nav:             0
+//    -blur-container:  0
+//    -overlay:        -1
+//    -nav-dropdown:   -1
+//    -modal:          -1
+
+
+// Stacking Contexts [normal]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     (-1)
+//    --overlay         (-1)
+//    --blur-container  (1)
+//      ---nav          ()
+//      ---section-1    ()
+
+// Stacking Contexts [side-drawer-animation]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     (-1)
+//    --overlay         (-1)
+//    --blur-container  (1)
+//      ---nav          ()
+//      ---section-1    ()
+
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -32,6 +78,9 @@ body {
 
 
   main {  position: relative;
+
+    // .nav-dropdown { position: fixed; }
+    @import './nav//nav-dropdown';
 
     // .side-drawer { position: fixed; }
     @import 'side-drawer';

@@ -1,0 +1,17 @@
+.nav-dropdown { position: fixed;
+
+  @media screen and (max-width: 1024px) { // x <= 1024
+    // top: var(--nav-dropdown-shift-mobile);
+    & { display: none; }
+  }
+
+  @media screen and (min-width: 1025px) { // 1025 <= x
+    // top: var(--nav-dropdown-shift-desktop);
+    & { display: block; }
+  }
+
+  z-index: 1;
+  height: var(--nav-dropdown-height);
+  width: 100vw;
+  background: $background-1;
+}

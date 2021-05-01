@@ -30,7 +30,7 @@ const translucent_overlay = () => {
   timeline.to(overlay, {
     duration,
     backgroundColor: 'rgba(0, 0, 0, 0.3)',
-    onStart:           () => overlay.style.zIndex = 1,
+    onStart:           () => overlay.style.zIndex = 1, 
     onReverseComplete: () => overlay.style.zIndex = -1,
   }); // .to()
 

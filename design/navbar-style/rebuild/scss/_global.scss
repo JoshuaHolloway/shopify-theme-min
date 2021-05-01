@@ -6,6 +6,17 @@ $background-footer: $color-1;
 $color-footer-1:    $background-1;
 $color-footer-2:  #7E7E7E;
 
+:root {
+  --mobile-nav-height:    60px;
+  --desktop-bar-1-height: 48px;
+  --desktop-bar-2-height: 60px;
+  --desktop-nav-height:   calc( var(--desktop-bar-1-height) + var(--desktop-bar-2-height));
+
+  --nav-dropdown-height: 400px;
+  --nav-dropdown-shift-desktop: calc(-1* calc(var(--nav-dropdown-height) - var(--desktop-nav-height)));
+  --nav-dropdown-shift-mobile:  calc(-1* calc(var(--nav-dropdown-height) - var(--mobile-nav-height )));
+}
+
 .container {
   width: 100%;
   padding-right: 1.75rem;
