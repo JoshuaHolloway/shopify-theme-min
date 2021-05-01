@@ -33,7 +33,7 @@ a {
 }
 
 li {
-          list-style-type: none;
+  list-style-type: none;
   a {
     text-decoration: none;
   }
@@ -51,3 +51,16 @@ li {
 //     // border: dashed green 2px;
 //   }
 // }
+
+.hide-below-1105 {
+  display: inline;
+  @media screen and (max-width: 1105px) {
+    display: none;
+  }
+}
+.hide-below-1162 {
+  display: inline;
+  @media screen and (max-width: 1162px) {
+    display: none;
+  }
+}
