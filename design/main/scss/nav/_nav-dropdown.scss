@@ -1,22 +1,24 @@
 .nav-dropdown { position: fixed;
 
+  top: calc(-1 * var(--nav-dropdown-height));
+  z-index: 2;
+
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  grid-template-rows: 1fr;
+
+  height: var(--nav-dropdown-height);
+  width: 100vw;
+  
+  background: $background-1;
+
   @media screen and (max-width: 1024px) { // x <= 1024
-    // top: var(--nav-dropdown-shift-mobile);
     & { display: none; }
   }
 
-  @media screen and (min-width: 1025px) { // 1025 <= x
+  &__col {
+    border: dashed hotpink 5px;
 
-    // When hidden, top:         -(nav-dropdown-height)
-    // When shown, gsap y-shift:  (nav-dropdown-height + nav-desktop-height)
 
-    // top: var(--nav-dropdown-shift-desktop);
-    top: calc(-1 * var(--nav-dropdown-height));
-    & { display: block; }
   }
-
-  z-index: 2;
-  height: var(--nav-dropdown-height);
-  width: 100vw;
-  background: $background-1;
 }
