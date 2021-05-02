@@ -1,2 +1,2 @@
-import './navbar.js';
+// import './navbar.js';
 import './side-drawer.js'

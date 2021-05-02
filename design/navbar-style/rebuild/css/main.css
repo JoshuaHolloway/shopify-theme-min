@@ -12,7 +12,6 @@
   width: 100%;
   padding-right: 1.75rem;
   padding-left: 1.75rem;
-  border: solid yellowgreen 5px;
 }
 
 .container-center {
@@ -279,10 +278,6 @@ body main .blur-container #section-1 .carousel .carousel-inner .carousel-item {
   justify-content: center;
   align-items: center;
   height: 100%;
-}
-
-body main .blur-container #section-1 .hero {
-  border: dashed 5px hotpink;
 }
 
 body main .blur-container #section-2 {

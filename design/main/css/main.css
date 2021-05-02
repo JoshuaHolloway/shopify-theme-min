@@ -83,8 +83,8 @@ html {
 
 body {
   overflow-x: hidden;
-  color: #111;
   background-color: #fff;
+  color: #111;
   font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
   font-weight: 400;
   line-height: inherit;
@@ -269,12 +269,13 @@ body main .blur-container nav .nav-desktop .nav__bottom .content-container li a:
 body main .blur-container #section-1 {
   height: 100vh;
   width: 100vw;
-  background: deepskyblue;
+  background: #fff;
 }
 
 body main .blur-container #section-1 .carousel {
   width: 100%;
   height: 60px;
+  background: #F5F5F5;
 }
 
 body main .blur-container #section-1 .carousel .carousel-inner {

@@ -20,8 +20,10 @@ const {viewport_width} = viewport_geometry();
 let timeline = gsap.timeline();
 const open_side_drawer = () => {
 
+  const duration = 0.3;
   timeline = gsap.timeline();
   timeline.to(side_drawer, {
+    duration: duration,
     x: -sidedrawer_width,
     onComplete: () => {
       console.log('animation complete');
@@ -42,16 +44,26 @@ const open_side_drawer = () => {
   });
 
   const nav_mobile = document.querySelector('#nav-mobile');
-  timeline.to(nav_mobile, {
+  const blur_container = document.querySelector('#blur-container');
+  timeline.to(blur_container, {
+    duration: duration,
     filter: 'blur(3px)',
+    onStart: () => {
+      console.log('starting blur');
+      // nav_mobile.style.transform = 'translateY(100px)';
+    }, // onStart()
+    onReverseComplete: () => {
+      // nav_mobile.style.transform = 'translateY(0px)';
+    }, // onReverseComplete()
   }, '<'); // .to()
   
-  const overlay = document.querySelector('.overlay');
-  timeline.to(overlay, {
-    backgroundColor: 'rgba(0, 0, 0, 0.2)',
-    onStart:           () => overlay.style.zIndex = 1,
-    onReverseComplete: () => overlay.style.zIndex = -1,
-  }, '<'); // .to()
+  // const overlay = document.querySelector('.overlay');
+  // timeline.to(overlay, {
+  //   duration: duration,
+  //   backgroundColor: 'rgba(0, 0, 0, 0.3)',
+  //   onStart:           () => overlay.style.zIndex = 1,
+  //   onReverseComplete: () => overlay.style.zIndex = -1,
+  // }, '<'); // .to()
 
 }; // open_side_drawer()
 
@@ -74,7 +86,6 @@ side_drawer_close_button.addEventListener('click', () => {
   close_side_drawer();
 
 });
-
 
 
 // ==============================================
