@@ -12,7 +12,6 @@
   width: 100%;
   padding-right: 1.75rem;
   padding-left: 1.75rem;
-  border: solid yellowgreen 5px;
 }
 
 .container-center {
@@ -186,7 +185,7 @@ body main .blur-container nav .nav-desktop .nav__top .content-container ul li:no
 
 body main .blur-container nav .nav-desktop .nav__bottom {
   display: grid;
-  grid-template-columns: 1fr 5fr 1fr;
+  grid-template-columns: 2fr 5fr 2fr;
   width: 100%;
   height: var(--desktop-bar-2-height);
   background: #fff;
@@ -198,7 +197,15 @@ body main .blur-container nav .nav-desktop .nav__bottom .content-container {
   align-items: center;
 }
 
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li {
+body main .blur-container nav .nav-desktop .nav__bottom .content-container:not(.nav-items):nth-child(1) {
+  padding-right: 50%;
+}
+
+body main .blur-container nav .nav-desktop .nav__bottom .content-container:not(.nav-items):nth-child(3) {
+  padding-left: 50%;
+}
+
+body main .blur-container nav .nav-desktop .nav__bottom .content-container.nav-items li {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -208,11 +215,11 @@ body main .blur-container nav .nav-desktop .nav__bottom .content-container li {
   transition: border 0.2s ease, background 0.2s ease;
 }
 
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li:hover {
+body main .blur-container nav .nav-desktop .nav__bottom .content-container.nav-items li:hover {
   cursor: pointer;
 }
 
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li:hover, body main .blur-container nav .nav-desktop .nav__bottom .content-container li.clicked {
+body main .blur-container nav .nav-desktop .nav__bottom .content-container.nav-items li:hover, body main .blur-container nav .nav-desktop .nav__bottom .content-container.nav-items li.clicked {
   border-bottom: solid black 3px;
 }
 
@@ -262,10 +269,6 @@ body main .blur-container #section-1 .carousel .carousel-inner .carousel-item {
   justify-content: center;
   align-items: center;
   height: 100%;
-}
-
-body main .blur-container #section-1 .hero {
-  border: dashed 5px hotpink;
 }
 
 body main .blur-container #section-2 {

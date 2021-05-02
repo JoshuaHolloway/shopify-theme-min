@@ -48,6 +48,33 @@ const translucent_overlay = () => {
 
 // ==============================================
 
+const drodown_data = {
+  'new_releases': [
+    [
+      'New & Featured',
+      'Shop All New Arrivals',
+      'SNKRS Launch Calendar',
+      'Best of Air Max',
+      'Member Access',
+      'Top Picks for Mom',
+      'Mix & Match with Mom'
+    ],
+    [],
+  ],
+  'men': [],
+  'women': [],
+  'kids': [],
+  'customize': [],
+  'sale': [],
+};
+const add_dynamic_dropdown_data = (className) => {
+
+
+
+};
+
+// ==============================================
+
 const navbar = document.querySelector('.nav-desktop');
 const nav_height = element_geometry(navbar).h;
 const nav_dropdown = document.querySelector('.nav-dropdown');
@@ -115,6 +142,9 @@ const open = () => {
   //  clicking hamburger button in navbar
 
   console.log('clicked hamburger');
+
+  // Add dynamic data to dropdown:
+  // add_dynamic_dropdown_data(className);
   
   master_timeline = gsap.timeline();
   master_timeline.add( blur_background() );
