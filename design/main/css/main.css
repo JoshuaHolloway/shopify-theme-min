@@ -81,10 +81,6 @@ body main .nav-dropdown {
   }
 }
 
-body main .nav-dropdown__col {
-  border: dashed hotpink 5px;
-}
-
 body main .side-drawer {
   position: fixed;
   z-index: 2;

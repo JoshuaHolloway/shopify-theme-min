@@ -58,10 +58,8 @@ const slide = (className) => {
 
   timeline.to(className, {
     duration,
-    // yPercent: 100,
     y: nav_height + nav_dropdown_height, 
     onStart: () => {
-      // disable_nav_item_click_listeners();
       is_nav_dropdown_open = true;
     }, // onStart()
     onComplete: () => {
@@ -108,6 +106,7 @@ const slide = (className) => {
 
 // ==============================================
 
+// Dummy data
 const dropdown_data = {
   'new_releases': [
     [
@@ -177,6 +176,7 @@ const dropdown_data = {
   'customize': [],
   'sale': [],
 };
+// Thid function will be replaced with dynamic data via Liquid
 const add_dynamic_dropdown_data = (nav_item_id) => {
 
   const dropdown_data_columns = dropdown_data[nav_item_id];
@@ -239,44 +239,28 @@ const reset_nav_item_click_listeners = () => {
 
 // ==============================================
 
-const disable_nav_item_click_listeners = () => {
-
-  // -What we actually want is to only disable the navbar for the currently selected nav-item
-  // -This allows user to open another nav-item without clicking outside nav-dropdown to close first.
-  // -Should add logic to not re-open the nav-dropdown, but be ready to swap out dynamic data corresponding to different nav-items
-  // -Can do this in function click_listener(event) { event.target.removeEventListener('click', click_listener)}
-  // -Then, don't call disable_nav_item_click_listeners() in the onStart() property of the gsap animatino in slide()
-  // -The issue that I need to work out is how to handle the logic with .reverse() animation [need to not start new animation or do .reverse,
-  //  and instead need to just swap out the dynamic data, which this is currently grabbed in the open() function, which might be a good place to 
-  //  keep this logic since I will call open() when the event of clicking a nav_item (other than the currently selected nav-item) is fired]
-
-  // this will run when the dropdown is open to prevent double opens
-  nav_items.forEach((nav_item) => {
-    nav_item.removeEventListener('click', click_listener);
-  });
-};
-
-// ==============================================
-
 const click_listener = (event) => {
   const nav_item = event.target;
-  nav_item.classList.add('clicked');
-  console.log('nav-item clicked: ', nav_item);
-
+  
+  // Open nav-dropdown with corresponding data
   const nav_item_id = nav_item.dataset.id;
   open(nav_item_id);
-
-  // first reset all event listeners, then disable only the one currently open
+  
+  // -first reset all event listeners, then disable only the one currently open
   // -need to reset them in case you click one nav-item,
   //  then click a second nav-item before closing the nav dropdown,
   //  then again clicking the first nav-item,
   //  we need to be listening to it again.
-  // -Currently, all event listeners on nav-items are reset upon
+  // -All event listeners on nav-items are also reset upon
   //  completion of the closing of the nav dropdown.
   reset_nav_item_click_listeners();
-
+  
   // disable event listener to prevent double open of nav-dropdown for same nav-item
   nav_item.removeEventListener('click', click_listener);
+
+  // Display the border-bottom on nav-item
+  nav_item.classList.add('clicked');
+  console.log('nav-item clicked: ', nav_item);
 };
 
 // ==============================================
