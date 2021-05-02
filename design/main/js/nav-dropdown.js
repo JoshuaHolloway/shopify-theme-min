@@ -86,15 +86,11 @@ const slide = (className) => {
 
     console.log('y: ', y, 'vh: ', vh,  'element_bottom: ', element_bottom);
     
-    if (y < element_top) {
-      // avoid being able to open the navbar dropdown twice
-      event.preventDefault(); // this does not fix it
-
-      // NEED TO REMOVE EVENT LISTENER ON THE ELEMENTS
-
-      console.log('WANT TO DO NOTHING WITH CLICK EVENT');
+    if (y < element_top) { // clicked in navbar region (above nav-dropdown)
+      // avoid being able to open the navbar dropdown twice (done by removing listeners on all nav-items in function disable_nav_item_click_listeners())
+      // event.preventDefault(); // this does not fix it
     }
-    else if (y > element_bottom) {
+    else if (y > element_bottom) { // clicked below opened nav-dropdown
       console.log('clicked outside the side-drawer!');
       close();
     }
@@ -143,15 +139,19 @@ const enable_nav_item_click_listeners = () => {
   nav_items.forEach((nav_item) => {
     nav_item.addEventListener('click', click_listener);
     
-    // Remove clicked highlighting on nav_item a-tag
-    const nav_item_a = nav_item.children[0];
-    nav_item_a.classList.remove('clicked');
+    // Remove clicked highlighting on nav_item
+    nav_item.classList.remove('clicked');
   });
 };
 
 // ==============================================
 
 const disable_nav_item_click_listeners = () => {
+
+  // -What we actually want is to only disable the navbar for the currently selected nav-item
+  // -This allows user to open another nav-item without clicking outside nav-dropdown to close first.
+  // -Should add logic to not re-open the nav-dropdown, but be ready to swap out dynamic data corresponding to different nav-items
+
   // this will run when the dropdown is open to prevent double opens
   nav_items.forEach((nav_item) => {
     nav_item.removeEventListener('click', click_listener);
@@ -161,11 +161,9 @@ const disable_nav_item_click_listeners = () => {
 // ==============================================
 
 const click_listener = (event) => {
-  event.preventDefault();
-
-  const nav_item_a = event.target;
-  nav_item_a.classList.add('clicked');
-  console.log('nav-item clicked: ', nav_item_a);
+  const nav_item = event.target;
+  nav_item.classList.add('clicked');
+  console.log('nav-item clicked: ', nav_item);
 
   open();
 };

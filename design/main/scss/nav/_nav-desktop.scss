@@ -48,22 +48,23 @@
       justify-content: space-evenly;
       align-items: center;
       li {
-        font-size: 1.4em;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+
         height: 100%;
+        width: 100%;
+        
+        // border: dashed hotpink 1px;
+        
+        font-size: 1.4em;
 
-        a {
-          display: flex;
-          align-items: center;
-          
-          height: 100%;
-          
-          // border: dashed hotpink 2px;
-          transition: border 0.2s ease, background 0.2s ease;
+        transition: border 0.2s ease, background 0.2s ease;
 
-          &:hover, &.clicked {
-            // background: rgba(0, 0, 0, 0.02);
-            border-bottom: solid black 3px;
-          }
+        &:hover { cursor: pointer; }
+        &:hover, &.clicked {
+          // background: rgba(0, 0, 0, 0.02);
+          border-bottom: solid black 3px;
         }
       }
   

@@ -229,18 +229,20 @@ body main .blur-container nav .nav-desktop .nav__bottom .content-container {
 }
 
 body main .blur-container nav .nav-desktop .nav__bottom .content-container li {
-  font-size: 1.4em;
-  height: 100%;
-}
-
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li a {
   display: flex;
+  justify-content: center;
   align-items: center;
   height: 100%;
+  width: 100%;
+  font-size: 1.4em;
   transition: border 0.2s ease, background 0.2s ease;
 }
 
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li a:hover, body main .blur-container nav .nav-desktop .nav__bottom .content-container li a.clicked {
+body main .blur-container nav .nav-desktop .nav__bottom .content-container li:hover {
+  cursor: pointer;
+}
+
+body main .blur-container nav .nav-desktop .nav__bottom .content-container li:hover, body main .blur-container nav .nav-desktop .nav__bottom .content-container li.clicked {
   border-bottom: solid black 3px;
 }
 
