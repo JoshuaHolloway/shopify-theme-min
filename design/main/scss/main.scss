@@ -103,3 +103,23 @@ body {
   // .modal
   @import 'modal';
 }
+
+.hide-below-1100 {
+  display: flex;
+  @media screen and (max-width: 1100px) {
+    border: dashed blue 5px;
+    display: none !important;
+  }
+}
+.hide-below-1200 {
+  display: flex;
+  @media screen and (max-width: 1200px) {
+    display: none !important;
+  }
+}
+.hide-below-1300 {
+  display: inline;
+  @media screen and (max-width: 1300px) {
+    display: none !important;
+  }
+}

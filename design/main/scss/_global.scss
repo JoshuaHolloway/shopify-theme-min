@@ -71,21 +71,3 @@ li {
 // 1162 and below hide 'Sale'
 
 
-.hide-below-1080 {
-  display: inline;
-  @media screen and (max-width: 1080px) {
-    display: none;
-  }
-}
-.hide-below-1105 {
-  display: inline;
-  @media screen and (max-width: 1105px) {
-    display: none;
-  }
-}
-.hide-below-1162 {
-  display: inline;
-  @media screen and (max-width: 1162px) {
-    display: none;
-  }
-}
