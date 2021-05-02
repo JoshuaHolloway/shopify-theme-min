@@ -6,7 +6,6 @@ import {viewport_geometry, element_geometry} from './geometry.js';
 
 const carousel = document.querySelector('.carousel');
 const carousel_items = gsap.utils.toArray('.carousel-item');
-console.log(carousel_items);
 
 // ==============================================
 

@@ -8,11 +8,11 @@ import { enable_scroll_listener,
 
 let master_timeline;
 const duration = 0.5;
+let is_nav_dropdown_open = false;
 
 // ==============================================
 
 const nav_items = gsap.utils.toArray('.nav-desktop .nav-item');
-console.log('nav_items: ', nav_items);
 
 // ==============================================
 
@@ -61,7 +61,8 @@ const slide = (className) => {
     // yPercent: 100,
     y: nav_height + nav_dropdown_height, 
     onStart: () => {
-      disable_nav_item_click_listeners();
+      // disable_nav_item_click_listeners();
+      is_nav_dropdown_open = true;
     }, // onStart()
     onComplete: () => {
       listen_for_click_outside_of_element('add');
@@ -70,22 +71,19 @@ const slide = (className) => {
     onReverseComplete: () => {
       listen_for_click_outside_of_element('remove');
       enable_scroll_listener();
-      enable_nav_item_click_listeners();
+      reset_nav_item_click_listeners();
+      is_nav_dropdown_open = false;
     }, // onReverseComplete()
   });
 
   // - - - - - - - - - - - - - - - - - - - - - - 
 
   const click_outside_of_element_listener = (event) => {
-
     const element = document.querySelector(className);
     const {y1: element_top, y2: element_bottom} = element_geometry(element);
     const {viewport_height: vh} = viewport_geometry();
-
     const y = event.clientY;
-
-    console.log('y: ', y, 'vh: ', vh,  'element_bottom: ', element_bottom);
-    
+    // console.log('y: ', y, 'vh: ', vh,  'element_bottom: ', element_bottom);
     if (y < element_top) { // clicked in navbar region (above nav-dropdown)
       // avoid being able to open the navbar dropdown twice (done by removing listeners on all nav-items in function disable_nav_item_click_listeners())
       // event.preventDefault(); // this does not fix it
@@ -144,31 +142,56 @@ const dropdown_data = {
       'Shop All New'
     ]
   ],
-  'men': [],
+  'men': [
+    [
+      'New & Featured',
+      'New Releases',
+      'Best Sellers',
+      'Best of Air Max',
+      'Top Picks for Mom',
+      'Summer of Tie Dye',
+      'Wild Run Collection',
+      'New Pegasus 38',
+      'Sale - Up to 40% Off'
+    ],
+    [
+      'Shoes',
+      'Lifestyle',
+      'Running',
+      'Basketball',
+      'Jordan',
+      'Training & Gym',
+      'Soccer',
+      'Golf',
+      'Track & Field',
+      'Skateboarding',
+      'Tennis',
+      'Baseball',
+      'Sandals & Slides',
+      'Shoes $100 & Under',
+      'All Shoes'
+    ]
+  ],
   'women': [],
   'kids': [],
   'customize': [],
   'sale': [],
 };
 const add_dynamic_dropdown_data = (nav_item_id) => {
-  console.log('nav_item_id: ', nav_item_id);
+
   const dropdown_data_columns = dropdown_data[nav_item_id];
   const cols = gsap.utils.toArray('.nav-dropdown__col');
+  // reset cols (to not keep appending)
+  cols.forEach((col) => {
+    col.innerHTML = '';
+  });
+
 
   for (let i = 0; i < dropdown_data_columns.length; i++){
-    console.log('i: ', i);
-    // const elem = document.createElement('div');
-    // console.log(elem);
-    // elem.textContent = dropdown_data_columns[0][0];
-    // col_1.append(elem);
-
     for (let j = 0; j < dropdown_data_columns[i].length; j++) {
-      console.log('j: ', j);
-
       const elem = document.createElement('div');
       elem.textContent = dropdown_data_columns[i][j];
       cols[i].append(elem);
-
     }
   }
 };
@@ -179,16 +202,18 @@ const open = (nav_item_id) => {
   // -currently only used in click listener for
   //  clicking hamburger button in navbar
 
-  console.log('clicked hamburger');
+  console.log('clicked nav item: ', nav_item_id);
 
   // Add dynamic data to dropdown:
   add_dynamic_dropdown_data(nav_item_id);
   
-  master_timeline = gsap.timeline();
-  master_timeline.add( blur_background() );
-  master_timeline.add( translucent_overlay(), '<' );
-  master_timeline.add( slide('.nav-dropdown'),   '<' );
-
+  if (is_nav_dropdown_open === false) {
+    master_timeline = gsap.timeline();
+    master_timeline.add( blur_background() );
+    master_timeline.add( translucent_overlay(), '<' );
+    master_timeline.add( slide('.nav-dropdown'),   '<' );
+  }
+  
 };
 
 // ==============================================
@@ -202,7 +227,7 @@ const close = () => {
 
 // ==============================================
 
-const enable_nav_item_click_listeners = () => {
+const reset_nav_item_click_listeners = () => {
   // this will run at page load and after the nav-dropdown is closed
   nav_items.forEach((nav_item) => {
     nav_item.addEventListener('click', click_listener);
@@ -240,10 +265,22 @@ const click_listener = (event) => {
 
   const nav_item_id = nav_item.dataset.id;
   open(nav_item_id);
+
+  // first reset all event listeners, then disable only the one currently open
+  // -need to reset them in case you click one nav-item,
+  //  then click a second nav-item before closing the nav dropdown,
+  //  then again clicking the first nav-item,
+  //  we need to be listening to it again.
+  // -Currently, all event listeners on nav-items are reset upon
+  //  completion of the closing of the nav dropdown.
+  reset_nav_item_click_listeners();
+
+  // disable event listener to prevent double open of nav-dropdown for same nav-item
+  nav_item.removeEventListener('click', click_listener);
 };
 
 // ==============================================
 // Enable on page load
-enable_nav_item_click_listeners();
+reset_nav_item_click_listeners();
 
 // ==============================================
