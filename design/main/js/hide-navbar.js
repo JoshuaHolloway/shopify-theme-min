@@ -1,5 +1,11 @@
 // ==============================================
 
+import { element_geometry } from './geometry.js';
+const navbar = document.querySelector('.nav-desktop');
+const navbar_bottom = element_geometry(navbar).y2;
+
+// ==============================================
+
 let tween;
 let prev_scrollY = 0;
 
@@ -30,7 +36,7 @@ const scroll_listener = () => {
     if (is_navbar_hidden === true) 
       show_navbar();
   }
-  else if (is_navbar_hidden === false)
+  else if (is_navbar_hidden === false && scrollY > navbar_bottom)
       hide_navbar();
   prev_scrollY = scrollY;
 };
