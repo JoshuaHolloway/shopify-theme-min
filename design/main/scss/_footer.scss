@@ -1,0 +1,32 @@
+footer {
+  height: 60px;
+  background: $background-footer;
+  color: $color-footer-1;
+
+  .footer__bottom {
+
+    display: flex;
+    align-items: center;
+
+    height: 100%;
+
+    // left
+    &__left {
+      background: pink;
+    }
+
+    // middle
+    &__center {
+      background: purple;
+    }
+
+    // right
+    &__right {
+      .privacy-policy {
+        color: $color-footer-2;
+        &:hover { color: $color-footer-1; }
+      }
+    }
+  }
+
+}

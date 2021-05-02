@@ -1,0 +1,22 @@
+.nav-dropdown { position: fixed;
+
+  @media screen and (max-width: 1024px) { // x <= 1024
+    // top: var(--nav-dropdown-shift-mobile);
+    & { display: none; }
+  }
+
+  @media screen and (min-width: 1025px) { // 1025 <= x
+
+    // When hidden, top:         -(nav-dropdown-height)
+    // When shown, gsap y-shift:  (nav-dropdown-height + nav-desktop-height)
+
+    // top: var(--nav-dropdown-shift-desktop);
+    top: calc(-1 * var(--nav-dropdown-height));
+    & { display: block; }
+  }
+
+  z-index: 2;
+  height: var(--nav-dropdown-height);
+  width: 100vw;
+  background: $background-1;
+}

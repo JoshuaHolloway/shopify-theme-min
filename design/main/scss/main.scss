@@ -1,0 +1,106 @@
+@import 'global';
+// -Systematic methodology of organizing style rulesets
+//  --Least common at top
+//  --How to systematically handle @media-queries?
+// 0: position and top/right/left/bottom
+// 0.1: z-index
+// 1: display
+// 2: height/width/padding/margin
+// 3: background/color
+// 4: font-size
+
+// z-index (normal):
+//    -nav:             1
+//    -blur-container:  0
+//    -overlay:        -1
+//    -side-drawer:    -1
+//    -nav-dropdown:   -1
+//    -modal:          -1
+
+// z-index (dropdown animation):
+//    -nav:             1
+//    -nav-dropdown:   -1
+//    -overlay:        -1
+//    -blur-container:  0
+//    -side-drawer:    -1
+//    -modal:          -1
+
+// z-index (sidebar animation):
+//    -side-drawer:     2
+//    -nav:             0
+//    -blur-container:  0
+//    -overlay:        -1
+//    -nav-dropdown:   -1
+//    -modal:          -1
+
+
+// Stacking Contexts [normal]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     ( 2)  [off-screen => doesn't matter]
+//    --overlay         (-1)
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
+
+// Stacking Contexts [side-drawer-animation]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     ( 2)
+//    --overlay         ( 1)  {ONLY THIS CHANGES FROM -1 to 1}
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
+
+// Stacking Contexts [side-drawer-animation]:
+//                      z-index       position    
+//  -main                           (relative)  
+//    --nav-dropdown    (-1)
+//    --side-drawer     ( 2)
+//    --overlay         ( 1)  {ONLY THIS CHANGES FROM -1 to 1}
+//    --blur-container  ( 0)
+//      ---nav          ( 3)
+//      ---section-1    ( )
+
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+body {
+  overflow-x: hidden;
+
+  color: $color-1;
+  background-color: $background-1;
+
+  font-family: "Helvetica Neue",Helvetica,Arial,sans-serif;
+  font-weight: 400;
+  line-height: inherit;
+
+
+  main {  position: relative;
+
+    // .nav-dropdown { position: fixed; }
+    @import './nav//nav-dropdown';
+
+    // .side-drawer { position: fixed; }
+    @import 'side-drawer';
+
+    // .overlay { position: fixed; }
+    @import 'overlay';
+
+    // .blur-container { position: absolute; }
+    @import 'blur-container';
+  }
+
+  // .modal
+  @import 'modal';
+}

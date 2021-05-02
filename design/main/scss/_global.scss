@@ -1,0 +1,91 @@
+$color-1:      #111;
+
+$background-1: #fff;
+$background-2: #F5F5F5;
+$background-footer: $color-1;
+$color-footer-1:    $background-1;
+$color-footer-2:  #7E7E7E;
+
+:root {
+  --mobile-nav-height:    60px;
+  --desktop-bar-1-height: 48px;
+  --desktop-bar-2-height: 60px;
+  --desktop-nav-height:   calc( var(--desktop-bar-1-height) + var(--desktop-bar-2-height));
+
+  --nav-dropdown-height: 400px;
+  --nav-dropdown-shift-desktop: calc(-1* calc(var(--nav-dropdown-height) - var(--desktop-nav-height)));
+  --nav-dropdown-shift-mobile:  calc(-1* calc(var(--nav-dropdown-height) - var(--mobile-nav-height )));
+}
+
+.container {
+  width: 100%;
+  padding-right: 1.75rem;
+  padding-left: 1.75rem;
+  // margin-right: auto;
+  // margin-left: auto;
+  border: solid yellowgreen 5px;
+}
+
+.container-center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 100%;
+}
+
+.content-container {
+  width: 100%;
+  height: 100%;
+}
+
+a {
+  color: $color-1;
+}
+
+li {
+  list-style-type: none;
+  a {
+    text-decoration: none;
+  }
+}
+
+// li {
+//   width: 100%;
+//   display: flex;
+//   justify-content: center;
+//   // border: solid red 1px;
+
+//   a {
+//     text-decoration: none;
+//     color: inherit;
+//     // border: dashed green 2px;
+//   }
+// }
+
+
+// Breakpoints:
+// 1024 and below collapse to hamburger with sidebar
+// 1080 and below hide 'Kids'
+// 1105 and below hide 'Customize'
+// 1162 and below hide 'Sale'
+
+
+.hide-below-1080 {
+  display: inline;
+  @media screen and (max-width: 1080px) {
+    display: none;
+  }
+}
+.hide-below-1105 {
+  display: inline;
+  @media screen and (max-width: 1105px) {
+    display: none;
+  }
+}
+.hide-below-1162 {
+  display: inline;
+  @media screen and (max-width: 1162px) {
+    display: none;
+  }
+}
