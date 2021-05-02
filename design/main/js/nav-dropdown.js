@@ -139,14 +139,20 @@ const close = () => {
 // ==============================================
 
 const enable_nav_item_click_listeners = () => {
+  // this will run at page load and after the nav-dropdown is closed
   nav_items.forEach((nav_item) => {
     nav_item.addEventListener('click', click_listener);
+    
+    // Remove clicked highlighting on nav_item a-tag
+    const nav_item_a = nav_item.children[0];
+    nav_item_a.classList.remove('clicked');
   });
 };
 
 // ==============================================
 
 const disable_nav_item_click_listeners = () => {
+  // this will run when the dropdown is open to prevent double opens
   nav_items.forEach((nav_item) => {
     nav_item.removeEventListener('click', click_listener);
   });
@@ -156,6 +162,11 @@ const disable_nav_item_click_listeners = () => {
 
 const click_listener = (event) => {
   event.preventDefault();
+
+  const nav_item_a = event.target;
+  nav_item_a.classList.add('clicked');
+  console.log('nav-item clicked: ', nav_item_a);
+
   open();
 };
 

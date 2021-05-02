@@ -240,8 +240,7 @@ body main .blur-container nav .nav-desktop .nav__bottom .content-container li a 
   transition: border 0.2s ease, background 0.2s ease;
 }
 
-body main .blur-container nav .nav-desktop .nav__bottom .content-container li a:hover {
-  background: rgba(0, 0, 0, 0.02);
+body main .blur-container nav .nav-desktop .nav__bottom .content-container li a:hover, body main .blur-container nav .nav-desktop .nav__bottom .content-container li a.clicked {
   border-bottom: solid black 3px;
 }
 
